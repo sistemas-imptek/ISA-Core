@@ -13,17 +13,29 @@ public class Committee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Idcommite;
+	@Column(name = "COM_IDCOMMITTEE")
+	private Integer idCommittee;
 	
-	@Column(name = "COM_DESCRIPTION", length = 256)
+	@Column(name = "COM_NAME", nullable = false, length = 256)
+	private String name;
+	
+	@Column(name = "COM_DESCRIPTION", nullable = true, length = 256)
 	private String description;
 
-	public Integer getIdcommite() {
-		return Idcommite;
+	public Integer getIdCommittee() {
+		return idCommittee;
 	}
 
-	public void setIdcommite(Integer idcommite) {
-		Idcommite = idcommite;
+	public void setIdCommittee(Integer idCommittee) {
+		this.idCommittee = idCommittee;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
@@ -33,10 +45,6 @@ public class Committee {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
-	
-	
 	
 	
 }
