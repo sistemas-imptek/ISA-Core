@@ -3,8 +3,14 @@ package com.isacore.model;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "USERIMPTEK")
 public class UserImptek {
 	
 	@Id
@@ -25,6 +31,10 @@ public class UserImptek {
 	
 	@Column(name = "USER_LASTACCESS", nullable = false)
 	private LocalDate lastAccess;
+	
+	@ManyToOne
+	@JoinColumn(name = "ROLE_NAME",insertable = true, updatable = true, nullable = true)
+	private Role role;
 
 	public Integer getIdUser() {
 		return idUser;
@@ -73,6 +83,15 @@ public class UserImptek {
 	public void setLastAccess(LocalDate lastAccess) {
 		this.lastAccess = lastAccess;
 	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
 	
 	
 }

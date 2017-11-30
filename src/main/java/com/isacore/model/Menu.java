@@ -18,7 +18,7 @@ public class Menu {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MEN_IDMENU")
-	private String idMenu;
+	private int idMenu;
 	
 	@Column(name = "MEN_ICON", nullable = false, length = 128)
 	private String iconMenu;
@@ -32,11 +32,11 @@ public class Menu {
 	@ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "menus")
 	private List<Role> Roles;
 
-	public String getIdMenu() {
+	public int getIdMenu() {
 		return idMenu;
 	}
 
-	public void setIdMenu(String idMenu) {
+	public void setIdMenu(int idMenu) {
 		this.idMenu = idMenu;
 	}
 
