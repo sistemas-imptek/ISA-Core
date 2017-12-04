@@ -1,4 +1,4 @@
-package com.isacore.controller;
+package com.isacore.api;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.model.Role;
@@ -25,4 +26,8 @@ public class RoleController {
 		return new ResponseEntity<List<Role>>(this.roleService.findAll(),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/findByIdRole", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Role> findByIdRole(@RequestParam(value = "idrole",required = true) String idrole){
+		return new ResponseEntity<Role>(this.roleService.findById(idrole),HttpStatus.OK);
+	}
 }

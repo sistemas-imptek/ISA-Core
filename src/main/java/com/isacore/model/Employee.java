@@ -25,8 +25,8 @@ public class Employee {
 	@Column(name = "EMP_DATALIFE", length = 16)
 	private String codDataLife;
 	
-	@Column(name = "EMP_STATE", length = 64)
-	private String state;
+	@Column(name = "EMP_STATE")
+	private boolean state;
 	
 
 	public String getCiEmployee() {
@@ -69,11 +69,11 @@ public class Employee {
 		this.codDataLife = codDataLife;
 	}
 
-	public String getState() {
+	public boolean getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(boolean state) {
 		this.state = state;
 	}
 	

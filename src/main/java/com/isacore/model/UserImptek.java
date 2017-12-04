@@ -1,24 +1,29 @@
 package com.isacore.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.isacore.localdate.converter.LocalDateTimeConverter;
 
-@Entity
+
+@Entity(name = "userImptek")
 @Table(name = "USERIMPTEK")
 public class UserImptek {
 	
 	@Id
 	@Column(name = "USER_IDUSER", nullable = false, length = 20)
-	private Integer idUser;
+	private String idUser;
 	
 	@Column(name = "EMP_CIEMPLOYEE", nullable = false, length = 20)
-	private Integer idEmployee;
+	private String idEmployee;
 	
 	@Column(name = "USER_NICKNAME", nullable = false, length = 32)
 	private String nickName;
@@ -27,28 +32,32 @@ public class UserImptek {
 	private String userPass;
 	
 	@Column(name = "USER_LASTKEYDATECHANGE", nullable = true)
-	private LocalDate lastKeyDateChange;
+	@Convert(converter = LocalDateTimeConverter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	private LocalDateTime lastKeyDateChange;
 	
 	@Column(name = "USER_LASTACCESS", nullable = false)
-	private LocalDate lastAccess;
+	@Convert(converter = LocalDateTimeConverter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	private LocalDateTime lastAccess;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "ROLE_NAME",insertable = true, updatable = true, nullable = true)
 	private Role role;
 
-	public Integer getIdUser() {
+	public String getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(Integer idUser) {
+	public void setIdUser(String idUser) {
 		this.idUser = idUser;
 	}
 
-	public Integer getIdEmployee() {
+	public String getIdEmployee() {
 		return idEmployee;
 	}
 
-	public void setIdEmployee(Integer idEmployee) {
+	public void setIdEmployee(String idEmployee) {
 		this.idEmployee = idEmployee;
 	}
 
@@ -68,19 +77,19 @@ public class UserImptek {
 		this.userPass = userPass;
 	}
 
-	public LocalDate getLastKeyDateChange() {
+	public LocalDateTime getLastKeyDateChange() {
 		return lastKeyDateChange;
 	}
 
-	public void setLastKeyDateChange(LocalDate lastKeyDateChange) {
+	public void setLastKeyDateChange(LocalDateTime lastKeyDateChange) {
 		this.lastKeyDateChange = lastKeyDateChange;
 	}
 
-	public LocalDate getLastAccess() {
+	public LocalDateTime getLastAccess() {
 		return lastAccess;
 	}
 
-	public void setLastAccess(LocalDate lastAccess) {
+	public void setLastAccess(LocalDateTime lastAccess) {
 		this.lastAccess = lastAccess;
 	}
 
