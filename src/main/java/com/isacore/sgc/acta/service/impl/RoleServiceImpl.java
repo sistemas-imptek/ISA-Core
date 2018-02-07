@@ -26,8 +26,8 @@ public class RoleServiceImpl implements IRoleService{
 	}
 
 	@Override
-	public Role findById(String idRole) {
-		return this.roleRepo.findOne(idRole);
+	public Role findById(Role r) {
+		return this.roleRepo.findOne(r.getRolName());
 	}
 
 	@Override

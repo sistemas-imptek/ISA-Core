@@ -26,8 +26,8 @@ public class UserImptekServiceImpl implements IUserImptekService{
 	}
 
 	@Override
-	public UserImptek findById(String iduser) { 
-		return this.repo.findOne(iduser);
+	public UserImptek findById(UserImptek u) { 
+		return this.repo.findOne(u.getIdUser());
 	}
 
 	@Override

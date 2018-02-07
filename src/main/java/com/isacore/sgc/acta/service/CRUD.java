@@ -8,7 +8,7 @@ public interface CRUD<T> {
 
 	T create(T obj);
 
-	T findById(String id);
+	T findById(T id);
 
 	T update(T obj);
 

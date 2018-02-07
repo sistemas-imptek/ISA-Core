@@ -54,12 +54,15 @@ public class MeetingMinute {
 	@Column(name = "MEE_FILEPATH",columnDefinition = "varchar(Max)", nullable = true)
 	private String filePath;
 	
+	@Column(name = "MEE_TYPE", nullable = false, length = 2)
+	private String type;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "minute", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<ActionPlan> plans;	
 	
 	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "MEE_IDMINUTE", nullable = false)
+	@JoinColumn(name = "MEE_IDMINUTE", nullable = true)
 	private List<Diary> activities;
 	
 	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
@@ -164,5 +167,14 @@ public class MeetingMinute {
 	public void setParticipants(List<Employee> participants) {
 		this.participants = participants;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	
 }

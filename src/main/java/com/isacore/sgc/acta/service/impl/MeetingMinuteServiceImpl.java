@@ -26,8 +26,8 @@ public class MeetingMinuteServiceImpl implements IMeetingMinuteService{
 	}
 
 	@Override
-	public MeetingMinute findById(String idMinute) {
-		return this.findById(idMinute);
+	public MeetingMinute findById(MeetingMinute m) {
+		return this.repo.findOne(m.getIdMinute());
 	}
 
 	@Override
