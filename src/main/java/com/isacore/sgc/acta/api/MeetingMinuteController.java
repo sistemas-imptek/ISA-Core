@@ -67,5 +67,13 @@ public class MeetingMinuteController {
 		
 		return Crypto.encrypt(s);
 	}
+	
+	@RequestMapping(value = "/utilDeCoding", method = RequestMethod.POST)
+	public @ResponseBody String decoding(@RequestBody String s) {
+		
+		logger.info("> String a encryptar " + s);
+		
+		return Crypto.decrypt(s);
+	}
 
 }

@@ -1,14 +1,6 @@
 package com.isacore.security.tx;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,44 +17,45 @@ import com.isacore.util.WebRequestIsa;
 
 @Component
 public class TxSecurity {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private IUserImptekService userImptekService;
-	
+
 	public ResponseEntity<Object> AAS(WebRequestIsa wri) {
-		
+
 		try {
 			logger.info("> TX: TxSecurityAAS");
-			String jsonValue = Crypto.decrypt(wri.getParameters()); 
-			logger.info("> Parameters: " + jsonValue);
+			String jsonValue = Crypto.decrypt(wri.getParameters());
 
-			ObjectMapper mapper = new ObjectMapper();
-			LoginIsa li = mapper.readValue(jsonValue, LoginIsa.class);
-			
-			logger.info("> Validando usuario: " + li.getUserName());
-			UserImptek userI = this.userImptekService.findByUserImptek(li.getUserName());
-			
-			if(userI == null)
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			else
-				if(li.getPass().equals(userI.getUserPass()))
-					return new ResponseEntity<Object>(userI,HttpStatus.OK);
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} else {
+				logger.info("> Parameters: " + jsonValue);
+
+				ObjectMapper mapper = new ObjectMapper();
+				LoginIsa li = mapper.readValue(jsonValue, LoginIsa.class);
+
+				logger.info("> Validando usuario: " + li.getUserName());
+				UserImptek userI = this.userImptekService.findByUserImptek(li.getUserName());
+
+				if (userI == null)
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				else if (li.getPass().equals(userI.getUserPass()))
+					return new ResponseEntity<Object>(userI, HttpStatus.OK);
 				else
 					return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-			
-		}catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException |InvalidKeyException |
-				InvalidAlgorithmParameterException |IllegalBlockSizeException | BadPaddingException e) {
-			logger.error("> error al desencryptar: " + LoginIsa.class);
+			}
+
+		} catch (NullPointerException e) {
+			logger.error("> jsonValue is null: " + LoginIsa.class);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}catch (NullPointerException e) {
-			logger.error("> jsonValue is null: " + LoginIsa.class);				
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}catch (IOException e) {
+		} catch (IOException e) {
 			logger.error("> No se ha podido serializar el JSON a la clase: " + LoginIsa.class);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 }

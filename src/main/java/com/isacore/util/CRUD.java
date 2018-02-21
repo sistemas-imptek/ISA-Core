@@ -1,4 +1,4 @@
-package com.isacore.sgc.acta.service;
+package com.isacore.util;
 
 import java.util.List;
 

@@ -8,8 +8,6 @@ public class WebRequestIsa {
 		
 	private String parameters;
 
-	
-	
 	public WebRequestIsa() {}
 
 	public WebRequestIsa(String transactionName, String transactionCode, String parameters) {
