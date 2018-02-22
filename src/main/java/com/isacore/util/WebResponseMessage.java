@@ -14,6 +14,10 @@ public class WebResponseMessage {
 
 	public static final String WITHOUT_PARAMS = "Sin parámetros de búsqueda";
 	
+	public static final String WITHOUT_PARAMS_TO_CREATE_UPDATE = "Sin parámetros de búsqueda";
+	
 	public static final String SEARCHING_OK = "Objeto Encontrado";
+	
+	public static final String CREATE_UPDATE_OK = "Objeto creado/actualizado satisfactoriamente";
 	
 }

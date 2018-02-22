@@ -1,5 +1,6 @@
 package com.isacore.quality.tx;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,44 +10,183 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.model.Norm;
 import com.isacore.quality.service.INormService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
+import com.isacore.util.WebResponseIsa;
+import com.isacore.util.WebResponseMessage;
 
 @Component
 public class TxNorm {
 
+	public static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+
+	public static final String TX_NAME_GetAllNorms = "GetAllNorms";
+	public static final String TX_CODE_GetAllNorms = "TxQQRgetNorms";
+
+	public static final String TX_NAME_GetNormById = "GetNormById";
+	public static final String TX_CODE_GetNormById = "TxQQRgetNormById";
+	
+	public static final String TX_NAME_GetByKindNorm = "GetByKindNorm";
+	public static final String TX_CODE_GetByKindNorm = "TxQQRgetByKindNorm";
+
+	
 	@Autowired
 	private INormService normService;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	
+	/**
+	 * TX NAME: GetAllNorms, obtiene toda la lista de normas
+	 * @param wri
+	 * @return
+	 */
 	public ResponseEntity<Object> TxQQRgetNorms(WebRequestIsa wri) {
 		logger.info("> TX: TxQQRgetNorms");
 
-		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
-			List<Norm> norms = this.normService.findAll();
-			if (norms.isEmpty() || norms == null)
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			else
-				return new ResponseEntity<Object>(norms, HttpStatus.OK);
-		} else {
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_GetAllNorms);
+		wrei.setTransactionCode(TX_CODE_GetAllNorms);
 
+		List<Norm> norms = this.normService.findAll();
+		if (norms.isEmpty() || norms == null) {
+			logger.info("> No existe registros en la base de datos");
+			wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
+		} else {
+			try {
+				// encryptamos la lista a JSON
+				String json = JSON_MAPPER.writeValueAsString(norms);
+				// encriptamos en JSON
+				String jsonCryp = Crypto.encrypt(json);
+
+				if (jsonCryp.equals(Crypto.ERROR)) {
+					logger.error("> error al encryptar");
+					wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+					return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+				} else {
+					wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+					wrei.setParameters(jsonCryp);
+					return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+				}
+
+			} catch (IOException e) {
+				logger.error("> error al serializar el JSON");
+				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+
+	}
+	
+	/**
+	 * TX NAME: GetNormById, obtiene una norma en base a su id
+	 */
+	public ResponseEntity<Object> TxQQRgetNormById(WebRequestIsa wri){
+		logger.info("> Tx TxQQRgetNormById");
+		
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_GetNormById);
+		wrei.setTransactionCode(TX_CODE_GetNormById);
+		
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		} else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
-				logger.info("> Parameters: " + jsonValue);
-				logger.info("> TX: TxQQRgetNorms --> " + jsonValue);
-				List<Norm> norms = this.normService.findByKindNorm(jsonValue);
-				if (norms.isEmpty() || norms == null)
-					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				else
-					return new ResponseEntity<Object>(norms, HttpStatus.OK);
+				try {
+					logger.info("> mapeando json a la clase: " + Norm.class);
+					Norm n = JSON_MAPPER.readValue(jsonValue, Norm.class);
+					logger.info("> id Norm: " + n.getIdNorm());
+					n = this.normService.findById(n);
+
+					if (n == null) {
+						logger.info("> Norm not found");
+						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
+					} else {
+						String json = JSON_MAPPER.writeValueAsString(n);
+						String jsonCryp = Crypto.encrypt(json);
+
+						if (jsonCryp.equals(Crypto.ERROR)) {
+							logger.error("> error al encryptar");
+							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						} else {
+							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setParameters(jsonCryp);
+							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+						}
+					}
+				} catch (IOException e) {
+					logger.error("> No se ha podido serializar el JSON a la clase: " + Norm.class);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
 			}
 		}
 	}
+	
+	/**
+	 * TX NAME: GetByKindNorm
+	 */
+	public ResponseEntity<Object> TxQQRgetByKindNorm(WebRequestIsa wri){
+logger.info("> Tx TxQQRgetNormById");
+		
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_GetByKindNorm);
+		wrei.setTransactionCode(TX_CODE_GetByKindNorm);
+		
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		} else {
+			String jsonValue = Crypto.decrypt(wri.getParameters());
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				try {
+					logger.info("> mapeando json a la clase: " + Norm.class);
+					Norm n = JSON_MAPPER.readValue(jsonValue, Norm.class);
+					logger.info("> kind Norm: " + n.getKind());
+					List<Norm> norms = this.normService.findByKindNorm(n);
 
+					if (norms.isEmpty() || norms == null) {
+						logger.info("> Norms not found");
+						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
+					} else {
+						String json = JSON_MAPPER.writeValueAsString(norms);
+						String jsonCryp = Crypto.encrypt(json);
+
+						if (jsonCryp.equals(Crypto.ERROR)) {
+							logger.error("> error al encryptar");
+							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						} else {
+							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setParameters(jsonCryp);
+							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+						}
+					}
+				} catch (IOException e) {
+					logger.error("> No se ha podido serializar el JSON a la clase: " + Norm.class);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+			}
+		}
+	}
 }

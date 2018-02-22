@@ -28,6 +28,10 @@ public class TxProduct {
 
 	public static final String TX_NAME_GetProductById = "GetProductById";
 	public static final String TX_CODE_GetProductById = "TxQQRgetProductById";
+	
+	public static final String TX_NAME_SetProduct = "SetProduct";
+	public static final String TX_CODE_SetProduct = "TxQQRsetProduct";
+	
 
 	@Autowired
 	private IProductService service;
@@ -50,6 +54,7 @@ public class TxProduct {
 		List<Product> products = this.service.findAll();
 
 		if (products.isEmpty() || products == null) {
+			logger.info("> No existe registros en la base de datos");
 			wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 		} else {
@@ -146,23 +151,40 @@ public class TxProduct {
 	public ResponseEntity<Object> TxQQRsetProduct(WebRequestIsa wri) {
 		logger.info("> TX: TxQQRsetProduct");
 
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_SetProduct);
+		wrei.setTransactionCode(TX_CODE_SetProduct);
+		
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
+			return new ResponseEntity<Object>(wrei,HttpStatus.NOT_ACCEPTABLE);
 		} else {
 
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
-					logger.info("> mapeando json a la clase: " + Product.class);
-					ObjectMapper mapper = new ObjectMapper();
-					Product p = mapper.readValue(jsonValue, Product.class);
+					logger.info("> mapeando json a la clase: " + Product.class);					
+					Product p = JSON_MAPPER.readValue(jsonValue, Product.class);
 					logger.info("> objeto a guardar: " + p.toString());
-					this.service.create(p);
-					return new ResponseEntity<>(HttpStatus.OK);
+					Product pp = this.service.create(p);
+					
+					String json = JSON_MAPPER.writeValueAsString(pp);
+					String jsonCryp = Crypto.encrypt(json);
+					
+					if(jsonCryp.equals(Crypto.ERROR)) {
+						logger.error("> error al encryptar");
+						wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+					}else {
+						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
+						wrei.setParameters(jsonCryp);
+						return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+					}
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Product.class);
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

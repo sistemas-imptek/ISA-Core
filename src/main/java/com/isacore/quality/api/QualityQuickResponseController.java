@@ -28,23 +28,28 @@ public class QualityQuickResponseController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
 		
 		switch(wri.getTransactionCode()) {
 		
-		case "TxQQRgetNorms":
+		case TxNorm.TX_CODE_GetAllNorms:
 			return this.txNorm.TxQQRgetNorms(wri);
+			
+		case TxNorm.TX_CODE_GetNormById:
+			return this.txNorm.TxQQRgetNormById(wri);
+			
+		case TxNorm.TX_CODE_GetByKindNorm:
+			return this.txNorm.TxQQRgetByKindNorm(wri);
 
-		case "TxQQRgetProducts":
+		case TxProduct.TX_CODE_GetAllProducts:
 			return this.txProduct.TxQQRgetProducts(wri);
 			
-		case "TxQQRsetProduct":
-			return this.txProduct.TxQQRsetProduct(wri);
-		
-		case "TxQQRgetProductById":
+		case TxProduct.TX_CODE_GetProductById:
 			return this.txProduct.TxQQRgetProductById(wri);
+			
+		case TxProduct.TX_CODE_SetProduct:
+			return this.txProduct.TxQQRsetProduct(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode() + " " + wri.getTransactionName() + LoginIsa.class);

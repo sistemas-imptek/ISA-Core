@@ -27,9 +27,8 @@ public class NormServiceImpl implements INormService{
 	}
 
 	@Override
-	public Norm findById(Norm id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Norm findById(Norm n) {
+		return this.repo.findOne(n.getIdNorm());
 	}
 
 	@Override
@@ -45,8 +44,9 @@ public class NormServiceImpl implements INormService{
 	}
 
 	@Override
-	public List<Norm> findByKindNorm(String kindNorm) {
-		return this.repo.findByKindNorm(kindNorm);
+	public List<Norm> findByKindNorm(Norm n) {
+		return this.repo.findByKindNorm(n.getKind());
 	}
+
 
 }

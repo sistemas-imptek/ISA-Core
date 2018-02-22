@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity(name = "norm")
 @Table(name = "NORM")
@@ -28,7 +29,8 @@ public class Norm {
 	@Column(name = "NORM_KIND", nullable = false, length = 2)
 	private String kind;
 	
-	
+	@Transient
+	private String kindDesc;
 
 	public Norm() {
 		super();
@@ -81,6 +83,24 @@ public class Norm {
 
 	public void setKind(String kind) {
 		this.kind = kind;
+	}
+
+	public String getKindDesc() {
+		
+		switch (this.kind) {
+		case "ES":
+			return "Ensayo";
+			
+		case "PR":
+			return "Producto";
+
+		default:
+			return "SN";
+		}
+	}
+
+	public void setKindDesc(String kindDesc) {
+		this.kindDesc = kindDesc;
 	}
 
 	@Override

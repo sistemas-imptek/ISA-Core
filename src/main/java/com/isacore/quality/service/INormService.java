@@ -7,6 +7,6 @@ import com.isacore.util.CRUD;
 
 public interface INormService  extends CRUD<Norm>{
 
-	List<Norm> findByKindNorm(String kindNorm);
+	List<Norm> findByKindNorm(Norm n);
 	
 }
