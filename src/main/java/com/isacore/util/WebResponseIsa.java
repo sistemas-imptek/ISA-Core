@@ -1,10 +1,15 @@
 package com.isacore.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class WebResponseIsa {
 	
 	private String transactionName;
 	
 	private String transactionCode;
+	
+	private String status;
 	
 	private String message;
 	
@@ -49,5 +54,15 @@ public class WebResponseIsa {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 	
 }
