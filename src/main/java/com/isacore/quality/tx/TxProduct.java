@@ -45,7 +45,7 @@ public class TxProduct {
 	 * @return
 	 */
 	public ResponseEntity<Object> TxQQRgetProducts(WebRequestIsa wri) {
-		logger.info("> TX: TxQRgetCommittees");
+		logger.info("> TX: TxQQRgetProducts");
 
 		WebResponseIsa wrei = new WebResponseIsa();
 		wrei.setTransactionName(TX_NAME_GetAllProducts);
@@ -70,6 +70,7 @@ public class TxProduct {
 					return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 				}else {
 					wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+					wrei.setStatus(WebResponseMessage.STATUS_OK);
 					wrei.setParameters(jsonCryp);
 					return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 				}

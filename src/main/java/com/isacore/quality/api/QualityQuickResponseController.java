@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
+import com.isacore.quality.tx.TxPropertyList;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
+import com.isacore.util.WebResponseMessage;
 
 @RestController
 @RequestMapping(value = "/qualityQR")
@@ -26,6 +28,9 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxProduct txProduct;
+	
+	@Autowired
+	private TxPropertyList txPropertyList;
 	
 	@Autowired
 	private WebResponseIsa wrei;
@@ -54,11 +59,15 @@ public class QualityQuickResponseController {
 			
 		case TxProduct.TX_CODE_SetProduct:
 			return this.txProduct.TxQQRsetProduct(wri);
+			
+		case TxPropertyList.TX_CODE_GetAllOnlyPropertyList:
+			return this.txPropertyList.TxQQRgetOnlyPL(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());
 			wrei.setTransactionName("Transacción no encontrada");
 			wrei.setTransactionCode("TxNotFound");
+			wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 			wrei.setMessage("Transacción no encontrada");
 			return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 		}

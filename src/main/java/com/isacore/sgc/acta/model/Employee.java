@@ -44,6 +44,12 @@ public class Employee {
 	@Column(name = "EMP_STATE")
 	private boolean state;
 	
+	@Column(name = "EMP_JOB", nullable = true, length = 512)
+	private String job;
+	
+	@Column(name = "EMP_WORK_AREA", nullable = true, length = 512)
+	private String workArea;
+	
 	@ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "participants")
 	private List<MeetingMinute> minutes;
 	
@@ -116,6 +122,23 @@ public class Employee {
 		this.plans = plans;
 	}
 	
+	
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	public String getWorkArea() {
+		return workArea;
+	}
+
+	public void setWorkArea(String workArea) {
+		this.workArea = workArea;
+	}
+
 	public String getCompleteName() {
 		StringBuilder sb = new StringBuilder().append(this.name).append(" ").append(this.lastName);		
 		StringTokenizer st = new StringTokenizer(sb.toString());

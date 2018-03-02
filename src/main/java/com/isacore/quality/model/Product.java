@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity(name = "product")
 @Table(name = "PRODUCT")
 public class Product {
@@ -22,7 +24,8 @@ public class Product {
 	@Column(name = "PRODUCT_ID")
 	private Integer idProduct;
 	
-	@Column(name = "PRODUCT_SAP_CODE", nullable = false, length = 32)
+	@NaturalId
+	@Column(name = "PRODUCT_SAP_CODE", nullable = true, length = 32)
 	private String sapCode;
 	
 	@Column(name = "PRODUCT_NAME", nullable = false, length = 512)
@@ -30,6 +33,9 @@ public class Product {
 	
 	@Column(name = "PRODUCT_DESCRIPTION", nullable = true, length = 512)
 	private String descProduct;
+	
+	@Column(name = "PRODUCT_ITCDQ", nullable = true, length = 64)
+	private String itcdq;
 	
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
@@ -85,6 +91,14 @@ public class Product {
 
 	public void setPropertyList(List<Property> propertyList) {
 		this.propertyList = propertyList;
+	}
+
+	public String getItcdq() {
+		return itcdq;
+	}
+
+	public void setItcdq(String itcdq) {
+		this.itcdq = itcdq;
 	}
 
 	@Override

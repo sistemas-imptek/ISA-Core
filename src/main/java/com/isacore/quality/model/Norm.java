@@ -1,12 +1,18 @@
 package com.isacore.quality.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "norm")
 @Table(name = "NORM")
@@ -20,14 +26,18 @@ public class Norm {
 	@Column(name = "NORM_NAME", nullable = false, length = 128)
 	private String nameNorm;
 	
-	@Column(name = "NORM_APLICATION")
+	@Column(name = "NORM_APLICATION", nullable = true, length = 64)
 	private String aplication;
 	
-	@Column(name = "NORM_DESCRIPTION", nullable = false, length = 512)
+	@Column(name = "NORM_DESCRIPTION", nullable = true, length = 512)
 	private String description;
 	
 	@Column(name = "NORM_KIND", nullable = false, length = 2)
 	private String kind;
+	
+	@JsonIgnore
+	@ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "norms")
+	private List<PropertyList> propertyList;
 	
 	@Transient
 	private String kindDesc;
@@ -103,11 +113,19 @@ public class Norm {
 		this.kindDesc = kindDesc;
 	}
 
+	public List<PropertyList> getPropertyList() {
+		return propertyList;
+	}
+
+	public void setPropertyList(List<PropertyList> propertyList) {
+		this.propertyList = propertyList;
+	}
+
 	@Override
 	public String toString() {
 		return "Norm [idNorm=" + idNorm + ", nameNorm=" + nameNorm + ", aplication=" + aplication + ", description="
-				+ description + ", kind=" + kind + "]";
+				+ description + ", kind=" + kind + ", propertyList=" + propertyList + ", kindDesc=" + kindDesc + "]";
 	}
-	
+
 	
 }

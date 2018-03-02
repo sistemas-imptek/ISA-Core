@@ -1,43 +1,42 @@
 package com.isacore.quality.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.isacore.localdate.converter.LocalDateTimeConverter;
 
 @Entity(name = "property")
 @Table(name = "PROPERTY")
 public class Property {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "PROPERTY_ID")
-	private Integer idProperty;
+	@Column(name = "PROPERTY_ID", nullable = false, length = 16)
+	private String idProperty;
 	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
 	private Product product;
 	*/
-	@ManyToOne( fetch = FetchType.EAGER)
-	@JoinColumn(name = "NORM_ID", referencedColumnName = "NORM_ID", nullable = false)
-	private Norm norm;
-	
 	@Column(name = "PROPERTY_NAME", nullable = false, length = 1024)
 	private String nameProperty;
 	
 	@Column(name = "PROPERTY_TYPE", nullable = false, length = 1)
 	private String typeProperty;
 	
+	@Column(name = "PROPERTY_NORM", nullable = true, length = 2048)
+	private String normProperty;
+	
 	@Column(name = "PROPERTY_MIN", nullable = true, columnDefinition = "decimal(5,2)" )
-	private double minProperty;
+	private Double minProperty;
 	
 	@Column(name = "PROPERTY_MAX", nullable = true, columnDefinition = "decimal(5,2)" )
-	private double maxProperty;
+	private Double maxProperty;
 	
 	@Column(name = "PROPERTY_UNIT", nullable = true, length = 8)
 	private String unitProperty;
@@ -45,16 +44,25 @@ public class Property {
 	@Column(name = "PROPERTY_DESCRIPTION", nullable = true, columnDefinition = "varchar(max)")
 	private String descProperty;
 	
-	@Column(name = "PROPERTY_VIEW", nullable = true, length = 32)
+	@Column(name = "PROPERTY_VIEW", nullable = true, columnDefinition = "varchar(Max)")
 	private String viewProperty;
 
+	@Column(name = "PROPERTY_VIEW_HCC", nullable = true)
+	private boolean viewPropertyOnHcc;
 	
+	@Column(name = "MEE_DATEMEETING", nullable = false)
+	@Convert(converter = LocalDateTimeConverter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	private LocalDateTime dateUpdate;
 	
-	public Integer getIdProperty() {
+	@Column(name = "PROPERTY_ASUSER", nullable = false, length = 64)
+	private String asUser;
+	
+	public String getIdProperty() {
 		return idProperty;
 	}
 
-	public void setIdProperty(Integer idProperty) {
+	public void setIdProperty(String idProperty) {
 		this.idProperty = idProperty;
 	}
 /*
@@ -66,14 +74,6 @@ public class Property {
 		this.product = product;
 	}
 */
-	public Norm getNorm() {
-		return norm;
-	}
-
-	public void setNorm(Norm norm) {
-		this.norm = norm;
-	}
-
 	public String getNameProperty() {
 		return nameProperty;
 	}
@@ -90,19 +90,19 @@ public class Property {
 		this.typeProperty = typeProperty;
 	}
 
-	public double getMinProperty() {
+	public Double getMinProperty() {
 		return minProperty;
 	}
 
-	public void setMinProperty(double minProperty) {
+	public void setMinProperty(Double minProperty) {
 		this.minProperty = minProperty;
 	}
 
-	public double getMaxProperty() {
+	public Double getMaxProperty() {
 		return maxProperty;
 	}
 
-	public void setMaxProperty(double maxProperty) {
+	public void setMaxProperty(Double maxProperty) {
 		this.maxProperty = maxProperty;
 	}
 
@@ -129,5 +129,38 @@ public class Property {
 	public void setViewProperty(String viewProperty) {
 		this.viewProperty = viewProperty;
 	}
+
+	public String getNormProperty() {
+		return normProperty;
+	}
+
+	public void setNormProperty(String normProperty) {
+		this.normProperty = normProperty;
+	}
+
+	public boolean isViewPropertyOnHcc() {
+		return viewPropertyOnHcc;
+	}
+
+	public void setViewPropertyOnHcc(boolean viewPropertyOnHcc) {
+		this.viewPropertyOnHcc = viewPropertyOnHcc;
+	}
+
+	public String getAsUser() {
+		return asUser;
+	}
+
+	public void setAsUser(String asUser) {
+		this.asUser = asUser;
+	}
+
+	public LocalDateTime getDateUpdate() {
+		return dateUpdate;
+	}
+
+	public void setDateUpdate(LocalDateTime dateUpdate) {
+		this.dateUpdate = dateUpdate;
+	}
+	
 	
 }

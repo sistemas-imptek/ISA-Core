@@ -1,6 +1,10 @@
 package com.isacore.util;
 
 public class WebResponseMessage {
+	
+	public static final String STATUS_OK = "OK";
+	
+	public static final String STATUS_ERROR = "ERROR";
 
 	public static final String ERROR_TO_JSON = "Error al serializar el JSON, favor contacte al administrador";
 	
