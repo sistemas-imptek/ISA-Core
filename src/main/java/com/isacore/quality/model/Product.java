@@ -37,6 +37,9 @@ public class Product {
 	@Column(name = "PRODUCT_ITCDQ", nullable = true, length = 64)
 	private String itcdq;
 	
+	@Column(name = "PRODUCT_FAMILY", nullable = true, length = 1024)
+	private String familyProduct;
+	
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
 	
@@ -77,6 +80,14 @@ public class Product {
 		this.descProduct = descProduct;
 	}
 
+	public String getFamilyProduct() {
+		return familyProduct;
+	}
+
+	public void setFamilyProduct(String familyProduct) {
+		this.familyProduct = familyProduct;
+	}
+
 	public String getTypeProduct() {
 		return typeProduct;
 	}
@@ -105,8 +116,6 @@ public class Product {
 	public String toString() {
 		return "Product [idProduct=" + idProduct + ", sapCode=" + sapCode + ", nameProduct=" + nameProduct
 				+ ", descProduct=" + descProduct + ", propertyList=" + propertyList + "]";
-	}
-	
-	
+	}	
 	
 }

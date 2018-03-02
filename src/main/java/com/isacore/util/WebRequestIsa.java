@@ -1,10 +1,16 @@
 package com.isacore.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class WebRequestIsa {
 
 	private String transactionName;
 	
 	private String transactionCode;
+	
+	@JsonInclude(Include.NON_NULL)
+	private String user;
 		
 	private String parameters;
 
@@ -30,6 +36,14 @@ public class WebRequestIsa {
 
 	public void setTransactionCode(String transactionCode) {
 		this.transactionCode = transactionCode;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	public String getParameters() {

@@ -60,6 +60,18 @@ public class HccHead {
 	
 	@Column(name = "HCCH_ANALYSIS", nullable = false, columnDefinition = "varchar(max)")
 	private String analysis;
+	
+	@Column(name = "HCCH_ASUSER", nullable = false, length = 64)
+	private String asUser;
+	
+	@Column(name = "HCCH_U_NAME", nullable = false, length = 1024)
+	private String userName;
+	
+	@Column(name = "HCCH_JOB", nullable = false, length = 512)
+	private String job;
+	
+	@Column(name = "HCCH_WORK_AREA", nullable = false, length = 512)
+	private String workArea;
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "HCCH_SAPCODE", nullable = false)
@@ -161,6 +173,38 @@ public class HccHead {
 
 	public void setAnalysis(String analysis) {
 		this.analysis = analysis;
+	}
+
+	public String getAsUser() {
+		return asUser;
+	}
+
+	public void setAsUser(String asUser) {
+		this.asUser = asUser;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	public String getWorkArea() {
+		return workArea;
+	}
+
+	public void setWorkArea(String workArea) {
+		this.workArea = workArea;
 	}
 
 	public List<HccDetail> getDetail() {
