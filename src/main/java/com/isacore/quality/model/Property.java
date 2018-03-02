@@ -50,7 +50,7 @@ public class Property {
 	@Column(name = "PROPERTY_VIEW_HCC", nullable = true)
 	private boolean viewPropertyOnHcc;
 	
-	@Column(name = "MEE_DATEMEETING", nullable = false)
+	@Column(name = "PROPERTY_UPDATE", nullable = false)
 	@Convert(converter = LocalDateTimeConverter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
 	private LocalDateTime dateUpdate;
