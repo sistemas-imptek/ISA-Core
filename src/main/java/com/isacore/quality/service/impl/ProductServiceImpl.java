@@ -41,4 +41,9 @@ public class ProductServiceImpl implements IProductService{
 		
 	}
 
+	@Override
+	public Product findOnlyProductById(Product p) {
+		return this.repo.findOnlyProductById(p.getIdProduct());
+	}
+
 }

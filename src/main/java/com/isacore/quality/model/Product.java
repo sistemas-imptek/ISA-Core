@@ -46,8 +46,40 @@ public class Product {
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "PRODUCT_ID")
 	private List<Property> propertyList;
-
 	
+	public Product() {
+		super();
+	}
+
+	public Product(Integer idProduct, String sapCode, String nameProduct, String descProduct, String itcdq,
+			String familyProduct, String typeProduct) {
+		super();
+		this.idProduct = idProduct;
+		this.sapCode = sapCode;
+		this.nameProduct = nameProduct;
+		this.descProduct = descProduct;
+		this.itcdq = itcdq;
+		this.familyProduct = familyProduct;
+		this.typeProduct = typeProduct;
+	}
+
+
+
+	public Product(Integer idProduct, String sapCode, String nameProduct, String descProduct, String itcdq,
+			String familyProduct, String typeProduct, List<Property> propertyList) {
+		super();
+		this.idProduct = idProduct;
+		this.sapCode = sapCode;
+		this.nameProduct = nameProduct;
+		this.descProduct = descProduct;
+		this.itcdq = itcdq;
+		this.familyProduct = familyProduct;
+		this.typeProduct = typeProduct;
+		this.propertyList = propertyList;
+	}
+
+
+
 	public Integer getIdProduct() {
 		return idProduct;
 	}

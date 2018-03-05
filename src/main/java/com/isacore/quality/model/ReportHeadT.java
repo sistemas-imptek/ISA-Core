@@ -36,6 +36,30 @@ public class ReportHeadT {
 	
 	@Column(name = "REPORT_OF", nullable = true, length = 3072)
 	private String of;
+	
+	
+
+	public ReportHeadT() {}
+	
+	
+
+	public ReportHeadT(String type) {
+		super();
+		this.type = type;
+	}
+
+	public ReportHeadT(Integer idReport, String type, String tittle, String subTitle, String norm, String code,
+			String review, String of) {
+		super();
+		this.idReport = idReport;
+		this.type = type;
+		this.tittle = tittle;
+		this.subTitle = subTitle;
+		this.norm = norm;
+		this.code = code;
+		this.review = review;
+		this.of = of;
+	}
 
 	public Integer getIdReport() {
 		return idReport;

@@ -24,4 +24,6 @@ public class WebResponseMessage {
 	
 	public static final String CREATE_UPDATE_OK = "Objeto creado/actualizado satisfactoriamente";
 	
+	public static final String ERROR_GENERATE_HCC = "Error al generar la HCC, favor contacte al administrador para corregir el problema";
+	
 }

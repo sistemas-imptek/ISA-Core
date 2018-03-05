@@ -5,4 +5,6 @@ import com.isacore.util.CRUD;
 
 public interface IProductService extends CRUD<Product>{
 
+	Product findOnlyProductById (Product p);
+	
 }

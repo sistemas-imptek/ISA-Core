@@ -161,6 +161,15 @@ public class Property {
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
 	}
+
+	@Override
+	public String toString() {
+		return "Property [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", typeProperty="
+				+ typeProperty + ", normProperty=" + normProperty + ", minProperty=" + minProperty + ", maxProperty="
+				+ maxProperty + ", unitProperty=" + unitProperty + ", descProperty=" + descProperty + ", viewProperty="
+				+ viewProperty + ", viewPropertyOnHcc=" + viewPropertyOnHcc + ", dateUpdate=" + dateUpdate + ", asUser="
+				+ asUser + "]";
+	}
 	
 	
 }

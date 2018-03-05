@@ -32,16 +32,19 @@ public class HccDetail {
 	private String unit;
 	
 	@Column(name = "HCCD_PROP_MIN", nullable = true, columnDefinition = "decimal(8,2)")
-	private double min;
+	private Double min;
 	
 	@Column(name = "HCCD_PROP_MAX", nullable = true, columnDefinition = "decimal(8,2)")
-	private double max;
+	private Double max;
 	
 	@Column(name = "HCCD_PROP_VIEW", nullable = true, length = 32)
 	private String view;
 	
+	@Column(name = "HCCD_PROP_VIEW_ON_HCC", nullable = true)
+	private boolean viewOnHcc;
+	
 	@Column(name = "HCCD_TEST_RESULT", nullable = true, columnDefinition = "decimal(8,2)")
-	private double result;
+	private Double result;
 	
 	@Column(name = "HCCD_TEST_RESULT_VIEW", nullable = true, length = 32)
 	private String resultText;
@@ -94,19 +97,19 @@ public class HccDetail {
 		this.unit = unit;
 	}
 
-	public double getMin() {
+	public Double getMin() {
 		return min;
 	}
 
-	public void setMin(double min) {
+	public void setMin(Double min) {
 		this.min = min;
 	}
 
-	public double getMax() {
+	public Double getMax() {
 		return max;
 	}
 
-	public void setMax(double max) {
+	public void setMax(Double max) {
 		this.max = max;
 	}
 
@@ -118,11 +121,11 @@ public class HccDetail {
 		this.view = view;
 	}
 
-	public double getResult() {
+	public Double getResult() {
 		return result;
 	}
 
-	public void setResult(double result) {
+	public void setResult(Double result) {
 		this.result = result;
 	}
 
@@ -132,6 +135,14 @@ public class HccDetail {
 
 	public void setResultText(String resultText) {
 		this.resultText = resultText;
+	}
+
+	public boolean isViewOnHcc() {
+		return viewOnHcc;
+	}
+
+	public void setViewOnHcc(boolean viewOnHcc) {
+		this.viewOnHcc = viewOnHcc;
 	}
 	
 	

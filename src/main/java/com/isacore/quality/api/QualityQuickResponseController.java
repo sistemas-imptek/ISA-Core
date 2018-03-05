@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
@@ -23,6 +24,11 @@ import com.isacore.util.WebResponseMessage;
 @RequestMapping(value = "/qualityQR")
 public class QualityQuickResponseController {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private WebResponseIsa wrei;
+	
 	@Autowired
 	private TxNorm txNorm;
 	
@@ -33,9 +39,7 @@ public class QualityQuickResponseController {
 	private TxPropertyList txPropertyList;
 	
 	@Autowired
-	private WebResponseIsa wrei;
-	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private TxHcc txHcc;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -62,6 +66,9 @@ public class QualityQuickResponseController {
 			
 		case TxPropertyList.TX_CODE_GetAllOnlyPropertyList:
 			return this.txPropertyList.TxQQRgetOnlyPL(wri);
+			
+		case TxHcc.TX_CODE_GenerateHcc:
+			return this.txHcc.TxQQRgenerateHCC(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());
