@@ -2,6 +2,8 @@ package com.isacore.quality.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,8 +12,9 @@ import javax.persistence.Table;
 public class HccDetail {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "HCCD_ID")
-	private String idHccd;
+	private Integer idHccd;
 	
 	//@Column(name = "HCCH_SAPCODE", nullable = false, length = 32)
 	//private String sapCode;
@@ -48,12 +51,15 @@ public class HccDetail {
 	
 	@Column(name = "HCCD_TEST_RESULT_VIEW", nullable = true, length = 32)
 	private String resultText;
+	
+	@Column(name = "HCCD_PASS_TEST", nullable = true)
+	private boolean passTest;
 
-	public String getIdHccd() {
+	public Integer getIdHccd() {
 		return idHccd;
 	}
 
-	public void setIdHccd(String idHccd) {
+	public void setIdHccd(Integer idHccd) {
 		this.idHccd = idHccd;
 	}
 
@@ -144,7 +150,13 @@ public class HccDetail {
 	public void setViewOnHcc(boolean viewOnHcc) {
 		this.viewOnHcc = viewOnHcc;
 	}
-	
-	
+
+	public boolean isPassTest() {
+		return passTest;
+	}
+
+	public void setPassTest(boolean passTest) {
+		this.passTest = passTest;
+	}
 	
 }

@@ -1,6 +1,7 @@
 package com.isacore.quality.tx;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.model.ReportHeadT;
+import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
 import com.isacore.util.Crypto;
@@ -29,6 +31,9 @@ public class TxHcc {
 
 	public static final String TX_NAME_GenerateHcc = "GenerateHcc";
 	public static final String TX_CODE_GenerateHcc = "TxQQRgenerateHCC";
+	
+	public static final String TX_NAME_SetHcc = "Create/UpdateHcc";
+	public static final String TX_CODE_SetHcc = "TxQQRsetHCC";
 
 	public static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,6 +43,9 @@ public class TxHcc {
 
 	@Autowired
 	private IProductService serviceProducto;
+	
+	@Autowired
+	private IHccHeadService serviceHccH;
 
 	/**
 	 * Transacción Para generar la estructura de la HCC, vincular los datos de los
@@ -98,6 +106,53 @@ public class TxHcc {
 			}
 		}
 	}
+	
+	public ResponseEntity<Object> TxQQRSetHCC(WebRequestIsa wri) {
+		logger.info("> TX: TxQQRSetHCC");
+		
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_SetHcc);
+		wrei.setTransactionCode(TX_CODE_SetHcc);
+		
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
+			return new ResponseEntity<Object>(wrei,HttpStatus.NOT_ACCEPTABLE);
+		}else {
+			
+			String jsonValue = Crypto.decrypt(wri.getParameters());
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
+			}else {
+				try {
+					logger.info("> mapeando json a la clase: " + HccHead.class);					
+					HccHead hh = JSON_MAPPER.readValue(jsonValue, HccHead.class);
+					logger.info("> objeto a guardar: " + hh.toString());
+					hh.setDateCreate(LocalDate.now());
+					HccHead hcc = this.serviceHccH.create(hh);
+					if(hcc != null) {
+						logger.info(">> Hcc guardada correctamente");
+						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
+						wrei.setStatus(WebResponseMessage.STATUS_OK);
+						return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+					}else {
+						logger.error(">> Error al guardar la Hcc");
+						wrei.setMessage("Error al guardar la HCC");
+						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+					}
+				}catch (IOException e) {
+					logger.error("> No se ha podido serializar el JSON a la clase: " + HccHead.class);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_CLASS);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					e.printStackTrace();
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
+				}
+			}
+		}
+	}
 
 	private HccHead getHccHead(HccHead hh) {
 		logger.info(">>> mthod: getHccHead::::");
@@ -131,7 +186,7 @@ public class TxHcc {
 
 		logger.info(">>>> mthod: gerenateDetailOfHcc::::");
 		List<HccDetail> detail = new ArrayList<>();
-		int i = 0;
+		
 		Product pp = this.serviceProducto.findById(hh.getProduct());
 		System.out.println(pp.toString());
 		for (Property prop : pp.getPropertyList()) {
