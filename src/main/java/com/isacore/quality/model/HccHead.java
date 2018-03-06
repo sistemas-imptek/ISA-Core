@@ -26,7 +26,7 @@ public class HccHead {
 	private String sapCode;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = true, updatable = false)
 	private Product product;
 	
 	@Column(name = "HCCH_NORM", nullable = false, length = 64)

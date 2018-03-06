@@ -40,6 +40,9 @@ public class HccDetail {
 	@Column(name = "HCCD_PROP_MAX", nullable = true, columnDefinition = "decimal(8,2)")
 	private Double max;
 	
+	@Column(name = "HCCD_SPECIFICATIONS", nullable = true, length = 2048)
+	private String specifications;
+	
 	@Column(name = "HCCD_PROP_VIEW", nullable = true, length = 32)
 	private String view;
 	
@@ -54,6 +57,22 @@ public class HccDetail {
 	
 	@Column(name = "HCCD_PASS_TEST", nullable = true)
 	private boolean passTest;
+	
+	public void generateSpecifications() {
+		if(this.typeProperty.equals("T")) {
+			if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+				this.specifications = "> " + this.min;
+			else {
+				if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
+					this.specifications = "< " + this.max;
+				else 
+					this.specifications  = this.min + " - " + this.max;
+					
+			}		
+		}else {
+			this.specifications = this.view;
+		}
+	}
 
 	public Integer getIdHccd() {
 		return idHccd;
@@ -158,5 +177,15 @@ public class HccDetail {
 	public void setPassTest(boolean passTest) {
 		this.passTest = passTest;
 	}
+
+	public String getSpecifications() {
+		return specifications;
+	}
+
+	public void setSpecifications(String specifications) {
+		this.specifications = specifications;
+	}
+	
+	
 	
 }

@@ -18,6 +18,7 @@ import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.model.ReportHeadT;
+import com.isacore.quality.report.GenerateReportHccPT;
 import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
@@ -136,7 +137,16 @@ public class TxHcc {
 						logger.info(">> Hcc guardada correctamente");
 						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
 						wrei.setStatus(WebResponseMessage.STATUS_OK);
-						return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+						
+						String statusReport = GenerateReportHccPT.runReport(hh.getSapCode());
+						if(statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
+							logger.info(">> Reporte generado correctamente");
+							return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+						}else {
+							wrei.setMessage("No se ha podido generar el reporte");
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+							return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
+						}
 					}else {
 						logger.error(">> Error al guardar la Hcc");
 						wrei.setMessage("Error al guardar la HCC");
@@ -200,6 +210,7 @@ public class TxHcc {
 			hd.setMax(prop.getMaxProperty());
 			hd.setView(prop.getViewProperty());
 			hd.setViewOnHcc(prop.isViewPropertyOnHcc());
+			hd.generateSpecifications();
 			detail.add(hd);
 		}
 
