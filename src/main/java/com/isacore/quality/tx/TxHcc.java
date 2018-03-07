@@ -218,5 +218,13 @@ public class TxHcc {
 		System.out.println(hh);
 		return hh;
 	}
+	
+	private HccHead mergeHccTests(HccHead hh, String batch) {
+		
+		
+		
+		
+		return null;
+	}
 
 }

@@ -16,7 +16,7 @@ public class Test {
 	@Column(name = "TEST_ID")
 	private Integer idTest;
 	
-	@Column(name = "TEST_SAP_CODE", nullable = false, length = 32)
+	@Column(name = "TEST_SAP_CODE", nullable = true, length = 32)
 	private String sapCode;
 	
 	@Column(name = "TEST_PROPERTY_CODE", nullable = false, length = 64)
@@ -26,7 +26,7 @@ public class Test {
 	private String batchTest;
 	
 	@Column(name = "TEST_RESULT", nullable = false, columnDefinition = "decimal(8,2)")
-	private double resultTest;
+	private Double resultTest;
 
 	public Integer getIdTest() {
 		return idTest;
@@ -60,11 +60,11 @@ public class Test {
 		this.batchTest = batchTest;
 	}
 
-	public double getResultTest() {
+	public Double getResultTest() {
 		return resultTest;
 	}
 
-	public void setResultTest(double resultTest) {
+	public void setResultTest(Double resultTest) {
 		this.resultTest = resultTest;
 	}
 	

@@ -43,20 +43,20 @@ public class HccDetail {
 	@Column(name = "HCCD_SPECIFICATIONS", nullable = true, length = 2048)
 	private String specifications;
 	
-	@Column(name = "HCCD_PROP_VIEW", nullable = true, length = 32)
+	@Column(name = "HCCD_PROP_VIEW", nullable = true, length = 1024)
 	private String view;
 	
 	@Column(name = "HCCD_PROP_VIEW_ON_HCC", nullable = true)
-	private boolean viewOnHcc;
+	private Boolean viewOnHcc;
 	
 	@Column(name = "HCCD_TEST_RESULT", nullable = true, columnDefinition = "decimal(8,2)")
 	private Double result;
 	
-	@Column(name = "HCCD_TEST_RESULT_VIEW", nullable = true, length = 32)
+	@Column(name = "HCCD_TEST_RESULT_VIEW", nullable = true, length = 1024)
 	private String resultText;
 	
 	@Column(name = "HCCD_PASS_TEST", nullable = true)
-	private boolean passTest;
+	private Boolean passTest;
 	
 	public void generateSpecifications() {
 		if(this.typeProperty.equals("T")) {
@@ -67,7 +67,6 @@ public class HccDetail {
 					this.specifications = "< " + this.max;
 				else 
 					this.specifications  = this.min + " - " + this.max;
-					
 			}		
 		}else {
 			this.specifications = this.view;
@@ -162,19 +161,19 @@ public class HccDetail {
 		this.resultText = resultText;
 	}
 
-	public boolean isViewOnHcc() {
+	public Boolean isViewOnHcc() {
 		return viewOnHcc;
 	}
 
-	public void setViewOnHcc(boolean viewOnHcc) {
+	public void setViewOnHcc(Boolean viewOnHcc) {
 		this.viewOnHcc = viewOnHcc;
 	}
 
-	public boolean isPassTest() {
+	public Boolean isPassTest() {
 		return passTest;
 	}
 
-	public void setPassTest(boolean passTest) {
+	public void setPassTest(Boolean passTest) {
 		this.passTest = passTest;
 	}
 

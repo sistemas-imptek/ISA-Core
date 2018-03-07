@@ -42,7 +42,7 @@ public class Employee {
 	private String codDataLife;
 	
 	@Column(name = "EMP_STATE")
-	private boolean state;
+	private Boolean state;
 	
 	@Column(name = "EMP_JOB", nullable = true, length = 512)
 	private String job;
@@ -98,11 +98,11 @@ public class Employee {
 		this.codDataLife = codDataLife;
 	}
 
-	public boolean getState() {
+	public Boolean getState() {
 		return state;
 	}
 
-	public void setState(boolean state) {
+	public void setState(Boolean state) {
 		this.state = state;
 	}
 
