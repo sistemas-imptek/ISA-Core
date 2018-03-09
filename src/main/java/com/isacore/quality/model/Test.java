@@ -20,7 +20,7 @@ public class Test {
 	private String sapCode;
 	
 	@Column(name = "TEST_PROPERTY_CODE", nullable = false, length = 64)
-	private String propertyCode;
+	private String idProperty;
 	
 	@Column(name = "TEST_BATCH", nullable = false, length = 64)
 	private String batchTest;
@@ -44,12 +44,12 @@ public class Test {
 		this.sapCode = sapCode;
 	}
 
-	public String getPropertyCode() {
-		return propertyCode;
+	public String getIdProperty() {
+		return idProperty;
 	}
 
-	public void setPropertyCode(String propertyCode) {
-		this.propertyCode = propertyCode;
+	public void setIdProperty(String propertyCode) {
+		this.idProperty = propertyCode;
 	}
 
 	public String getBatchTest() {

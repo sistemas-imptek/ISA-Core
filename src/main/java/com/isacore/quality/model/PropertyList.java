@@ -23,32 +23,31 @@ public class PropertyList {
 	@Id
 	@Column(name = "PROPL_ID", nullable = false, length = 16)
 	private String idProperty;
-	
-	@Column(name = "PROPL_NAME" , nullable = false, length = 1024)
+
+	@Column(name = "PROPL_NAME", nullable = false, length = 1024)
 	private String nameProperty;
-	
-	//Propiedad para saber si es Técnica(T) o Visual (V)
+
+	// Propiedad para saber si es Técnica(T) o Visual (V)
 	@Column(name = "PROPL_TYPE", nullable = false, length = 4)
 	private String typeProperty;
-	
-	//Propiedad para saber si es de Producto(PR) o Ensayo (TE)
+
+	// Propiedad para saber si es de Producto(PR) o Ensayo (TE)
 	@Column(name = "PROPL_TYPE2", nullable = false, length = 4)
 	private String typeProperty2;
-	
+
 	@Transient
 	@JsonInclude(Include.NON_NULL)
 	private String normText;
-	
+
 	@JsonInclude(Include.NON_NULL)
-	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	@JoinTable(name = "PROPERTY_NORM",
-	joinColumns = {@JoinColumn(name = "PROPL_ID")},
-	inverseJoinColumns = {@JoinColumn(name = "NORM_ID")})
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinTable(name = "PROPERTY_NORM", joinColumns = { @JoinColumn(name = "PROPL_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "NORM_ID") })
 	private List<Norm> norms;
-	
-	public PropertyList() {	}
-	
-	
+
+	public PropertyList() {
+	}
+
 	public PropertyList(String idProperty, String nameProperty, String typeProperty, String typeProperty2) {
 		super();
 		this.idProperty = idProperty;
@@ -107,15 +106,18 @@ public class PropertyList {
 	public void setNorms(List<Norm> norms) {
 		this.norms = norms;
 	}
-	
+
 	public void listNorms() {
-		
-		StringBuilder sb = new StringBuilder();
-		this.norms.forEach(x -> sb.append(x).append("/"));
-		
-		this.normText = sb.toString();
+		if (this.norms.isEmpty() || this.norms == null) {
+			StringBuilder sb = new StringBuilder();
+			this.norms.forEach(x -> sb.append(x).append("/"));
+
+			this.normText = sb.toString();
+		}else {
+			this.normText = "---";
+		}
 	}
-	
+
 	public String getNormText() {
 		return normText;
 	}
@@ -129,5 +131,5 @@ public class PropertyList {
 		return "PropertyList [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", typeProperty="
 				+ typeProperty + ", typeProperty2=" + typeProperty2 + ", normText=" + normText + "]";
 	}
-	
+
 }

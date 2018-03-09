@@ -18,10 +18,13 @@ import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.model.ReportHeadT;
+import com.isacore.quality.model.Test;
+import com.isacore.quality.report.GenerateReportHccMP;
 import com.isacore.quality.report.GenerateReportHccPT;
 import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
+import com.isacore.quality.service.ITestService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
@@ -32,7 +35,7 @@ public class TxHcc {
 
 	public static final String TX_NAME_GenerateHcc = "GenerateHcc";
 	public static final String TX_CODE_GenerateHcc = "TxQQRgenerateHCC";
-	
+
 	public static final String TX_NAME_SetHcc = "Create/UpdateHcc";
 	public static final String TX_CODE_SetHcc = "TxQQRsetHCC";
 
@@ -44,9 +47,12 @@ public class TxHcc {
 
 	@Autowired
 	private IProductService serviceProducto;
-	
+
 	@Autowired
 	private IHccHeadService serviceHccH;
+
+	@Autowired
+	private ITestService serviceTest;
 
 	/**
 	 * Transacción Para generar la estructura de la HCC, vincular los datos de los
@@ -107,58 +113,71 @@ public class TxHcc {
 			}
 		}
 	}
-	
+
 	public ResponseEntity<Object> TxQQRSetHCC(WebRequestIsa wri) {
 		logger.info("> TX: TxQQRSetHCC");
-		
+
 		WebResponseIsa wrei = new WebResponseIsa();
 		wrei.setTransactionName(TX_NAME_SetHcc);
 		wrei.setTransactionCode(TX_CODE_SetHcc);
-		
+
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
-			return new ResponseEntity<Object>(wrei,HttpStatus.NOT_ACCEPTABLE);
-		}else {
-			
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		} else {
+
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
-				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
-			}else {
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
 				try {
-					logger.info("> mapeando json a la clase: " + HccHead.class);					
+					logger.info("> mapeando json a la clase: " + HccHead.class);
 					HccHead hh = JSON_MAPPER.readValue(jsonValue, HccHead.class);
 					logger.info("> objeto a guardar: " + hh.toString());
 					hh.setDateCreate(LocalDate.now());
 					HccHead hcc = this.serviceHccH.create(hh);
-					if(hcc != null) {
+					if (hcc != null) {
 						logger.info(">> Hcc guardada correctamente");
 						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
 						wrei.setStatus(WebResponseMessage.STATUS_OK);
-						
-						String statusReport = GenerateReportHccPT.runReport(hh.getSapCode());
-						if(statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
-							logger.info(">> Reporte generado correctamente");
-							return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+
+						if (hcc.getProduct().getTypeProduct().equals("PT")) {
+							String statusReport = GenerateReportHccPT.runReport(hh.getSapCode());
+							if (statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
+								logger.info(">> Reporte generado correctamente");
+								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+							} else {
+								wrei.setMessage("No se ha podido generar el reporte");
+								wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+							}
 						}else {
-							wrei.setMessage("No se ha podido generar el reporte");
-							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
-							return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
+							String statusReport = GenerateReportHccMP.runReport(hh.getSapCode());
+							if (statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
+								logger.info(">> Reporte generado correctamente");
+								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+							} else {
+								wrei.setMessage("No se ha podido generar el reporte");
+								wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+							}
 						}
-					}else {
+
+					} else {
 						logger.error(">> Error al guardar la Hcc");
 						wrei.setMessage("Error al guardar la HCC");
 						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-				}catch (IOException e) {
+				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + HccHead.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_CLASS);
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					e.printStackTrace();
-					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -168,21 +187,44 @@ public class TxHcc {
 		logger.info(">>> mthod: getHccHead::::");
 		Product p = this.serviceProducto.findOnlyProductById(hh.getProduct());
 		if (p != null) {
-			ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCPT"));
 
-			if (rh != null) {
-				HccHead hhg = new HccHead();
-				hhg.setProduct(p);
-				hhg.setHccNorm(rh.getNorm());
-				hhg.setCode(rh.getCode());
-				hhg.setReview(rh.getReview());
-				hhg.setOf(rh.getOf());
-				hhg.setHcchBatch(hh.getHcchBatch());
-				hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
-				return hhg;
+			if (p.getTypeProduct().equals("PT")) {
+
+				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCPT"));
+
+				if (rh != null) {
+					logger.info(">>> mthod: getHccHead::::PT::::" + p.getIdProduct() + ":::" + p.getNameProduct());
+					HccHead hhg = new HccHead();
+					hhg.setProduct(p);
+					hhg.setHccNorm(rh.getNorm());
+					hhg.setCode(rh.getCode());
+					hhg.setReview(rh.getReview());
+					hhg.setOf(rh.getOf());
+					hhg.setHcchBatch(hh.getHcchBatch());
+					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
+					mergeHccTests(hhg, hh.getHcchBatch());
+					return hhg;
+				} else {
+					logger.info(">>> mthod: getHccHead::::no se ha el reportHeaderTemplate HCCPT");
+					return null;
+				}
 			} else {
-				logger.info(">>> mthod: getHccHead::::no se ha el reportHeaderTemplate HCCPT");
-				return null;
+				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCMP"));
+
+				if (rh != null) {
+					logger.info(">>> mthod: getHccHead::::PT::::" + p.getIdProduct() + ":::" + p.getNameProduct());
+					HccHead hhg = new HccHead();
+					hhg.setProduct(p);
+					hhg.setCode(rh.getCode());
+					hhg.setReview(rh.getReview());
+					hhg.setHcchBatch(hh.getHcchBatch());
+					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
+					mergeHccTests(hhg, hh.getHcchBatch());
+					return hhg;
+				} else {
+					logger.info(">>> mthod: getHccHead::::no se ha el reportHeaderTemplate HCCMP");
+					return null;
+				}
 			}
 		} else {
 			logger.info(">>> mthod: getHccHead::::no se ha encontrado el producto con id "
@@ -191,12 +233,12 @@ public class TxHcc {
 		}
 
 	}
-	
+
 	private HccHead gerenateDetailOfHcc(HccHead hh, Product p) {
 
 		logger.info(">>>> mthod: gerenateDetailOfHcc::::");
 		List<HccDetail> detail = new ArrayList<>();
-		
+
 		Product pp = this.serviceProducto.findById(hh.getProduct());
 		System.out.println(pp.toString());
 		for (Property prop : pp.getPropertyList()) {
@@ -218,13 +260,26 @@ public class TxHcc {
 		System.out.println(hh);
 		return hh;
 	}
-	
-	private HccHead mergeHccTests(HccHead hh, String batch) {
-		
-		
-		
-		
-		return null;
+
+	private void mergeHccTests(HccHead hh, String batch) {
+		logger.info(">>>>> mthod: mergeHccTests::::");
+		List<Test> tests = this.serviceTest.findByBatch(batch);
+
+		hh.getDetail().forEach(x -> x.setPassTest(false));
+
+		if (tests == null || tests.isEmpty()) {
+			logger.warn(">>>>> No se encontraron pruebas del lote:::: " + batch);
+		} else {
+			for (Test t : tests) {
+				for (HccDetail hd : hh.getDetail()) {
+					if (t.getIdProperty().equals(hd.getIdProperty())) {
+						hd.setResult(t.getResultTest());
+						hd.evaluateResult();
+						break;
+					}
+				}
+			}
+		}
 	}
 
 }

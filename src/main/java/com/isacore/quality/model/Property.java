@@ -8,7 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
 
 @Entity(name = "property")
@@ -52,7 +53,7 @@ public class Property {
 	
 	@Column(name = "PROPERTY_UPDATE", nullable = false)
 	@Convert(converter = LocalDateTimeConverter.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDateTime dateUpdate;
 	
 	@Column(name = "PROPERTY_ASUSER", nullable = false, length = 64)

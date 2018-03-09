@@ -12,7 +12,7 @@ hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.h
 from dbo.product p
 inner join dbo.hcchead hh on hh.product_id = p.product_id
 inner join dbo.hccdetail hd on hd.hcch_sapcode = hh.hcch_sapcode
-where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
+where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 	</queryString>
 	<field name="product_name" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="product_name"/>
@@ -84,10 +84,13 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 		<property name="com.jaspersoft.studio.field.label" value="hccd_pass_test"/>
 	</field>
 	<variable name="TestR" class="java.lang.String">
-		<variableExpression><![CDATA[$F{hccd_prop_type}.equals( "T" )?$F{hccd_test_result}.toString():$F{hccd_test_result_view}]]></variableExpression>
+		<variableExpression><![CDATA[$F{hccd_prop_type}.equals( "T" ) ? ($F{hccd_test_result} != null ? $F{hccd_test_result}.toString() : "--") :($F{hccd_test_result_view} != null ? $F{hccd_test_result_view} : "--")]]></variableExpression>
 	</variable>
 	<variable name="Success" class="java.lang.String">
-		<variableExpression><![CDATA[$F{hccd_pass_test}.equals( "true" )?"Cumple":"No Cumple"]]></variableExpression>
+		<variableExpression><![CDATA[$F{hccd_pass_test} != null ? ($F{hccd_pass_test} == true ? "Cumple":"No Cumple") : "--"]]></variableExpression>
+	</variable>
+	<variable name="vUunit" class="java.lang.String">
+		<variableExpression><![CDATA[$F{hccd_prop_unit} == null ? "---":$F{hccd_prop_unit}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -453,7 +456,7 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="b44fdd31-ad91-44b3-b399-b3b5ac214da2">
@@ -472,17 +475,12 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<textFieldExpression><![CDATA[$F{hccd_prop_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="240" y="0" width="60" height="20" uuid="511b13f2-f6e0-447a-b408-502c9d7b0371">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0248f0b0-eed5-43f5-aeca-fb725f8fede1"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{hccd_prop_unit}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="300" y="0" width="90" height="20" uuid="a2be1378-699f-4c00-87b3-a07ab254a6b8">
+				<reportElement x="300" y="0" width="90" height="30" uuid="a2be1378-699f-4c00-87b3-a07ab254a6b8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e99ff858-6687-4173-8dd7-bf670132980a"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{hccd_specifications}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -495,13 +493,17 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{Success}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="240" y="0" width="60" height="20" uuid="40d69e24-6f55-4222-bbe6-6a6d005bdd0e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{vUunit}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="181" splitType="Prevent">
-			<property name="com.jaspersoft.studio.layout"/>
+	<pageFooter>
+		<band height="163" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="5" width="180" height="40" uuid="e65f6cfe-8b82-4009-8e8e-94e68327b8ff"/>
+				<reportElement x="0" y="0" width="180" height="40" uuid="e65f6cfe-8b82-4009-8e8e-94e68327b8ff"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -514,7 +516,7 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<text><![CDATA[Observaciones:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="180" y="5" width="370" height="40" uuid="fec5ef87-4f10-4c90-a0d8-5f29f84dee97"/>
+				<reportElement x="180" y="0" width="370" height="40" uuid="fec5ef87-4f10-4c90-a0d8-5f29f84dee97"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -525,7 +527,7 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<textFieldExpression><![CDATA[$F{hcch_comment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="45" width="180" height="40" uuid="55d31d30-f14d-4c2b-82a9-160819a7ce14"/>
+				<reportElement x="0" y="40" width="180" height="40" uuid="55d31d30-f14d-4c2b-82a9-160819a7ce14"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -538,7 +540,7 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<text><![CDATA[Análisis:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="180" y="45" width="370" height="40" uuid="0afbf430-ba7e-4562-a0c4-6020ff1f3abb"/>
+				<reportElement x="180" y="40" width="370" height="40" uuid="0afbf430-ba7e-4562-a0c4-6020ff1f3abb"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -549,7 +551,7 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<textFieldExpression><![CDATA[$F{hcch_analysis}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="85" width="180" height="80" uuid="610431b0-d139-4b0e-8366-6c7ae00a1414"/>
+				<reportElement x="0" y="80" width="180" height="80" uuid="610431b0-d139-4b0e-8366-6c7ae00a1414"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -562,42 +564,39 @@ where hd.hccd_prop_view_on_hcc = 1 and hh.hcch_sapcode = $P{CodeHCC}]]>
 				<text><![CDATA[Control de Calidad]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="270" y="95" width="140" height="20" uuid="7fcdab92-6cf8-4f58-acaf-5d061b793507"/>
+				<reportElement x="270" y="90" width="140" height="20" uuid="7fcdab92-6cf8-4f58-acaf-5d061b793507"/>
 				<textFieldExpression><![CDATA[$F{hcch_u_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="270" y="115" width="140" height="20" uuid="3d9cab3d-a9db-48a0-b912-048fd9f0b1d4"/>
+				<reportElement x="270" y="110" width="140" height="20" uuid="3d9cab3d-a9db-48a0-b912-048fd9f0b1d4"/>
 				<textFieldExpression><![CDATA[$F{hcch_job}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="270" y="135" width="140" height="20" uuid="6f4415a9-6d74-46a7-94be-c35ac9a5a5bb"/>
+				<reportElement x="270" y="130" width="140" height="20" uuid="6f4415a9-6d74-46a7-94be-c35ac9a5a5bb"/>
 				<textFieldExpression><![CDATA[$F{hcch_work_area}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="195" y="95" width="75" height="20" uuid="8947ebb3-1a8f-4b4f-a9e1-32d1f58ac59a"/>
+				<reportElement x="195" y="90" width="75" height="20" uuid="8947ebb3-1a8f-4b4f-a9e1-32d1f58ac59a"/>
 				<text><![CDATA[Usuario:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="195" y="115" width="75" height="20" uuid="d3c2057c-7ccf-4a8b-a1dd-fd739ee77baa"/>
+				<reportElement x="195" y="110" width="75" height="20" uuid="d3c2057c-7ccf-4a8b-a1dd-fd739ee77baa"/>
 				<text><![CDATA[Cargo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="195" y="135" width="75" height="20" uuid="180603d8-64ff-41d1-a898-5bd97c9270eb"/>
+				<reportElement x="195" y="130" width="75" height="20" uuid="180603d8-64ff-41d1-a898-5bd97c9270eb"/>
 				<text><![CDATA[Departamento:]]></text>
 			</staticText>
 			<line direction="BottomUp">
-				<reportElement x="180" y="165" width="370" height="1" uuid="8518b31f-6cdc-40d3-a300-73a1db6008af"/>
+				<reportElement x="180" y="160" width="370" height="1" uuid="8518b31f-6cdc-40d3-a300-73a1db6008af"/>
 				<graphicElement>
 					<pen lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="550" y="85" width="1" height="80" uuid="b545ee5d-8234-4527-a8c6-751ccc78a8fc"/>
+				<reportElement x="550" y="80" width="1" height="80" uuid="b545ee5d-8234-4527-a8c6-751ccc78a8fc"/>
 			</line>
 		</band>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch"/>

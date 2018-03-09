@@ -72,6 +72,19 @@ public class HccDetail {
 			this.specifications = this.view;
 		}
 	}
+	
+	public void evaluateResult() {
+		this.passTest = false;
+		if(this.typeProperty.equals("T")) {
+			if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+				this.passTest = this.result > this.min ? true : false;
+			else 
+				if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
+					this.passTest = this.result < this.max ? true : false;
+				else 
+					this.passTest = (this.result > this.min) && (this.result < this.max) ? true : false;
+		}
+	}
 
 	public Integer getIdHccd() {
 		return idHccd;
@@ -184,7 +197,5 @@ public class HccDetail {
 	public void setSpecifications(String specifications) {
 		this.specifications = specifications;
 	}
-	
-	
 	
 }

@@ -28,16 +28,22 @@ public class HccHead {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = true, updatable = false)
 	private Product product;
-	
-	@Column(name = "HCCH_NORM", nullable = false, length = 64)
+	/**
+	 * Esta variable tambien se la utiliza para el campo Nombre del proveedor 
+	 * en el caso de la HCC de materia prima
+	 */
+	@Column(name = "HCCH_NORM", nullable = false, length = 4096)
 	private String hccNorm;
 	
 	@Column(name = "HCCH_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
 	private LocalDate dateCreate;
-	
-	@Column(name = "HCCH_PERIODICITY", nullable = false, length = 32)
+	/**
+	 * Esta variable tambien sela utiliza para el campo Pedido en el caso de la 
+	 * HCC de materia prima
+	 */
+	@Column(name = "HCCH_PERIODICITY", nullable = false, length = 64)
 	private String periodicity;
 	
 	@Column(name = "HCCH_CODE", nullable = false, length = 32)
@@ -46,10 +52,13 @@ public class HccHead {
 	@Column(name = "HCCH_REVIEW", nullable = false, length = 8)
 	private String review;
 	
-	@Column(name = "HCCH_REFERENCE", nullable = false, length = 32)
+	@Column(name = "HCCH_REFERENCE", nullable = true, length = 32)
 	private String reference;
-	
-	@Column(name = "HCCH_OF", nullable = false, length = 32)
+	/**
+	 * Esta variable tambien se la utiliza tambien para el campo código del proveedor
+	 * en el caso de la HCC de materia prima
+	 */
+	@Column(name = "HCCH_OF", nullable = false, length = 64)
 	private String of;
 	
 	@Column(name = "HCCH_BATCH", nullable = false, length = 32)

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isacore.quality.model.Product;
+import com.isacore.quality.service.IProductService;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
@@ -39,6 +43,9 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxHcc txHcc;
+	
+	@Autowired
+	private IProductService sP;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -81,4 +88,33 @@ public class QualityQuickResponseController {
 			return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 		}
 	}	
+	
+	
+	@RequestMapping(value = "/product", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Product> getProduct(){
+		Product p = new Product();
+		p.setIdProduct(7);
+		return new ResponseEntity<Product>(this.sP.findById(p),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/product2", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getProduct2(){
+		Product p = new Product();
+		p.setIdProduct(7);
+		
+		ObjectMapper map = new ObjectMapper();
+		String json;
+		
+		try {
+			Product pp = this.sP.findById(p);
+			json = map.writeValueAsString(pp);
+			System.out.println(json);
+			return json;
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "error";
+		}
+		
+	}
 }
