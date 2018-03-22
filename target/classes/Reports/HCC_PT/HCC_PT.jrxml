@@ -96,7 +96,7 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="157" splitType="Stretch">
+		<band height="165" splitType="Stretch">
 			<staticText>
 				<reportElement x="153" y="0" width="237" height="46" uuid="67aca617-42db-48e5-a6bb-c7b307146396"/>
 				<box>
@@ -314,17 +314,6 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 				<textFieldExpression><![CDATA[$F{hcch_batch}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="470" y="127" width="80" height="19" uuid="5a43c836-185e-46a5-955a-7b30bbfbfa9b"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{hcch_code}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="470" y="89" width="80" height="19" uuid="c368591d-08ff-4dbf-97bc-d819e28d07e7"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -367,6 +356,17 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{hcch_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="127" width="81" height="19" uuid="00ca58de-c543-4988-912b-931370a75a04"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hcch_sapcode}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -596,9 +596,10 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 			<line>
 				<reportElement x="550" y="80" width="1" height="80" uuid="b545ee5d-8234-4527-a8c6-751ccc78a8fc"/>
 			</line>
+			<image>
+				<reportElement x="390" y="0" width="159" height="159" uuid="00ef4293-0018-4066-84b3-dfe53b4cc9a1"/>
+				<imageExpression><![CDATA["C:/CRIMPTEK/ReporteRolDePagos/imagenes/Sello de calidad.png"]]></imageExpression>
+			</image>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

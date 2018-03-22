@@ -30,6 +30,9 @@ public class Property {
 	@Column(name = "PROPERTY_TYPE", nullable = false, length = 1)
 	private String typeProperty;
 	
+	@Column(name = "PROPERTY_PERIODICITY", nullable = true, length = 64)
+	private String periodicityProperty;
+	
 	@Column(name = "PROPERTY_NORM", nullable = true, length = 2048)
 	private String normProperty;
 	
@@ -161,6 +164,14 @@ public class Property {
 
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
+	}
+
+	public String getPeriodicityProperty() {
+		return periodicityProperty;
+	}
+
+	public void setPeriodicityProperty(String periodicityProperty) {
+		this.periodicityProperty = periodicityProperty;
 	}
 
 	@Override

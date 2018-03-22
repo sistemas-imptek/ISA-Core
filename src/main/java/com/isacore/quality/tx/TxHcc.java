@@ -201,7 +201,8 @@ public class TxHcc {
 					hhg.setReview(rh.getReview());
 					hhg.setOf(rh.getOf());
 					hhg.setHcchBatch(hh.getHcchBatch());
-					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
+					hhg.setPeriodicity(hh.getPeriodicity());
+					hhg = gerenateDetailOfHcc(hhg, hh.getProduct(), hh.getPeriodicity());
 					mergeHccTests(hhg, hh.getHcchBatch());
 					return hhg;
 				} else {
@@ -212,7 +213,7 @@ public class TxHcc {
 				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCMP"));
 
 				if (rh != null) {
-					logger.info(">>> mthod: getHccHead::::PT::::" + p.getIdProduct() + ":::" + p.getNameProduct());
+					logger.info(">>> mthod: getHccHead::::MP::::" + p.getIdProduct() + ":::" + p.getNameProduct());
 					HccHead hhg = new HccHead();
 					hhg.setProduct(p);
 					hhg.setCode(rh.getCode());
@@ -234,13 +235,19 @@ public class TxHcc {
 
 	}
 
-	private HccHead gerenateDetailOfHcc(HccHead hh, Product p) {
+	private HccHead gerenateDetailOfHcc(HccHead hh, Product p, String... period) {
 
 		logger.info(">>>> mthod: gerenateDetailOfHcc::::");
 		List<HccDetail> detail = new ArrayList<>();
+		System.out.println("tamaño array::::::: " + period.length);
 
-		Product pp = this.serviceProducto.findById(hh.getProduct());
-		System.out.println(pp.toString());
+		Product pp;
+		
+		if(period.length == 0 || period == null)
+			pp = this.serviceProducto.findById(hh.getProduct());
+		else
+			pp = this.serviceProducto.findProductByIdAndPeriod(p.getIdProduct(), period[0]);
+		
 		for (Property prop : pp.getPropertyList()) {
 			HccDetail hd = new HccDetail();
 			hd.setNameNorm(prop.getNormProperty());

@@ -34,6 +34,9 @@ public class PropertyList {
 	// Propiedad para saber si es de Producto(PR) o Ensayo (TE)
 	@Column(name = "PROPL_TYPE2", nullable = false, length = 4)
 	private String typeProperty2;
+	
+	@Column(name = "PROPL_PERIODICITY", nullable = true, length = 64)
+	private String periodicity;
 
 	@Transient
 	@JsonInclude(Include.NON_NULL)
@@ -124,6 +127,14 @@ public class PropertyList {
 
 	public void setNormText(String normText) {
 		this.normText = normText;
+	}
+
+	public String getPeriodicity() {
+		return periodicity;
+	}
+
+	public void setPeriodicity(String periodicity) {
+		this.periodicity = periodicity;
 	}
 
 	@Override

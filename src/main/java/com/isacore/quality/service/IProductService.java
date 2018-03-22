@@ -7,4 +7,6 @@ public interface IProductService extends CRUD<Product>{
 
 	Product findOnlyProductById (Product p);
 	
+	Product findProductByIdAndPeriod(Integer idP, String period);
+	
 }

@@ -95,9 +95,6 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 	<variable name="vCodeProd" class="java.lang.String">
 		<variableExpression><![CDATA[$F{product_sap_code}]]></variableExpression>
 	</variable>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
 		<band height="149" splitType="Stretch">
 			<staticText>
@@ -479,7 +476,7 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="163" splitType="Stretch">
+		<band height="180" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="180" height="40" uuid="e65f6cfe-8b82-4009-8e8e-94e68327b8ff"/>
 				<box>
@@ -574,9 +571,10 @@ where hd.hccd_prop_view_on_hcc = 1 and  hh.hcch_sapcode = $P{CodeHCC}]]>
 			<line>
 				<reportElement x="550" y="80" width="1" height="80" uuid="b545ee5d-8234-4527-a8c6-751ccc78a8fc"/>
 			</line>
+			<image>
+				<reportElement x="389" y="0" width="160" height="159" uuid="f0659a2e-83c2-41e5-91d1-aa28dda28be7"/>
+				<imageExpression><![CDATA["C:/CRIMPTEK/ReporteRolDePagos/imagenes/Sello de calidad.png"]]></imageExpression>
+			</image>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

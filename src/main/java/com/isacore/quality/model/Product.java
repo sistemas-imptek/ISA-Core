@@ -11,10 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
-
+import org.springframework.stereotype.Component;
+@Component
 @Entity(name = "product")
 @Table(name = "PRODUCT")
 public class Product {
@@ -43,8 +45,12 @@ public class Product {
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
 	
+	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "FEA_ID", nullable = true)
+	private Feature feature;
+	
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "PRODUCT_ID")
+	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID")
 	private List<Property> propertyList;
 	
 	public Product() {
@@ -77,8 +83,20 @@ public class Product {
 		this.typeProduct = typeProduct;
 		this.propertyList = propertyList;
 	}
-
-
+	
+	public Product(Integer idProduct, String sapCode, String nameProduct, String descProduct, String itcdq,
+			String familyProduct, String typeProduct, Feature feature, List<Property> propertyList) {
+		super();
+		this.idProduct = idProduct;
+		this.sapCode = sapCode;
+		this.nameProduct = nameProduct;
+		this.descProduct = descProduct;
+		this.itcdq = itcdq;
+		this.familyProduct = familyProduct;
+		this.typeProduct = typeProduct;
+		this.feature = feature;
+		this.propertyList = propertyList;
+	}
 
 	public Integer getIdProduct() {
 		return idProduct;
@@ -142,6 +160,14 @@ public class Product {
 
 	public void setItcdq(String itcdq) {
 		this.itcdq = itcdq;
+	}
+
+	public Feature getFeature() {
+		return feature;
+	}
+
+	public void setFeature(Feature feature) {
+		this.feature = feature;
 	}
 
 	@Override
