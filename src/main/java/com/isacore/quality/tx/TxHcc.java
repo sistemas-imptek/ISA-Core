@@ -19,8 +19,7 @@ import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.model.ReportHeadT;
 import com.isacore.quality.model.Test;
-import com.isacore.quality.report.GenerateReportHccMP;
-import com.isacore.quality.report.GenerateReportHccPT;
+import com.isacore.quality.report.GenerateReportQuality;
 import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
@@ -145,8 +144,9 @@ public class TxHcc {
 						wrei.setStatus(WebResponseMessage.STATUS_OK);
 
 						if (hcc.getProduct().getTypeProduct().equals("PT")) {
-							String statusReport = GenerateReportHccPT.runReport(hh.getSapCode());
-							if (statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
+							//String statusReport = GenerateReportQuality.runReport(hh.getSapCode());
+							String statusReport = GenerateReportQuality.runReportPentahoHccPT(hh.getSapCode());
+							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {
@@ -155,8 +155,8 @@ public class TxHcc {
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 							}
 						}else {
-							String statusReport = GenerateReportHccMP.runReport(hh.getSapCode());
-							if (statusReport.equals(GenerateReportHccPT.REPORT_SUCCESS)) {
+							String statusReport = GenerateReportQuality.runReportPentahoHccMP(hh.getSapCode());
+							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {

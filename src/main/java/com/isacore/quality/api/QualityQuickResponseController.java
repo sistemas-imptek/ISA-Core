@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.tx.TxHcc;
+import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
@@ -43,6 +44,9 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxHcc txHcc;
+	
+	@Autowired
+	private TxNonConformingProduct txNcp;
 	
 	@Autowired
 	private IProductService sP;
@@ -78,6 +82,9 @@ public class QualityQuickResponseController {
 			
 		case TxHcc.TX_CODE_SetHcc:
 			return this.txHcc.TxQQRSetHCC(wri);
+			
+		case TxNonConformingProduct.TX_CODE_GetAllNCP:
+				return this.txNcp.TxQQRgetAllNCP();
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());

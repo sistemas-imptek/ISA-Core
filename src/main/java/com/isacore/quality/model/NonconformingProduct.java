@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateConverter;
+import com.isacore.localdate.converter.LocalDateTimeConverter;
 
 @Entity(name = "nonconforming")
 @Table(name = "NONCONFORMING_PRODUCT")
@@ -28,8 +29,26 @@ public class NonconformingProduct {
 	@Column(name = "NCP_ID")
 	private Integer idNCP;
 	
+	@Column(name = "REP_TITLE", nullable = true, length = 2048)
+	private String repTitle;
+	
+	@Column(name = "REP_SUBTITLE", nullable = true, length = 2048)
+	private String repSubtitle;
+	
+	@Column(name = "REP_REFERENCE", nullable = true, length = 2048)
+	private String repReference;
+	
+	@Column(name = "REP_REVIEW", nullable = true, length = 64)
+	private String repReview;
+	
+	@Column(name = "REP_REGISTER", nullable = true, length = 64)
+	private String repRegister;
+	
+	@Column(name = "REP_CODE", nullable = true, length = 64)
+	private String repCode;	
+	
 	@Column(name = "NCP_DATE_UPDATE", nullable = false)
-	@Convert(converter = LocalDateConverter.class)
+	@Convert(converter = LocalDateTimeConverter.class)
 	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDateTime dateUpdate;
 	
@@ -49,11 +68,11 @@ public class NonconformingProduct {
 	@Column(name = "NCP_MONTH", nullable = false)
 	private Integer month;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = false, updatable = false)
 	private Product product;
 	
-	@Column(name = "NCP_BATCH", nullable = false, length = 64)
+	@Column(name = "NCP_BATCH", nullable = true, length = 64)
 	private String batch;
 	
 	@Transient
@@ -110,7 +129,7 @@ public class NonconformingProduct {
 	@Column(name = "NCP_TOTAL_COST", nullable = true, columnDefinition = "decimal(10,3)")
 	private Double totalCost;
 	
-	@Column(name = "NCP_PERCENT", nullable = true, columnDefinition = "decimal(5,3)")
+	@Column(name = "NCP_PERCENT", nullable = true, columnDefinition = "decimal(19,18)")
 	private Double percentPNC;
 	
 	@Column(name = "NCP_GOAL", nullable = true, columnDefinition = "decimal(5,3)")
@@ -125,7 +144,7 @@ public class NonconformingProduct {
 	@Column(name = "NCP_TOTAL_PRODUCTION_KG", nullable = true, columnDefinition = "decimal(10,3)")
 	private Double totalProductionKg;
 	
-	@Column(name = "NCP_PERCENT_MONTHLY", nullable = true, columnDefinition = "decimal(7,4)")
+	@Column(name = "NCP_PERCENT_MONTHLY", nullable = true, columnDefinition = "decimal(19,18)")
 	private Double percentMonthly;
 	
 	@Column(name = "NCP_TOTAL_SALES", nullable = true, columnDefinition = "decimal(10,3)")
@@ -134,7 +153,7 @@ public class NonconformingProduct {
 	@Column(name = "NCP_GOAL_MONTHLY", nullable = true, columnDefinition = "decimal(5,3)")
 	private Double goalMonthly;
 	
-	@Column(name = "NCP_PERCENT_NO_QUALITY", nullable = true, columnDefinition = "decimal(7,4)")
+	@Column(name = "NCP_PERCENT_NO_QUALITY", nullable = true, columnDefinition = "decimal(19,18)")
 	private Double percentNoQuality;
 	
 	@Column(name = "NCP_ADDITIONAL_REMARKS", nullable = true)
@@ -142,6 +161,15 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_ASUSER", nullable = true)
 	private String asUser;
+	
+	@Column(name = "NCP_U_NAME", nullable = false, length = 1024)
+	private String userName;
+	
+	@Column(name = "NCP_JOB", nullable = false, length = 512)
+	private String job;
+	
+	@Column(name = "NCP_WORK_AREA", nullable = false, length = 512)
+	private String workArea;
 
 	public Integer getIdNCP() {
 		return idNCP;
@@ -429,6 +457,78 @@ public class NonconformingProduct {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public String getRepTitle() {
+		return repTitle;
+	}
+
+	public void setRepTitle(String repTitle) {
+		this.repTitle = repTitle;
+	}
+
+	public String getRepSubtitle() {
+		return repSubtitle;
+	}
+
+	public void setRepSubtitle(String repSubtitle) {
+		this.repSubtitle = repSubtitle;
+	}
+
+	public String getRepReview() {
+		return repReview;
+	}
+
+	public void setRepReview(String repReview) {
+		this.repReview = repReview;
+	}
+
+	public String getRepRegister() {
+		return repRegister;
+	}
+
+	public void setRepRegister(String repRegister) {
+		this.repRegister = repRegister;
+	}
+
+	public String getRepCode() {
+		return repCode;
+	}
+
+	public void setRepCode(String repCode) {
+		this.repCode = repCode;
+	}
+
+	public String getRepReference() {
+		return repReference;
+	}
+
+	public void setRepReference(String repReference) {
+		this.repReference = repReference;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	public String getWorkArea() {
+		return workArea;
+	}
+
+	public void setWorkArea(String workArea) {
+		this.workArea = workArea;
 	}
 	
 }
