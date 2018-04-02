@@ -2,7 +2,9 @@ package com.isacore.quality.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -156,8 +159,14 @@ public class NonconformingProduct {
 	@Column(name = "NCP_PERCENT_NO_QUALITY", nullable = true, columnDefinition = "decimal(19,18)")
 	private Double percentNoQuality;
 	
-	@Column(name = "NCP_ADDITIONAL_REMARKS", nullable = true)
+	@Column(name = "NCP_DETAIL_OTHER", nullable = true, columnDefinition = "varchar(max)")
+	private String detailOther;
+	
+	@Column(name = "NCP_ADDITIONAL_REMARKS", nullable = true, columnDefinition = "varchar(max)")
 	private String aditionalRemarks;
+	
+	@Column(name = "NCP_FINAL_DESTINATION", nullable = true, columnDefinition = "varchar(max)")
+	private String finalDestination;
 	
 	@Column(name = "NCP_ASUSER", nullable = true)
 	private String asUser;
@@ -170,6 +179,10 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_WORK_AREA", nullable = false, length = 512)
 	private String workArea;
+	
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "NCP_ID", nullable = true)
+	private List<TaskNcp> tasks;
 
 	public Integer getIdNCP() {
 		return idNCP;
@@ -530,5 +543,29 @@ public class NonconformingProduct {
 	public void setWorkArea(String workArea) {
 		this.workArea = workArea;
 	}
-	
+
+	public String getDetailOther() {
+		return detailOther;
+	}
+
+	public void setDetailOther(String detailOther) {
+		this.detailOther = detailOther;
+	}
+
+	public String getFinalDestination() {
+		return finalDestination;
+	}
+
+	public void setFinalDestination(String finalDestination) {
+		this.finalDestination = finalDestination;
+	}
+
+	public List<TaskNcp> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<TaskNcp> tasks) {
+		this.tasks = tasks;
+	}
+
 }

@@ -69,5 +69,19 @@ public class GenerateReportQuality {
 			return REPORT_ERROR;
 		}
 	}
+	
+	public static String runReportPentahoNCP(Integer idNCP) {
+
+		try {
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/MP/PNC_" + idNCP + ".pdf");
+			GenerateReportPentahoPNC grpPNC = new GenerateReportPentahoPNC();
+			grpPNC.setIdNCP(idNCP);
+			grpPNC.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+			
+			return REPORT_SUCCESS;
+		} catch (ReportProcessingException | IOException e) {
+			return REPORT_ERROR;
+		}
+	}
 
 }
