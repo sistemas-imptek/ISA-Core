@@ -17,26 +17,22 @@ public class TestServiceImpl implements ITestService{
 	
 	@Override
 	public List<Test> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findAll();
 	}
 
 	@Override
 	public Test create(Test obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.save(obj);
 	}
 
 	@Override
-	public Test findById(Test id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Test findById(Test obj) {
+		return this.repo.findOne(obj.getIdTest());
 	}
 
 	@Override
 	public Test update(Test obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.save(obj);
 	}
 
 	@Override

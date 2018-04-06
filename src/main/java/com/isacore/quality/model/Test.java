@@ -25,7 +25,7 @@ public class Test {
 	@Column(name = "TEST_BATCH", nullable = false, length = 64)
 	private String batchTest;
 	
-	@Column(name = "TEST_RESULT", nullable = false, columnDefinition = "decimal(8,2)")
+	@Column(name = "TEST_RESULT", nullable = false, columnDefinition = "decimal(10,5)")
 	private Double resultTest;
 
 	public Integer getIdTest() {
@@ -67,6 +67,11 @@ public class Test {
 	public void setResultTest(Double resultTest) {
 		this.resultTest = resultTest;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Test [idTest=" + idTest + ", sapCode=" + sapCode + ", idProperty=" + idProperty + ", batchTest="
+				+ batchTest + ", resultTest=" + resultTest + "]";
+	}
 	
 }
