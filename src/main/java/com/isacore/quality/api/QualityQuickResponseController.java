@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.isacore.quality.model.Product;
-import com.isacore.quality.service.IProductService;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
@@ -45,10 +43,6 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxNonConformingProduct txNcp;
-	
-	@Autowired
-	private IProductService sP;
-	
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -83,7 +77,13 @@ public class QualityQuickResponseController {
 			return this.txHcc.TxQQRSetHCC(wri);
 			
 		case TxNonConformingProduct.TX_CODE_GetAllNCP:
-				return this.txNcp.TxQQRgetAllNCP();
+				return this.txNcp.TxQQRgetAllNCP(wri);
+				
+		case TxNonConformingProduct.TX_CODE_GetNCPById:
+				return this.txNcp.TxQQRgetNCPById(wri);
+				
+		case TxNonConformingProduct.TX_CODE_SetNCP:
+			return this.txNcp.TxQQRsetNCP(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());
@@ -94,19 +94,4 @@ public class QualityQuickResponseController {
 			return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 		}
 	}	
-	
-	
-	@RequestMapping(value = "/product", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Product> getProduct(){
-		Product p = new Product();
-		p.setIdProduct(7);
-		return new ResponseEntity<Product>(this.sP.findById(p),HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/tests", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String getProduct2(){
-		
-		
-		return null;		
-	}
 }

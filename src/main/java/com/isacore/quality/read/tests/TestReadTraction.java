@@ -93,7 +93,7 @@ public class TestReadTraction {
 			
 			Test t4 = new Test();
 			t4.setBatchTest(batch);
-			t4.setIdProperty(ALARGAMIENTO_ROTURA_TRANSVERSE);
+			t4.setIdProperty(RESISTENCIA_TRACCION_TRANSVERSE);
 			t4.setResultTest(Double.parseDouble((String)transverse[2]));
 			listTests.add(t4);
 			

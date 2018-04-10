@@ -76,7 +76,7 @@ public class ProductServiceImpl implements IProductService {
 				p.setPeriodicityProperty((String)x[8]);
 				p.setNormProperty((String)x[9]);
 				p.setMinProperty((x[10]) == null ? null : ((BigDecimal)x[10]).doubleValue());
-				p.setMaxProperty((x[10]) == null ? null : ((BigDecimal)x[10]).doubleValue());
+				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal)x[11]).doubleValue());
 				p.setUnitProperty((String)x[12]);
 				p.setViewProperty((String)x[13]);
 				p.setViewPropertyOnHcc((Boolean)x[14]);

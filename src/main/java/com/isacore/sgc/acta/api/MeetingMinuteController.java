@@ -68,7 +68,7 @@ public class MeetingMinuteController {
 		return Crypto.encrypt(s);
 	}
 	
-	@RequestMapping(value = "/utilDeCoding", method = RequestMethod.POST)
+	@RequestMapping(value = "/utilDeCoding", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody String decoding(@RequestBody String s) {
 		
 		logger.info("> String a encryptar " + s);

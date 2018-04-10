@@ -18,8 +18,11 @@ public class GeneralReadTest{
 
 	@Autowired
 	private TestReadPiedra rTPiedra;
+	
+	@Autowired
+	private TestReadAdhesividad rTAdhesividad;
 
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "0 51 9 * * ?")
 	public void execute(){
 		this.rTTraction.run();
 
@@ -28,6 +31,8 @@ public class GeneralReadTest{
 		this.rTDesgarroClavo.run();
 
 		this.rTPiedra.run();
+		
+		this.rTAdhesividad.run();
 
 	}
 

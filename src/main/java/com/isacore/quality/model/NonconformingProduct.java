@@ -18,10 +18,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateConverter;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
+import com.isacore.util.LocalDateDeserializeIsa;
+import com.isacore.util.LocalDateTimeDeserializeIsa;
+import com.isacore.util.LocalDateTimeSerializeIsa;
 
 @Entity(name = "nonconforming")
 @Table(name = "NONCONFORMING_PRODUCT")
@@ -52,17 +56,20 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_DATE_UPDATE", nullable = false)
 	@Convert(converter = LocalDateTimeConverter.class)
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializeIsa.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializeIsa.class)
 	private LocalDateTime dateUpdate;
 	
 	@Column(name = "NCP_DETECTION_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
 	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateDetection;
 	
 	@Column(name = "NCP_PRODUCTION_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
 	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateProduction;
 	
 	@Column(name = "NCP_YEAR", nullable = false)
@@ -72,7 +79,7 @@ public class NonconformingProduct {
 	private Integer month;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = true, updatable = false)
 	private Product product;
 	
 	@Column(name = "NCP_BATCH", nullable = true, length = 64)
@@ -123,7 +130,7 @@ public class NonconformingProduct {
 	private String fiveM;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "OM_ID", referencedColumnName = "OM_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "OM_ID", referencedColumnName = "OM_ID", insertable = true, updatable = false)
 	private OutputMethod outputMethod;
 	
 	@Column(name = "NCP_UNIT_COST", nullable = true, columnDefinition = "decimal(5,3)")
@@ -179,6 +186,9 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_WORK_AREA", nullable = false, length = 512)
 	private String workArea;
+	
+	@Column(name = "NCP_CLOSE", nullable = true)
+	private Boolean close;
 	
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "NCP_ID", nullable = true)
@@ -558,6 +568,14 @@ public class NonconformingProduct {
 
 	public void setFinalDestination(String finalDestination) {
 		this.finalDestination = finalDestination;
+	}
+	
+	public Boolean getClose() {
+		return close;
+	}
+
+	public void setClose(Boolean close) {
+		this.close = close;
 	}
 
 	public List<TaskNcp> getTasks() {
