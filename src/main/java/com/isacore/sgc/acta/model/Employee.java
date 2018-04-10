@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.isacore.quality.model.Area;
 
 @Entity(name = "employee")
 @Table(name = "EMPLOYEE")
@@ -28,6 +29,10 @@ public class Employee {
 	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "KIN_IDKINDEMPLOYEE", nullable = false)
 	private KindEmployee kind;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "AREA_ID", nullable = false)
+	private Area area;
 	
 	@Column(name = "EMP_NAME", length = 64, nullable = false)
 	private String name;
@@ -47,16 +52,12 @@ public class Employee {
 	@Column(name = "EMP_JOB", nullable = true, length = 512)
 	private String job;
 	
-	@Column(name = "EMP_WORK_AREA", nullable = true, length = 512)
-	private String workArea;
-	
 	@ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "participants")
 	private List<MeetingMinute> minutes;
 	
 	@JsonIgnore
 	@ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "responsible", fetch = FetchType.LAZY)
 	private List<ActionPlan> plans;
-	
 
 	public String getCiEmployee() {
 		return ciEmployee;
@@ -131,14 +132,6 @@ public class Employee {
 		this.job = job;
 	}
 
-	public String getWorkArea() {
-		return workArea;
-	}
-
-	public void setWorkArea(String workArea) {
-		this.workArea = workArea;
-	}
-
 	public String getCompleteName() {
 		StringBuilder sb = new StringBuilder().append(this.name).append(" ").append(this.lastName);		
 		StringTokenizer st = new StringTokenizer(sb.toString());
@@ -156,6 +149,13 @@ public class Employee {
 	public void setKind(KindEmployee kind) {
 		this.kind = kind;
 	}
-	
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
 	
 }

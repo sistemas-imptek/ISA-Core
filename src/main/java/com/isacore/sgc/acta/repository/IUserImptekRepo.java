@@ -13,4 +13,7 @@ public interface IUserImptekRepo extends JpaRepository<UserImptek, String>{
 	@Query("from userImptek u where u.nickName = :user")
 	UserImptek findUserByNickname(@Param("user") String user);
 	
+	@Query("select new com.isacore.sgc.acta.model.UserImptek(ui.idUser,ui.employee,ui.nickName,ui.userPass,ui.lastKeyDateChange,ui.lastAccess) from userImptek ui where ui.nickName = :user")
+	UserImptek findOnlyUserByNickname(@Param("user") String user);
+	
 }

@@ -84,6 +84,9 @@ public class QualityQuickResponseController {
 				
 		case TxNonConformingProduct.TX_CODE_SetNCP:
 			return this.txNcp.TxQQRsetNCP(wri);
+			
+		case TxNonConformingProduct.TX_CODE_CloseNCP:
+			return this.txNcp.TxQQRcloseNCP(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());

@@ -1,6 +1,7 @@
 package com.isacore.quality.tx;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.model.NonconformingProduct;
-import com.isacore.quality.model.Product;
+import com.isacore.quality.report.GenerateReportQuality;
 import com.isacore.quality.service.INonconformingProductService;
+import com.isacore.sgc.acta.model.UserImptek;
+import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
@@ -32,9 +35,15 @@ public class TxNonConformingProduct {
 	
 	public static final String TX_NAME_SetNCP = "SetNCP";
 	public static final String TX_CODE_SetNCP = "TxQQRsetNCP";
+	
+	public static final String TX_NAME_CloseNCP = "Close NCP";
+	public static final String TX_CODE_CloseNCP = "TxQQRcloseNCP";
 
 	@Autowired
 	private INonconformingProductService service;
+	
+	@Autowired
+	private IUserImptekService serviceUI;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -169,6 +178,13 @@ public class TxNonConformingProduct {
 					logger.info("> mapeando json a la clase: " + NonconformingProduct.class);					
 					NonconformingProduct ncp = JSON_MAPPER.readValue(jsonValue, NonconformingProduct.class);
 					logger.info("> objeto a guardar: " + ncp.toString());
+					
+					UserImptek ui = this.serviceUI.findOnlyUserByNickname(ncp.getAsUser());
+					
+					ncp.setDateUpdate(LocalDateTime.now());
+					ncp.setUserName(ui.getEmployee().getCompleteName());
+					ncp.setJob(ui.getEmployee().getJob());
+					ncp.setWorkArea(ui.getEmployee().getArea().getNameArea());
 					NonconformingProduct ncpp = this.service.create(ncp);
 					
 					String json = JSON_MAPPER.writeValueAsString(ncpp);
@@ -191,4 +207,72 @@ public class TxNonConformingProduct {
 			}
 		}
 	}
+	
+	/**
+	 * TX NAME: TxQQRcloseNCP cambia el estado del PNC a cerrado
+	 * @param wri parámetro de petición de producto no conforme con su clave primaria.
+	 * @return wrei respuesta del servidor con el mensaje de haber cerrado o no el PNC correctamente.
+	 */
+	public ResponseEntity<Object> TxQQRcloseNCP(WebRequestIsa wri){
+		logger.info("> TX: TxQQRcloseNCP");
+		
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_CloseNCP);
+		wrei.setTransactionCode(TX_CODE_CloseNCP);
+		
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		}else {
+			String jsonValue = Crypto.decrypt(wri.getParameters());
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				try {
+					logger.info("> mapeando json a la clase: " + NonconformingProduct.class);
+					ObjectMapper mapper = new ObjectMapper();
+					NonconformingProduct ncp = mapper.readValue(jsonValue, NonconformingProduct.class);
+					logger.info("> id Nonconforming Product: " + ncp.getIdNCP());
+					ncp = this.service.findById(ncp);
+
+					if (ncp == null) {
+						logger.info("> Nonconforming Product not found");
+						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
+					} else {
+						String statusReport = GenerateReportQuality.runReportPentahoNCP(ncp.getIdNCP());
+						if(statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
+							logger.info(">> Reporte generado correctamente");
+							wrei.setMessage("PNC::" + ncp.getIdNCP() + "::: cerrado correctamente");
+							ncp.setClose(true);
+							
+							UserImptek ui = this.serviceUI.findOnlyUserByNickname(ncp.getAsUser());
+							
+							ncp.setDateUpdate(LocalDateTime.now());
+							ncp.setUserName(ui.getEmployee().getCompleteName());
+							ncp.setJob(ui.getEmployee().getJob());
+							ncp.setWorkArea(ui.getEmployee().getArea().getNameArea());
+							
+							this.service.update(ncp);
+							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+						}else {
+							logger.info(">> No se ha podido generar el reporte");
+							wrei.setMessage("No se pudo cerrar el PNC::" + ncp.getIdNCP());
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						}					
+					}
+				} catch (IOException e) {
+					logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
+					e.printStackTrace();
+					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				}
+			}
+		}
+	}
+	
 }

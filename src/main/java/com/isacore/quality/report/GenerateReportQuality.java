@@ -73,7 +73,7 @@ public class GenerateReportQuality {
 	public static String runReportPentahoNCP(Integer idNCP) {
 
 		try {
-			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/MP/PNC_" + idNCP + ".pdf");
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/PNC/PNC_" + idNCP + ".pdf");
 			GenerateReportPentahoPNC grpPNC = new GenerateReportPentahoPNC();
 			grpPNC.setIdNCP(idNCP);
 			grpPNC.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);

@@ -7,4 +7,5 @@ public interface IUserImptekService extends CRUD<UserImptek>{
 	
 	UserImptek findByUserImptek(String nickname);
 	
+	UserImptek findOnlyUserByNickname(String nicknamr);
 }

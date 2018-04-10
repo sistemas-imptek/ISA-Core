@@ -45,6 +45,11 @@ public class UserImptekServiceImpl implements IUserImptekService{
 		return this.repo.findUserByNickname(nickname);
 	}
 
+	@Override
+	public UserImptek findOnlyUserByNickname(String nickname) {
+		return this.repo.findOnlyUserByNickname(nickname);
+	}
+
 	
 
 }

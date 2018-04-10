@@ -24,6 +24,8 @@ import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
 import com.isacore.quality.service.ITestService;
+import com.isacore.sgc.acta.model.UserImptek;
+import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
@@ -52,6 +54,9 @@ public class TxHcc {
 
 	@Autowired
 	private ITestService serviceTest;
+	
+	@Autowired
+	private IUserImptekService serviceUI;
 
 	/**
 	 * Transacción Para generar la estructura de la HCC, vincular los datos de los
@@ -135,8 +140,13 @@ public class TxHcc {
 				try {
 					logger.info("> mapeando json a la clase: " + HccHead.class);
 					HccHead hh = JSON_MAPPER.readValue(jsonValue, HccHead.class);
+					UserImptek ui = this.serviceUI.findOnlyUserByNickname(hh.getAsUser());
+					hh.setUserName(ui.getEmployee().getCompleteName());
+					hh.setJob(ui.getEmployee().getJob());
+					hh.setWorkArea(ui.getEmployee().getArea().getNameArea());
 					logger.info("> objeto a guardar: " + hh.toString());
 					hh.setDateCreate(LocalDate.now());
+					
 					HccHead hcc = this.serviceHccH.create(hh);
 					if (hcc != null) {
 						logger.info(">> Hcc guardada correctamente");

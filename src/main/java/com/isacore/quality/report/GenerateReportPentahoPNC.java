@@ -79,7 +79,7 @@ public class GenerateReportPentahoPNC extends AbstractReportGenerator{
 	
 	public void setIdNCP(Integer idNCP) {
 		this.paramsReport = new HashMap<String, Object>();
-		this.paramsReport.put("idNCO",idNCP);
+		this.paramsReport.put("idNCP",idNCP);
 	}
 
 }

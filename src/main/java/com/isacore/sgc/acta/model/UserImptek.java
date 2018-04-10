@@ -6,10 +6,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
 
@@ -22,13 +25,14 @@ public class UserImptek {
 	@Column(name = "USER_IDUSER", nullable = false, length = 20)
 	private String idUser;
 	
-	@Column(name = "EMP_CIEMPLOYEE", nullable = false, length = 20)
-	private String idEmployee;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "EMP_CIEMPLOYEE", nullable = true)
+	private Employee employee;
 	
 	@Column(name = "USER_NICKNAME", nullable = false, length = 32)
 	private String nickName;
 	
-	@Column(name = "USER_PASS", nullable = false, length = 128)
+	@Column(name = "USER_PASS", nullable = false, length = 1024)
 	private String userPass;
 	
 	@Column(name = "USER_LASTKEYDATECHANGE", nullable = true)
@@ -45,20 +49,39 @@ public class UserImptek {
 	@JoinColumn(name = "ROLE_NAME",insertable = true, updatable = true, nullable = true)
 	private Role role;
 
+	public UserImptek() {
+		super();
+	}
+
+	public UserImptek(String idUser, Employee employee, String nickName, String userPass,
+			LocalDateTime lastKeyDateChange, LocalDateTime lastAccess) {
+		super();
+		this.idUser = idUser;
+		this.employee = employee;
+		this.nickName = nickName;
+		this.userPass = userPass;
+		this.lastKeyDateChange = lastKeyDateChange;
+		this.lastAccess = lastAccess;
+	}
+
+	public UserImptek(String idUser, Employee employee, String nickName, String userPass,
+			LocalDateTime lastKeyDateChange, LocalDateTime lastAccess, Role role) {
+		super();
+		this.idUser = idUser;
+		this.employee = employee;
+		this.nickName = nickName;
+		this.userPass = userPass;
+		this.lastKeyDateChange = lastKeyDateChange;
+		this.lastAccess = lastAccess;
+		this.role = role;
+	}
+
 	public String getIdUser() {
 		return idUser;
 	}
 
 	public void setIdUser(String idUser) {
 		this.idUser = idUser;
-	}
-
-	public String getIdEmployee() {
-		return idEmployee;
-	}
-
-	public void setIdEmployee(String idEmployee) {
-		this.idEmployee = idEmployee;
 	}
 
 	public String getNickName() {
@@ -100,7 +123,13 @@ public class UserImptek {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
-	
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
 	
 }
