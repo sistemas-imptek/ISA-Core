@@ -49,7 +49,7 @@ public class HccHead {
 	@Column(name = "HCCH_CODE", nullable = false, length = 32)
 	private String code;
 	
-	@Column(name = "HCCH_REVIEW", nullable = false, length = 8)
+	@Column(name = "HCCH_REVIEW", nullable = false, length = 64)
 	private String review;
 	
 	@Column(name = "HCCH_REFERENCE", nullable = true, length = 32)
