@@ -13,8 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
+import com.isacore.util.LocalDateTimeDeserializeIsa;
+import com.isacore.util.LocalDateTimeSerializeIsa;
 
 
 @Entity(name = "userImptek")
@@ -37,12 +40,14 @@ public class UserImptek {
 	
 	@Column(name = "USER_LASTKEYDATECHANGE", nullable = true)
 	@Convert(converter = LocalDateTimeConverter.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	@JsonSerialize(using = LocalDateTimeSerializeIsa.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializeIsa.class)
 	private LocalDateTime lastKeyDateChange;
 	
 	@Column(name = "USER_LASTACCESS", nullable = false)
 	@Convert(converter = LocalDateTimeConverter.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	@JsonSerialize(using = LocalDateTimeSerializeIsa.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializeIsa.class)
 	private LocalDateTime lastAccess;
 	
 	@ManyToOne(cascade = {CascadeType.ALL})
