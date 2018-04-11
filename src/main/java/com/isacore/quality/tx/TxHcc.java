@@ -208,7 +208,8 @@ public class TxHcc {
 					hhg.setProduct(p);
 					hhg.setHccNorm(rh.getNorm());
 					hhg.setCode(rh.getCode());
-					hhg.setReview(p.getItcdq());
+					hhg.setReview(rh.getReview());
+					hhg.setReference(p.getItcdq());
 					hhg.setOf(rh.getOf());
 					hhg.setHcchBatch(hh.getHcchBatch());
 					hhg.setPeriodicity(hh.getPeriodicity());
