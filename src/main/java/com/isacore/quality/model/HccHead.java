@@ -58,7 +58,7 @@ public class HccHead {
 	 * Esta variable tambien se la utiliza tambien para el campo código del proveedor
 	 * en el caso de la HCC de materia prima
 	 */
-	@Column(name = "HCCH_OF", nullable = false, length = 64)
+	@Column(name = "HCCH_OF", nullable = true, length = 64)
 	private String of;
 	
 	@Column(name = "HCCH_BATCH", nullable = false, length = 32)
