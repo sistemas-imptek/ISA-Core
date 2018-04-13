@@ -24,6 +24,7 @@ import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
 import com.isacore.quality.service.ITestService;
+import com.isacore.quality.service.impl.IProviderServiceImpl;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
@@ -57,6 +58,9 @@ public class TxHcc {
 	
 	@Autowired
 	private IUserImptekService serviceUI;
+	
+	@Autowired
+	private IProviderServiceImpl serviceProvider;
 
 	/**
 	 * Transacción Para generar la estructura de la HCC, vincular los datos de los
@@ -222,8 +226,9 @@ public class TxHcc {
 				}
 			} else {
 				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCMP"));
-
+				
 				if (rh != null) {
+					p.setProviders(this.serviceProvider.findByProductId(p.getIdProduct()));
 					logger.info(">>> mthod: getHccHead::::MP::::" + p.getIdProduct() + ":::" + p.getNameProduct());
 					HccHead hhg = new HccHead();
 					hhg.setProduct(p);
