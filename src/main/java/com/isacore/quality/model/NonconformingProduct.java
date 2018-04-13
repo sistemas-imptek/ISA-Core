@@ -20,10 +20,10 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateConverter;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
 import com.isacore.util.LocalDateDeserializeIsa;
+import com.isacore.util.LocalDateSerializeIsa;
 import com.isacore.util.LocalDateTimeDeserializeIsa;
 import com.isacore.util.LocalDateTimeSerializeIsa;
 
@@ -62,13 +62,13 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_DETECTION_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(using = LocalDateSerializeIsa.class)
 	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateDetection;
 	
 	@Column(name = "NCP_PRODUCTION_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(using = LocalDateSerializeIsa.class)
 	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateProduction;
 	

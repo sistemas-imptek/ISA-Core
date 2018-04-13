@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateConverter;
 import com.isacore.util.LocalDateDeserializeIsa;
+import com.isacore.util.LocalDateSerializeIsa;
 
 @Entity(name = "hcchead")
 @Table(name = "HCCHEAD")
@@ -49,7 +50,7 @@ public class HccHead {
 	 */
 	@Column(name = "HCCH_DATE_ORDER", nullable = true)
 	@Convert(converter = LocalDateConverter.class)
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(using = LocalDateSerializeIsa.class)
 	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateOrder;
 	
