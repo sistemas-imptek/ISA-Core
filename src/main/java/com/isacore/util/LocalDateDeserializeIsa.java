@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 public class LocalDateDeserializeIsa extends JsonDeserializer<LocalDate>{
 
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-M-yyyy");
+	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	@Override
 	public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
