@@ -14,8 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateConverter;
+import com.isacore.util.LocalDateDeserializeIsa;
 
 @Entity(name = "hcchead")
 @Table(name = "HCCHEAD")
@@ -37,8 +40,22 @@ public class HccHead {
 	
 	@Column(name = "HCCH_DATE", nullable = false)
 	@Convert(converter = LocalDateConverter.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy@HH:mm:ss", timezone="America/Bogota")
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateCreate;
+	
+	/*
+	 * Fecha de la orden de pedido de materia prima
+	 */
+	@Column(name = "HCCH_DATE_ORDER", nullable = true)
+	@Convert(converter = LocalDateConverter.class)
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
+	private LocalDate dateOrder;
+	
+	@Column(name = "HCCH_ORDER_NUMBER", nullable = true, length = 128)
+	private String orderNumber;
+	
 	/**
 	 * Esta variable tambien sela utiliza para el campo Pedido en el caso de la 
 	 * HCC de materia prima
@@ -222,6 +239,22 @@ public class HccHead {
 
 	public void setDetail(List<HccDetail> detail) {
 		this.detail = detail;
+	}
+
+	public LocalDate getDateOrder() {
+		return dateOrder;
+	}
+
+	public void setDateOrder(LocalDate dateOrder) {
+		this.dateOrder = dateOrder;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
 }
