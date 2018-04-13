@@ -43,7 +43,7 @@ public class HccHead {
 	 * Esta variable tambien sela utiliza para el campo Pedido en el caso de la 
 	 * HCC de materia prima
 	 */
-	@Column(name = "HCCH_PERIODICITY", nullable = false, length = 64)
+	@Column(name = "HCCH_PERIODICITY", nullable = true, length = 64)
 	private String periodicity;
 	
 	@Column(name = "HCCH_CODE", nullable = false, length = 32)
