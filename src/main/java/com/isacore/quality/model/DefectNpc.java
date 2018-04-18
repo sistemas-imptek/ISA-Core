@@ -17,7 +17,7 @@ public class DefectNpc {
 	private Integer idDefect;
 	
 	@Column(name = "DEFECT_DESCRIPTION", nullable = false, length = 4096)
-	private String desciption;
+	private String description;
 	
 	@Column(name = "DEFECT_PERCENT", nullable = true, columnDefinition = "decimal(5,3)")
 	private Double percent;
@@ -31,11 +31,11 @@ public class DefectNpc {
 	}
 
 	public String getDesciption() {
-		return desciption;
+		return description;
 	}
 
 	public void setDesciption(String desciption) {
-		this.desciption = desciption;
+		this.description = desciption;
 	}
 
 	public Double getPercent() {
