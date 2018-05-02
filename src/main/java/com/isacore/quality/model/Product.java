@@ -16,7 +16,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Component
+@JsonInclude(Include.NON_NULL)
 @Entity(name = "product")
 @Table(name = "PRODUCT")
 public class Product {

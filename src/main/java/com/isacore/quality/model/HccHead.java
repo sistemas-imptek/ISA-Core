@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -21,6 +23,7 @@ import com.isacore.localdate.converter.LocalDateConverter;
 import com.isacore.util.LocalDateDeserializeIsa;
 import com.isacore.util.LocalDateSerializeIsa;
 
+@JsonInclude(Include.NON_NULL)
 @Entity(name = "hcchead")
 @Table(name = "HCCHEAD")
 public class HccHead {
@@ -105,6 +108,15 @@ public class HccHead {
 	private List<HccDetail> detail;
 	
 	public HccHead() {}
+
+	public HccHead(String sapCode, Product product, LocalDate dateCreate, String hcchBatch, String analysis) {
+		super();
+		this.sapCode = sapCode;
+		this.product = product;
+		this.dateCreate = dateCreate;
+		this.hcchBatch = hcchBatch;
+		this.analysis = analysis;
+	}
 
 	public String getSapCode() {
 		return sapCode;

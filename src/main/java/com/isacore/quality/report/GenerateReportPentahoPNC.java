@@ -56,7 +56,7 @@ public class GenerateReportPentahoPNC extends AbstractReportGenerator{
 		final SQLReportDataFactory dataFactory = new SQLReportDataFactory(ReportConnection.ConnectionPentaho());
 		dataFactory.setQuery(QUERY_NAME, "select ncp.rep_title, ncp.rep_subtitle, ncp.rep_reference, ncp.rep_code, ncp.rep_review, ncp.rep_register, \r\n" + 
 				"ncp.ncp_id, p.product_name, ncp.ncp_source, CONCAT(ncp.ncp_nonconforming_amount, ' ', ncp.ncp_unit) as ncp_amountUnit,\r\n" + 
-				"ncp.ncp_production_order, ncp.ncp_nonconforming_amount, ncp.ncp_production_date, ncp.ncp_batch, \r\n" + 
+				"ncp.ncp_production_order, ncp.ncp_nonconforming_amount, ncp.ncp_production_date, ncp.ncp_batch, ncp.ncp_hcc_free_use,\r\n" + 
 				"ncp.ncp_detection_date, a.area_name, round(ncp.ncp_percent_validity*100,2) as ncp_percent_validity,\r\n" + 
 				"d.defect_description, ncp.ncp_fivem, o.om_code, t.task_description, round((t.task_percent * 100),2) as task_percent, \r\n" + 
 				"ncp.ncp_detail_other, ncp.ncp_final_destination, ncp_additional_remarks, ncp.ncp_u_name, ncp.ncp_job, ncp.ncp_work_area\r\n" + 

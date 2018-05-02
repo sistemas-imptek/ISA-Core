@@ -74,6 +74,9 @@ public class QualityQuickResponseController {
 		case TxPropertyList.TX_CODE_GetAllOnlyPropertyList:
 			return this.txPropertyList.TxQQRgetOnlyPL(wri);
 			
+		case TxHcc.TX_CODE_GetAllHCCTP:
+			return this.txHcc.TxQQRgetHCCPT(wri);
+		
 		case TxHcc.TX_CODE_GenerateHcc:
 			return this.txHcc.TxQQRgenerateHCC(wri);
 			

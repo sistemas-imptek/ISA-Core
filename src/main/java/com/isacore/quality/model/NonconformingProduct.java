@@ -194,6 +194,13 @@ public class NonconformingProduct {
 	@JoinColumn(name = "NCP_ID", nullable = true)
 	private List<TaskNcp> tasks;
 
+	
+	public void calculteBalanceMaterial() {
+		if(this.exitMaterial != null) {
+			this.balanceMaterial = this.amountNonConforming - this.exitMaterial;
+		}
+	}
+	
 	public Integer getIdNCP() {
 		return idNCP;
 	}
