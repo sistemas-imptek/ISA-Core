@@ -55,6 +55,7 @@ public class TxNorm {
 		if (norms.isEmpty() || norms == null) {
 			logger.info("> No existe registros en la base de datos");
 			wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 		} else {
 			try {
@@ -66,16 +67,19 @@ public class TxNorm {
 				if (jsonCryp.equals(Crypto.ERROR)) {
 					logger.error("> error al encryptar");
 					wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 				} else {
 					wrei.setMessage(WebResponseMessage.SEARCHING_OK);
 					wrei.setParameters(jsonCryp);
+					wrei.setStatus(WebResponseMessage.STATUS_OK);
 					return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 				}
 
 			} catch (IOException e) {
 				logger.error("> error al serializar el JSON");
 				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
@@ -95,12 +99,14 @@ public class TxNorm {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -112,6 +118,7 @@ public class TxNorm {
 					if (n == null) {
 						logger.info("> Norm not found");
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
 						String json = JSON_MAPPER.writeValueAsString(n);
@@ -120,17 +127,20 @@ public class TxNorm {
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
 							wrei.setParameters(jsonCryp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
 					}
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Norm.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -149,12 +159,14 @@ logger.info("> Tx TxQQRgetNormById");
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -166,6 +178,7 @@ logger.info("> Tx TxQQRgetNormById");
 					if (norms.isEmpty() || norms == null) {
 						logger.info("> Norms not found");
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
 						String json = JSON_MAPPER.writeValueAsString(norms);
@@ -174,9 +187,11 @@ logger.info("> Tx TxQQRgetNormById");
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							wrei.setParameters(jsonCryp);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
@@ -184,7 +199,8 @@ logger.info("> Tx TxQQRgetNormById");
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Norm.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}

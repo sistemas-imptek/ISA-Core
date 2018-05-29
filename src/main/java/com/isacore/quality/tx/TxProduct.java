@@ -56,6 +56,7 @@ public class TxProduct {
 		if (products.isEmpty() || products == null) {
 			logger.info("> No existe registros en la base de datos");
 			wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 		} else {
 			try {
@@ -67,6 +68,7 @@ public class TxProduct {
 				if (jsonCryp.equals(Crypto.ERROR)) {
 					logger.error("> error al encriptar");
 					wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 				}else {
 					wrei.setMessage(WebResponseMessage.SEARCHING_OK);
@@ -78,6 +80,7 @@ public class TxProduct {
 			} catch (IOException e) {
 				logger.error("> error al serializar el JSON");
 				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
@@ -99,12 +102,14 @@ public class TxProduct {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -117,6 +122,7 @@ public class TxProduct {
 					if (p == null) {
 						logger.info("> Product not found");
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
 						String json = JSON_MAPPER.writeValueAsString(p);
@@ -125,17 +131,20 @@ public class TxProduct {
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
 							wrei.setParameters(jsonCryp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
 					}
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Product.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -159,6 +168,7 @@ public class TxProduct {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei,HttpStatus.NOT_ACCEPTABLE);
 		} else {
 
@@ -166,6 +176,7 @@ public class TxProduct {
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -180,15 +191,19 @@ public class TxProduct {
 					if(jsonCryp.equals(Crypto.ERROR)) {
 						logger.error("> error al encryptar");
 						wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}else {
 						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
 						wrei.setParameters(jsonCryp);
+						wrei.setStatus(WebResponseMessage.STATUS_OK);
 						return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 					}
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Product.class);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+					return new ResponseEntity<Object>(wri,HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}
 		}

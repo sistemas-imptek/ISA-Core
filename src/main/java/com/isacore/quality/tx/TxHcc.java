@@ -73,7 +73,7 @@ public class TxHcc {
 	 * @return
 	 */
 	public ResponseEntity<Object> TxQQRgetHCCPT(WebRequestIsa wri) {
-logger.info("> TX: TxQQRgetHCCPT");
+		logger.info("> TX: TxQQRgetHCCPT");
 		
 		WebResponseIsa wrei = new WebResponseIsa();
 		wrei.setTransactionName(TX_NAME_GetAllHCCTP);
@@ -81,7 +81,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 		
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
-			wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		}else {
@@ -98,7 +98,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 
 					if (listHcc == null) {
 						logger.info("> No existen Hcc");
-						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
@@ -122,7 +122,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 					e.printStackTrace();
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<Object>(wri,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -145,7 +145,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
-			wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
@@ -166,9 +166,11 @@ logger.info("> TX: TxQQRgetHCCPT");
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							wrei.setParameters(jsonCryp);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
@@ -183,7 +185,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 					logger.error("> No se ha podido serializar el JSON a la clase: " + HccHead.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -199,6 +201,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 
@@ -206,6 +209,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -231,6 +235,7 @@ logger.info("> TX: TxQQRgetHCCPT");
 								logger.info(">> Reporte generado correctamente");
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {
+								logger.error(">> El reporte de la HCC" + hh.getSapCode() +  "no se a podido crear");
 								wrei.setMessage("No se ha podido generar el reporte");
 								wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -239,8 +244,11 @@ logger.info("> TX: TxQQRgetHCCPT");
 							String statusReport = GenerateReportQuality.runReportPentahoHccMP(hh.getSapCode());
 							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
+								wrei.setMessage("El reporte de la HCC " + hh.getSapCode() + "ha sido creado satisfactoriamente");
+								wrei.setStatus(WebResponseMessage.STATUS_OK);
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {
+								logger.error(">> El reporte de la HCC" + hh.getSapCode() +  "no se a podido crear");
 								wrei.setMessage("No se ha podido generar el reporte");
 								wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -257,7 +265,6 @@ logger.info("> TX: TxQQRgetHCCPT");
 					logger.error("> No se ha podido serializar el JSON a la clase: " + HccHead.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_CLASS);
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
-					e.printStackTrace();
 					return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
 				}
 			}

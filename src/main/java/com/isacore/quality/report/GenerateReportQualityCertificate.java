@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.isacore.util.AbstractReportGenerator;
 import com.isacore.util.ReportConnection;
 
-public class GenerateReportPentahoHccMP extends AbstractReportGenerator {
-
+public class GenerateReportQualityCertificate extends AbstractReportGenerator{
+	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private static final String QUERY_NAME = "ReportQuery";
@@ -27,22 +27,20 @@ public class GenerateReportPentahoHccMP extends AbstractReportGenerator {
 
 	@Override
 	public MasterReport getReportDefinition() {
-
-		Path pa = Paths.get("com/isacore/quality/report/prpt/HCC_MP_6.0.1.0-386.prpt");
+		Path pa = Paths.get("com/isacore/quality/report/prpt/QualityCertificate_6.0.1.0-386.prpt");
 		final ClassLoader classloader = this.getClass().getClassLoader();
-		
-		System.out.println("::::::::: " + classloader.toString());
 		
 		final URL reportDefinitionURL = classloader.getResource(pa.toString());
 
 		final ResourceManager resourceManager = new ResourceManager();
 		Resource directly;
-		try {
-			
+		try {			
 			directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
 
 			MasterReport mr = (MasterReport) directly.getResource();
 			mr.setQuery(QUERY_NAME);
+			
+			logger.info("> ISA::::Method:::getReportDefinition:::::report success");
 			return mr;
 
 		} catch (ResourceException e) {
@@ -53,28 +51,29 @@ public class GenerateReportPentahoHccMP extends AbstractReportGenerator {
 
 	@Override
 	public DataFactory getDataFactory() {
-
 		final SQLReportDataFactory dataFactory = new SQLReportDataFactory(ReportConnection.ConnectionPentaho());
-		dataFactory.setQuery(QUERY_NAME, "select p.product_name, p.product_sap_code ,\r\n" + 
-				"hh.hcch_sapcode, hh.hcch_analysis, hh.hcch_code, hh.hcch_comment, hh.hcch_date_order, hh.hcch_norm, hh.hcch_batch, \r\n" + 
-				"hh.hcch_job, hh.hcch_order_number, hh.hcch_reference, hh.hcch_periodicity, hh.hcch_review, hh.hcch_u_name, hh.hcch_work_area,\r\n" + 
+		dataFactory.setQuery(QUERY_NAME, "select \r\n" + 
+				"qc.qc_client,qc.qc_order,qc_email,\r\n" + 
+				"p.product_name, hh.hcch_sapcode,hh.hcch_norm, hh.hcch_batch, \r\n" + 
 				"hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.hccd_specifications, hd.hccd_test_result, hd.hccd_test_result_view, hd.hccd_pass_test\r\n" + 
 				"from dbo.product p\r\n" + 
 				"inner join dbo.hcchead hh on hh.product_id = p.product_id\r\n" + 
 				"inner join dbo.hccdetail hd on hd.hcch_sapcode = hh.hcch_sapcode\r\n" + 
-				"where hh.hcch_sapcode = ${CodeHCC}");
+				"inner join dbo.quality_certificate qc on qc.qc_sap_code = hh.hcch_sapcode\r\n" + 
+				"where hh.hcch_sapcode = ${HccSapCode};");
 
 		return dataFactory;
 	}
 
 	@Override
 	public Map<String, Object> getReportParameters() {
+		// TODO Auto-generated method stub
 		return this.paramsReport;
 	}
-
-	public void setIdHcc(String idHCC) {
+	
+	public void setIdHccSapCode(String hccSapCode) {
 		this.paramsReport = new HashMap<String, Object>();
-		this.paramsReport.put("CodeHCC", idHCC);
+		this.paramsReport.put("HccSapCode",hccSapCode);
 	}
 
 }

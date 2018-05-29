@@ -42,6 +42,7 @@ public class TxSecurity {
 		if (jsonValue.equals(Crypto.ERROR)) {
 			logger.error("> error al desencryptar");
 			wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+			wrei.setStatus(WebResponseMessage.STATUS_OK);
 			return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
 		} else {
 			try {
@@ -63,10 +64,12 @@ public class TxSecurity {
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
 							wrei.setParameters(jsonCryp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
 					}else {
@@ -79,6 +82,7 @@ public class TxSecurity {
 				logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
 				e.printStackTrace();
 				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 		}

@@ -83,5 +83,18 @@ public class GenerateReportQuality {
 			return REPORT_ERROR;
 		}
 	}
+	
+	public static String runReportPentahoQualityCertificate(String hccSapCode) {
+		try {
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/QualityCertificate/QualityCertificate_" + hccSapCode + ".pdf");
+			GenerateReportQualityCertificate grpQC = new GenerateReportQualityCertificate();
+			grpQC.setIdHccSapCode(hccSapCode);
+			grpQC.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+			
+			return REPORT_SUCCESS;
+		} catch (ReportProcessingException | IOException e) {
+			return REPORT_ERROR;
+		}
+	}
 
 }

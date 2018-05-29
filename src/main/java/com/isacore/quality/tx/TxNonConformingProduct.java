@@ -66,6 +66,7 @@ public class TxNonConformingProduct {
 		if (ncps.isEmpty() || ncps == null) {
 			logger.info("> No existe registros en la base de datos");
 			wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 		} else {
 			ncps.forEach((NonconformingProduct x) -> {
@@ -81,6 +82,7 @@ public class TxNonConformingProduct {
 				if (jsonCryp.equals(Crypto.ERROR)) {
 					logger.error("> error al encriptar");
 					wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 				}else {
 					wrei.setMessage(WebResponseMessage.SEARCHING_OK);
@@ -91,6 +93,7 @@ public class TxNonConformingProduct {
 			} catch (IOException e) {
 				logger.error("> error al serializar el JSON");
 				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
@@ -111,12 +114,14 @@ public class TxNonConformingProduct {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		}else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -129,6 +134,7 @@ public class TxNonConformingProduct {
 					if (ncp == null) {
 						logger.info("> Nonconforming Product not found");
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
 						String json = JSON_MAPPER.writeValueAsString(ncp);
@@ -137,10 +143,12 @@ public class TxNonConformingProduct {
 						if (jsonCryp.equals(Crypto.ERROR)) {
 							logger.error("> error al encryptar");
 							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						} else {
 							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
 							wrei.setParameters(jsonCryp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}
 					}
@@ -148,7 +156,8 @@ public class TxNonConformingProduct {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
 					e.printStackTrace();
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -165,6 +174,7 @@ public class TxNonConformingProduct {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS_TO_CREATE_UPDATE);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei,HttpStatus.NOT_ACCEPTABLE);
 		} else {
 
@@ -172,6 +182,7 @@ public class TxNonConformingProduct {
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei,HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -187,22 +198,33 @@ public class TxNonConformingProduct {
 					ncp.setWorkArea(ui.getEmployee().getArea().getNameArea());
 					NonconformingProduct ncpp = this.service.create(ncp);
 					
-					String json = JSON_MAPPER.writeValueAsString(ncpp);
-					String jsonCryp = Crypto.encrypt(json);
-					
-					if(jsonCryp.equals(Crypto.ERROR)) {
-						logger.error("> error al encryptar");
-						wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
-						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+					if(ncpp != null) {
+						String json = JSON_MAPPER.writeValueAsString(ncpp);
+						String jsonCryp = Crypto.encrypt(json);
+						
+						if(jsonCryp.equals(Crypto.ERROR)) {
+							logger.error("> error al encryptar");
+							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						}else {
+							wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
+							wrei.setParameters(jsonCryp);
+							return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+						}
 					}else {
-						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
-						wrei.setParameters(jsonCryp);
-						return new ResponseEntity<Object>(wrei,HttpStatus.OK);
+						logger.error(">> Error al guardar el PNC");
+						wrei.setMessage("Error al guardar el PNC");
+						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setMessage("No se ha podido serializar la clase");
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}
@@ -223,12 +245,14 @@ public class TxNonConformingProduct {
 		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
 			logger.info("> Objeto vacío");
 			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
 		}else {
 			String jsonValue = Crypto.decrypt(wri.getParameters());
 			if (jsonValue.equals(Crypto.ERROR)) {
 				logger.error("> error al desencryptar");
 				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 			} else {
 				try {
@@ -241,6 +265,7 @@ public class TxNonConformingProduct {
 					if (ncp == null) {
 						logger.info("> Nonconforming Product not found");
 						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
 						String statusReport = GenerateReportQuality.runReportPentahoNCP(ncp.getIdNCP());
@@ -255,8 +280,8 @@ public class TxNonConformingProduct {
 							ncp.setUserName(ui.getEmployee().getCompleteName());
 							ncp.setJob(ui.getEmployee().getJob());
 							ncp.setWorkArea(ui.getEmployee().getArea().getNameArea());
-							
 							this.service.update(ncp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}else {
 							logger.info(">> No se ha podido generar el reporte");
@@ -269,7 +294,8 @@ public class TxNonConformingProduct {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
 					e.printStackTrace();
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}

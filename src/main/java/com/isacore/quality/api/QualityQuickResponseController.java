@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.quality.classes.util.TxRequestQualityUtil;
+import com.isacore.quality.tx.TxGenerateQualityCertificate;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
@@ -47,6 +48,9 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxRequestQualityUtil txRQU;
+	
+	@Autowired
+	private TxGenerateQualityCertificate txGQC;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -97,6 +101,9 @@ public class QualityQuickResponseController {
 			
 		case TxRequestQualityUtil.TX_CODE_RNCP:
 			return this.txRQU.requestNCP();
+			
+		case TxGenerateQualityCertificate.Tx_CODE_GenerateQualityCertificate:
+			return this.txGQC.TxGQC(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());
