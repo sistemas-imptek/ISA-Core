@@ -77,12 +77,12 @@ public class TxGenerateQualityCertificate {
 						
 						if(statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 							logger.info(">> Reporte generado correctamente");
-							wrei.setMessage("Certificado de calidad::" + qqc.getIdCertificate() + "::: creado satisfactoriamente");
+							wrei.setMessage("Certificado de calidad::" + qqc.getOrder() + "::: creado satisfactoriamente");
 							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 						}else {
 							logger.info(">> No se ha podido generar el reporte");
-							wrei.setMessage("No se pudo Generar el certificado de calidad::" + qqc.getIdCertificate());
+							wrei.setMessage("No se pudo Generar el certificado de calidad::" + qqc.getOrder());
 							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 						}

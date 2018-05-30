@@ -57,6 +57,10 @@ public class HccHead {
 	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateOrder;
 	
+	
+	/**
+	 * {@value campo que se utiliza en la HCC de materia prima para la órden de compra de materia prima}
+	 */
 	@Column(name = "HCCH_ORDER_NUMBER", nullable = true, length = 128)
 	private String orderNumber;
 	
