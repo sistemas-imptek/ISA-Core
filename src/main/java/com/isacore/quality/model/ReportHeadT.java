@@ -37,6 +37,9 @@ public class ReportHeadT {
 	@Column(name = "REPORT_OF", nullable = true, length = 3072)
 	private String of;
 	
+	@Column(name = "REPORT_REFERENCE", nullable = true, length = 2048)
+	private String reportReference;
+	
 	
 
 	public ReportHeadT() {}
@@ -60,6 +63,24 @@ public class ReportHeadT {
 		this.review = review;
 		this.of = of;
 	}
+	
+	
+
+	public ReportHeadT(Integer idReport, String type, String tittle, String subTitle, String norm, String code,
+			String review, String of, String reportReference) {
+		super();
+		this.idReport = idReport;
+		this.type = type;
+		this.tittle = tittle;
+		this.subTitle = subTitle;
+		this.norm = norm;
+		this.code = code;
+		this.review = review;
+		this.of = of;
+		this.reportReference = reportReference;
+	}
+
+
 
 	public Integer getIdReport() {
 		return idReport;
@@ -124,5 +145,14 @@ public class ReportHeadT {
 	public void setOf(String of) {
 		this.of = of;
 	}
+
+	public String getReportReference() {
+		return reportReference;
+	}
+
+	public void setReportReference(String reportReference) {
+		this.reportReference = reportReference;
+	}
+	
 	
 }

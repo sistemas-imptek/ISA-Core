@@ -93,6 +93,7 @@ public class GenerateReportQuality {
 			
 			return REPORT_SUCCESS;
 		} catch (ReportProcessingException | IOException e) {
+			e.printStackTrace();
 			return REPORT_ERROR;
 		}
 	}

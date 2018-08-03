@@ -32,7 +32,9 @@ public class TxProduct {
 	public static final String TX_NAME_SetProduct = "SetProduct";
 	public static final String TX_CODE_SetProduct = "TxQQRsetProduct";
 	
-
+	public static final String TX_NAME_GetFeature = "GetFeatures";
+	public static final String TX_CODE_GetFeature = "TxQQRgetProductFeature";
+	
 	@Autowired
 	private IProductService service;
 
@@ -125,6 +127,7 @@ public class TxProduct {
 						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
+						p.setFeature(null);
 						String json = JSON_MAPPER.writeValueAsString(p);
 						String jsonCryp = Crypto.encrypt(json);
 
@@ -141,6 +144,7 @@ public class TxProduct {
 						}
 					}
 				} catch (IOException e) {
+					e.printStackTrace();
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Product.class);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
@@ -204,6 +208,71 @@ public class TxProduct {
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
 					return new ResponseEntity<Object>(wri,HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * TX NAME: GetProductFeature obtiene las características del producto solicitado
+	 * 
+	 * @param wri
+	 * @return
+	 */
+	public ResponseEntity<Object> TxQQRgetProductFeature(WebRequestIsa wri) {
+		logger.info("> TX: TxQQRgetProductFeature");
+
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_GetFeature);
+		wrei.setTransactionCode(TX_CODE_GetFeature);
+
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		} else {
+			String jsonValue = Crypto.decrypt(wri.getParameters());
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				try {
+					logger.info("> mapeando json a la clase: " + Product.class);
+					ObjectMapper mapper = new ObjectMapper();
+					Product p = mapper.readValue(jsonValue, Product.class);
+					logger.info("> id Product: " + p.getIdProduct());
+					p = this.service.findProductFeature(p.getIdProduct());
+
+					if (p == null) {
+						logger.info("> Product not found");
+						wrei.setMessage(WebResponseMessage.OBJECT_NOT_FOUND);
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
+						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
+					} else {
+						String json = JSON_MAPPER.writeValueAsString(p);
+						String jsonCryp = Crypto.encrypt(json);
+
+						if (jsonCryp.equals(Crypto.ERROR)) {
+							logger.error("> error al encryptar");
+							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						} else {
+							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setParameters(jsonCryp);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
+							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					logger.error("> No se ha podido serializar el JSON a la clase: " + Product.class);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei,HttpStatus.BAD_REQUEST);
 				}
 			}
 		}

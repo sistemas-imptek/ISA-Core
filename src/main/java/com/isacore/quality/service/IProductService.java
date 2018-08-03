@@ -9,4 +9,6 @@ public interface IProductService extends CRUD<Product>{
 	
 	Product findProductByIdAndPeriod(Integer idP, String period);
 	
+	Product findProductFeature(Integer idP);
+	
 }

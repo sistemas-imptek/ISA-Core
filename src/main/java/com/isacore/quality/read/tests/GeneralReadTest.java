@@ -22,7 +22,7 @@ public class GeneralReadTest{
 	@Autowired
 	private TestReadAdhesividad rTAdhesividad;
 
-	@Scheduled(cron = "0 16 14 * * ?")
+	@Scheduled(cron = "0 5 12 * * ?")
 	public void execute(){
 		this.rTTraction.run();
 

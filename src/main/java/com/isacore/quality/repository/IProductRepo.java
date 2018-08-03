@@ -18,5 +18,6 @@ public interface IProductRepo extends JpaRepository<Product, Integer>{
 	@Query(value = "select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_type, prop.property_id, prop.property_name, prop.property_type, prop.property_periodicity, prop.property_norm, prop.property_min, prop.property_max, prop.property_unit, prop.property_view, prop.property_view_hcc from product p inner join property prop on p.product_id = prop.product_id where p.product_id = :idP and prop.property_periodicity = :period", nativeQuery = true)
 	List<Object[]> findProductByIdAndPeriod(@Param("idP")Integer idP, @Param("period")String period);
 	
-	
+	@Query(value = "select p.product_id, p.product_sap_code, p.product_name, f.fea_length, f.fea_length_unit, f.fea_gross_weight, f.fea_gross_weight_unit, f.fea_net_weight, f.fea_net_weight_unit, f.fea_weight_area, f.fea_umb, f.fea_unit_cost, f.fea_distributor_price from product p  inner join feature f on p.fea_id = f.fea_id where p.product_id = :idP", nativeQuery = true)
+	List<Object[]> findProductFeature(@Param("idP") Integer idP);
 }

@@ -15,11 +15,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-@Component
+
 @JsonInclude(Include.NON_NULL)
 @Entity(name = "product")
 @Table(name = "PRODUCT")
@@ -49,7 +48,7 @@ public class Product {
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
 	
-	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "FEA_ID", nullable = true)
 	private Feature feature;
 	
@@ -119,6 +118,14 @@ public class Product {
 		this.feature = feature;
 		this.providers = providers;
 		this.propertyList = propertyList;
+	}
+
+	public Product(Integer idProduct, String sapCode, String nameProduct, Feature feature) {
+		super();
+		this.idProduct = idProduct;
+		this.sapCode = sapCode;
+		this.nameProduct = nameProduct;
+		this.feature = feature;
 	}
 
 	public Integer getIdProduct() {

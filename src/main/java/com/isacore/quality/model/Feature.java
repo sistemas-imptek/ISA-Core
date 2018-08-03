@@ -45,6 +45,29 @@ public class Feature {
 	
 	@Column(name = "FEA_DISTRIBUTOR_PRICE", nullable = true, columnDefinition = "decimal(7,3)")
 	private Double distributorPrice;
+	
+	
+
+	public Feature() {
+		super();
+	}
+
+	public Feature(Integer idFeature, Double length, String unitLength, Double grossWeigth, String unitGrossWeigth,
+			Double netWeigth, String unitNetWeigth, Double weigthArea, String umb, Double unitCost,
+			Double distributorPrice) {
+		super();
+		this.idFeature = idFeature;
+		this.length = length;
+		this.unitLength = unitLength;
+		this.grossWeigth = grossWeigth;
+		this.unitGrossWeigth = unitGrossWeigth;
+		this.netWeigth = netWeigth;
+		this.unitNetWeigth = unitNetWeigth;
+		this.weigthArea = weigthArea;
+		this.umb = umb;
+		this.unitCost = unitCost;
+		this.distributorPrice = distributorPrice;
+	}
 
 	public Integer getIdFeature() {
 		return idFeature;

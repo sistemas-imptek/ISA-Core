@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isacore.quality.model.Feature;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.repository.IProductRepo;
@@ -17,9 +18,6 @@ public class ProductServiceImpl implements IProductService {
 
 	@Autowired
 	private IProductRepo repo;
-	
-	@Autowired
-	private Product product;
 
 	@Override
 	public List<Product> findAll() {
@@ -56,10 +54,12 @@ public class ProductServiceImpl implements IProductService {
 	public Product findProductByIdAndPeriod(Integer idP, String period) {
 
 		List<Object[]> list = this.repo.findProductByIdAndPeriod(idP, period);
-
+		
 		if (list.isEmpty() || list == null)
 			return null;
 		else {
+			Product product = new Product();
+			
 			Object[] o = list.get(0);
 			product.setIdProduct((Integer)o[0]);
 			product.setSapCode((String) o[1]);
@@ -83,6 +83,39 @@ public class ProductServiceImpl implements IProductService {
 				listProperty.add(p);
 			});
 			product.setPropertyList(listProperty);
+			return product;
+		}
+	}
+
+	@Override
+	public Product findProductFeature(Integer idP) {
+		List<Object[]> list = this.repo.findProductFeature(idP);
+		
+		if(list.isEmpty() || list == null)
+			return null;
+		else {
+			
+			Product product = new Product();
+			
+			Object[] o = list.get(0); 
+			product.setIdProduct((Integer) o[0]);
+			product.setSapCode((String) o[1]);
+			product.setNameProduct((String) o[2]);
+			
+			Feature f = new Feature();
+			f.setLength((o[3]) == null ? null : ((BigDecimal)o[3]).doubleValue());
+			f.setUnitLength((String) o[4]);
+			f.setGrossWeigth((o[5]) == null ? null : ((BigDecimal)o[5]).doubleValue());
+			f.setUnitGrossWeigth((String) o[6]);
+			f.setNetWeigth((o[7]) == null ? null : ((BigDecimal)o[7]).doubleValue());
+			f.setUnitNetWeigth((String) o[8]);
+			f.setWeigthArea((o[9]) == null ? null : ((BigDecimal)o[9]).doubleValue());
+			f.setUmb((String) o[10]);
+			f.setUnitCost((o[11]) == null ? null : ((BigDecimal)o[11]).doubleValue());
+			f.setDistributorPrice((o[12]) == null ? null : ((BigDecimal)o[12]).doubleValue());
+			
+			product.setFeature(f);
+			
 			return product;
 		}
 	}

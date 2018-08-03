@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.quality.classes.util.TxRequestQualityUtil;
+import com.isacore.quality.model.TestReadViscocidad;
+import com.isacore.quality.read.tests.TestReadPesoArea;
+import com.isacore.quality.read.tests.TestReadSujecionGranulo;
+import com.isacore.quality.read.tests.TestReadTemplatepH;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNonConformingProduct;
@@ -52,6 +56,19 @@ public class QualityQuickResponseController {
 	@Autowired
 	private TxGenerateQualityCertificate txGQC;
 	
+	@Autowired
+	private TestReadTemplatepH tpH;
+	
+	@Autowired 
+	private TestReadViscocidad tViscocidad;
+	
+	@Autowired
+	private TestReadSujecionGranulo tSujecion;
+	
+	@Autowired
+	private TestReadPesoArea tPesoArea;
+	
+	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
 		
@@ -71,6 +88,9 @@ public class QualityQuickResponseController {
 			
 		case TxProduct.TX_CODE_GetProductById:
 			return this.txProduct.TxQQRgetProductById(wri);
+			
+		case TxProduct.TX_CODE_GetFeature:
+			return this.txProduct.TxQQRgetProductFeature(wri);
 			
 		case TxProduct.TX_CODE_SetProduct:
 			return this.txProduct.TxQQRsetProduct(wri);
@@ -96,7 +116,7 @@ public class QualityQuickResponseController {
 		case TxNonConformingProduct.TX_CODE_SetNCP:
 			return this.txNcp.TxQQRsetNCP(wri);
 			
-		case TxNonConformingProduct.TX_CODE_CloseNCP:
+		case TxNonConformingProduct.TX_CODE_CloseNCP:	
 			return this.txNcp.TxQQRcloseNCP(wri);
 			
 		case TxRequestQualityUtil.TX_CODE_RNCP:
@@ -114,4 +134,12 @@ public class QualityQuickResponseController {
 			return new ResponseEntity<Object>(wrei,HttpStatus.OK);
 		}
 	}	
+	
+	@RequestMapping(value = "/testExcel", method = RequestMethod.GET)
+	public void testExcel() {
+		tpH.run();
+		tViscocidad.run();
+		tSujecion.run();
+		tPesoArea.run();
+	}
 }

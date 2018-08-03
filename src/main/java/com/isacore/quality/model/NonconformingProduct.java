@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.isacore.localdate.converter.LocalDateConverter;
@@ -108,6 +111,11 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_MATERIAL_EXIT", nullable = true, columnDefinition = "decimal(10,3)")
 	private Double exitMaterial;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JoinColumn(name = "NCP_ID", nullable = true)
+	private List<ExitMaterialHistory> exitMaterialH;
 	
 	@Column(name = "NCP_MATERIAL_BALANCE", nullable = true, columnDefinition = "decimal(10,3)")
 	private Double balanceMaterial;
