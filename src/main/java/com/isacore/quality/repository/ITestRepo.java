@@ -12,7 +12,7 @@ import com.isacore.quality.model.Test;
 @Repository
 public interface ITestRepo extends JpaRepository<Test, Integer>{
 
-	@Query("from test t where t.batchTest = :batch")
+	@Query(value = "from test t where t.batchTest = :batch", nativeQuery = true)
 	List<Test> findByBatch(@Param("batch") String batch);
 	
 }

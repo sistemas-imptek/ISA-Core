@@ -16,3 +16,4 @@ public interface IHccHeadRepo extends JpaRepository<HccHead, String>{
 	List<Object[]> findOnlyHccHead(@Param("tp")String tp);
 	
 }
+	

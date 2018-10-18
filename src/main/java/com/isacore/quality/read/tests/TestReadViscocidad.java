@@ -1,4 +1,4 @@
-package com.isacore.quality.model;
+package com.isacore.quality.read.tests;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import com.isacore.quality.model.Test;
 import com.isacore.quality.service.ITestService;
 
 @Component

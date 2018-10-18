@@ -70,7 +70,7 @@ public class TxNonConformingProduct {
 			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 		} else {
 			ncps.forEach((NonconformingProduct x) -> {
-				x.getProduct().setPropertyList(null);
+				/*x.getProduct().setPropertyList(null);*/
 				x.getProduct().setFeature(null);
 			});
 

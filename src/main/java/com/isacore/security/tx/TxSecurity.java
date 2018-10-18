@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isacore.quality.model.NonconformingProduct;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
@@ -46,7 +45,7 @@ public class TxSecurity {
 			return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
 		} else {
 			try {
-				logger.info("> mapeando json a la clase: " + NonconformingProduct.class);
+				logger.info("> mapeando json a la clase: " + LoginIsa.class);
 				ObjectMapper mapper = new ObjectMapper();
 				LoginIsa li = mapper.readValue(jsonValue, LoginIsa.class);
 				logger.info("> Login ISA::: " + li.getUserName());
@@ -79,7 +78,7 @@ public class TxSecurity {
 					}
 				}
 			} catch (IOException e) {
-				logger.error("> No se ha podido serializar el JSON a la clase: " + NonconformingProduct.class);
+				logger.error("> No se ha podido serializar el JSON a la clase: " + LoginIsa.class);
 				e.printStackTrace();
 				wrei.setMessage(WebResponseMessage.ERROR_TO_JSON);
 				wrei.setStatus(WebResponseMessage.STATUS_ERROR);

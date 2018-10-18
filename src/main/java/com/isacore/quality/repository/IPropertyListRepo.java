@@ -12,9 +12,9 @@ import com.isacore.quality.model.PropertyList;
 @Repository
 public interface IPropertyListRepo extends JpaRepository<PropertyList, String>{
 
-	@Query("select new com.isacore.quality.model.PropertyList(pl.idProperty, pl.nameProperty, pl.typeProperty, pl.typeProperty2) from propertylist pl")
+	@Query(value = "select new com.isacore.quality.model.PropertyList(pl.idProperty, pl.nameProperty, pl.typeProperty, pl.typeProperty2) from propertylist pl", nativeQuery = true)
 	List<PropertyList> findAllOnlyProperty();
 	
-	@Query("select new com.isacore.quality.model.PropertyList(pl.idProperty, pl.nameProperty, pl.typeProperty, pl.typeProperty2) from propertylist pl where pl.idProperty = :idProperty")
+	@Query(value = "select new com.isacore.quality.model.PropertyList(pl.idProperty, pl.nameProperty, pl.typeProperty, pl.typeProperty2) from propertylist pl where pl.idProperty = :idProperty", nativeQuery = true)
 	PropertyList findOneOnlyPropertyById(@Param("idProperty") String idProperty);
 }

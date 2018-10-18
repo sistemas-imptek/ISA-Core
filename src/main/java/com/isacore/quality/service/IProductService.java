@@ -1,5 +1,7 @@
 package com.isacore.quality.service;
 
+import java.util.List;
+
 import com.isacore.quality.model.Product;
 import com.isacore.util.CRUD;
 
@@ -10,5 +12,7 @@ public interface IProductService extends CRUD<Product>{
 	Product findProductByIdAndPeriod(Integer idP, String period);
 	
 	Product findProductFeature(Integer idP);
+	
+	List<Product> findAllProducts();
 	
 }

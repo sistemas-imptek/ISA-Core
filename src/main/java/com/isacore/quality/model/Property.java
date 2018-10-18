@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,28 +14,22 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
 
 @Entity(name = "property")
+@IdClass(PropertyPK.class)
 @Table(name = "PROPERTY")
 public class Property {
 
-	@Id
-	@Column(name = "PROPERTY_ID", nullable = false, length = 16)
-	private String idProperty;
 	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
 	private Product product;
 	*/
-	@Column(name = "PROPERTY_NAME", nullable = false, length = 1024)
-	private String nameProperty;
 	
-	@Column(name = "PROPERTY_TYPE", nullable = false, length = 1)
-	private String typeProperty;
+	@Id
+	private Product product;
 	
-	@Column(name = "PROPERTY_PERIODICITY", nullable = true, length = 64)
-	private String periodicityProperty;
-	
-	@Column(name = "PROPERTY_NORM", nullable = true, length = 2048)
-	private String normProperty;
+	@Id
+	private PropertyList propertyList;
+
 	
 	@Column(name = "PROPERTY_MIN", nullable = true, columnDefinition = "decimal(5,2)" )
 	private Double minProperty;
@@ -62,13 +57,6 @@ public class Property {
 	@Column(name = "PROPERTY_ASUSER", nullable = false, length = 64)
 	private String asUser;
 	
-	public String getIdProperty() {
-		return idProperty;
-	}
-
-	public void setIdProperty(String idProperty) {
-		this.idProperty = idProperty;
-	}
 /*
 	public Product getProduct() {
 		return product;
@@ -78,20 +66,21 @@ public class Property {
 		this.product = product;
 	}
 */
-	public String getNameProperty() {
-		return nameProperty;
+
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setNameProperty(String nameProperty) {
-		this.nameProperty = nameProperty;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
-	public String getTypeProperty() {
-		return typeProperty;
+	public PropertyList getPropertyList() {
+		return propertyList;
 	}
 
-	public void setTypeProperty(String typeProperty) {
-		this.typeProperty = typeProperty;
+	public void setPropertyList(PropertyList propertyList) {
+		this.propertyList = propertyList;
 	}
 
 	public Double getMinProperty() {
@@ -134,14 +123,6 @@ public class Property {
 		this.viewProperty = viewProperty;
 	}
 
-	public String getNormProperty() {
-		return normProperty;
-	}
-
-	public void setNormProperty(String normProperty) {
-		this.normProperty = normProperty;
-	}
-
 	public boolean isViewPropertyOnHcc() {
 		return viewPropertyOnHcc;
 	}
@@ -164,23 +145,6 @@ public class Property {
 
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
-	}
-
-	public String getPeriodicityProperty() {
-		return periodicityProperty;
-	}
-
-	public void setPeriodicityProperty(String periodicityProperty) {
-		this.periodicityProperty = periodicityProperty;
-	}
-
-	@Override
-	public String toString() {
-		return "Property [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", typeProperty="
-				+ typeProperty + ", normProperty=" + normProperty + ", minProperty=" + minProperty + ", maxProperty="
-				+ maxProperty + ", unitProperty=" + unitProperty + ", descProperty=" + descProperty + ", viewProperty="
-				+ viewProperty + ", viewPropertyOnHcc=" + viewPropertyOnHcc + ", dateUpdate=" + dateUpdate + ", asUser="
-				+ asUser + "]";
 	}
 	
 	

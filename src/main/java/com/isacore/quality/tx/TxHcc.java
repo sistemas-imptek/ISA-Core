@@ -302,7 +302,7 @@ public class TxHcc {
 				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCMP"));
 				
 				if (rh != null) {
-					p.setProviders(this.serviceProvider.findByProductId(p.getIdProduct()));
+					//p.setProviders(this.serviceProvider.findByProductId(p.getIdProduct()));
 					logger.info(">>> mthod: getHccHead::::MP::::" + p.getIdProduct() + ":::" + p.getNameProduct());
 					HccHead hhg = new HccHead();
 					hhg.setProduct(p);
@@ -338,7 +338,7 @@ public class TxHcc {
 		else
 			pp = this.serviceProducto.findProductByIdAndPeriod(p.getIdProduct(), period[0]);
 		
-		for (Property prop : pp.getPropertyList()) {
+		/*for (Property prop : pp.getPropertyList()) {
 			HccDetail hd = new HccDetail();
 			hd.setNameNorm(prop.getNormProperty());
 			hd.setIdProperty(prop.getIdProperty());
@@ -351,7 +351,7 @@ public class TxHcc {
 			hd.setViewOnHcc(prop.isViewPropertyOnHcc());
 			hd.generateSpecifications();
 			detail.add(hd);
-		}
+		}*/
 
 		hh.setDetail(detail);
 		System.out.println(hh);

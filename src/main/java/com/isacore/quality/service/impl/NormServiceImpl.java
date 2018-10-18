@@ -45,7 +45,8 @@ public class NormServiceImpl implements INormService{
 
 	@Override
 	public List<Norm> findByKindNorm(Norm n) {
-		return this.repo.findByKindNorm(n.getKind());
+		//return this.repo.findByKindNorm(n.getKind());
+		return null;
 	}
 
 

@@ -12,8 +12,8 @@ import com.isacore.sgc.acta.model.ActionPlan;
 @Repository
 public interface IActionPlanRepo extends JpaRepository<ActionPlan, String>{
 
-	@Query("select new com.isacore.sgc.acta.model.ActionPlan(a.idPlan, a.description, a.startDate, a.deadLine,"
-			+ "a.executed, a.executionDate) from actionPlan a inner join a.minute as am where am.idMinute = :idMinute")
+	@Query(value = "select new com.isacore.sgc.acta.model.ActionPlan(a.idPlan, a.description, a.startDate, a.deadLine,"
+			+ "a.executed, a.executionDate) from actionPlan a inner join a.minute as am where am.idMinute = :idMinute", nativeQuery = true)
 	List<ActionPlan> findPlanByIdMinute(@Param("idMinute") String idMinute);
 	
 }

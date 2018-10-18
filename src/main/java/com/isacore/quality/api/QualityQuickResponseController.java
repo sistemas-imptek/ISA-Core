@@ -6,22 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.quality.classes.util.TxRequestQualityUtil;
-import com.isacore.quality.model.TestReadViscocidad;
+import com.isacore.quality.model.Product;
+import com.isacore.quality.read.specification.pt.GeneralReadPT;
 import com.isacore.quality.read.tests.TestReadPesoArea;
 import com.isacore.quality.read.tests.TestReadSujecionGranulo;
 import com.isacore.quality.read.tests.TestReadTemplatepH;
+import com.isacore.quality.read.tests.TestReadViscocidad;
+import com.isacore.quality.service.impl.ProductServiceImpl;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
+import com.isacore.sgc.acta.model.Role;
+import com.isacore.sgc.acta.service.impl.RoleServiceImpl;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
 import com.isacore.util.WebResponseMessage;
@@ -67,6 +73,15 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TestReadPesoArea tPesoArea;
+	
+	@Autowired
+	private ProductServiceImpl p;
+	
+	@Autowired
+	private GeneralReadPT readPT;
+	
+	@Autowired
+	private RoleServiceImpl roleService;
 	
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -135,11 +150,25 @@ public class QualityQuickResponseController {
 		}
 	}	
 	
-	@RequestMapping(value = "/testExcel", method = RequestMethod.GET)
-	public void testExcel() {
-		tpH.run();
-		tViscocidad.run();
-		tSujecion.run();
-		tPesoArea.run();
+	@PostMapping(value = "/testRole", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Role testExcel(@RequestBody String id) {
+		
+		Role r = new Role();
+		r.setRolName(id);
+		return roleService.findById(r);
+		
+		
+	}
+	
+	@RequestMapping(value = "/varios", method = RequestMethod.GET)
+	public void varios() {
+		Product pp = new Product();
+		pp.setIdProduct(5);
+		p.findOnlyProductById(pp);
+	}
+	
+	@RequestMapping(value = "/readSpecifications", method = RequestMethod.GET)
+	public void readSpecifications() {
+		readPT.run();
 	}
 }

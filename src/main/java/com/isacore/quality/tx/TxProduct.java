@@ -53,7 +53,7 @@ public class TxProduct {
 		wrei.setTransactionName(TX_NAME_GetAllProducts);
 		wrei.setTransactionCode(TX_CODE_GetAllProducts);
 
-		List<Product> products = this.service.findAll();
+		List<Product> products = this.service.findAllProducts();
 
 		if (products.isEmpty() || products == null) {
 			logger.info("> No existe registros en la base de datos");
@@ -117,9 +117,10 @@ public class TxProduct {
 				try {
 					logger.info("> mapeando json a la clase: " + Product.class);
 					ObjectMapper mapper = new ObjectMapper();
+					//mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);		
 					Product p = mapper.readValue(jsonValue, Product.class);
 					logger.info("> id Product: " + p.getIdProduct());
-					p = this.service.findById(p);
+					p = this.service.findOnlyProductById(p);
 
 					if (p == null) {
 						logger.info("> Product not found");
@@ -252,6 +253,7 @@ public class TxProduct {
 						wrei.setStatus(WebResponseMessage.STATUS_INFO);
 						return new ResponseEntity<Object>(wrei, HttpStatus.NOT_FOUND);
 					} else {
+//						JSON_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 						String json = JSON_MAPPER.writeValueAsString(p);
 						String jsonCryp = Crypto.encrypt(json);
 

@@ -1,20 +1,9 @@
 package com.isacore.quality.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity(name = "propertylist")
 @Table(name = "PROPERTYLIST")
@@ -26,49 +15,35 @@ public class PropertyList {
 
 	@Column(name = "PROPL_NAME", nullable = false, length = 1024)
 	private String nameProperty;
+	
+	@Column(name = "PROPL_NORM", nullable = true, length = 512)
+	private String normName;
+	
+	@Column(name = "PROPL_LINE_APPLICATION", nullable = true, length = 512)
+	private String lineApplication;
+	
+	@Column(name = "PROPL_PERIODICITY", nullable = true, length = 64)
+	private String periodicity;
+	
+	@Column(name = "PROPL_MACHINE", nullable = true, length = 1024)
+	private String machine;
 
 	// Propiedad para saber si es Técnica(T) o Visual (V)
 	@Column(name = "PROPL_TYPE", nullable = false, length = 4)
 	private String typeProperty;
-
-	// Propiedad para saber si es de Producto(PR) o Ensayo (TE)
-	@Column(name = "PROPL_TYPE2", nullable = false, length = 4)
-	private String typeProperty2;
 	
-	@Column(name = "PROPL_PERIODICITY", nullable = true, length = 64)
-	private String periodicity;
-
-	@Transient
-	@JsonInclude(Include.NON_NULL)
-	private String normText;
-
-	@JsonInclude(Include.NON_NULL)
-	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinTable(name = "PROPERTY_NORM", joinColumns = { @JoinColumn(name = "PROPL_ID") }, inverseJoinColumns = {
-			@JoinColumn(name = "NORM_ID") })
-	private List<Norm> norms;
-
-	public PropertyList() {
-	}
-
-	public PropertyList(String idProperty, String nameProperty, String typeProperty, String typeProperty2) {
-		super();
-		this.idProperty = idProperty;
-		this.nameProperty = nameProperty;
-		this.typeProperty = typeProperty;
-		this.typeProperty2 = typeProperty2;
-	}
-
-	public PropertyList(String idProperty, String nameProperty, String typeProperty, String typeProperty2,
-			List<Norm> norms, String normText) {
-		super();
-		this.idProperty = idProperty;
-		this.nameProperty = nameProperty;
-		this.typeProperty = typeProperty;
-		this.typeProperty2 = typeProperty2;
-		this.norms = norms;
-		this.normText = normText;
-	}
+	@Column(name = "PROPL_METHOD", nullable = true, length = 4)
+	private String method;
+	
+	@Column(name = "PROPL_LABORATORY", nullable = true, length = 4)
+	private String laboratory;
+	
+	@Column(name = "PROPL_SAMPLING_PLAN", nullable = true, length = 4)
+	private String samplingPlan;
+	
+	//propiedad para saber si la especificacion de un producto terminado PT o materi prima MP
+	@Column(name = "PROPL_TYPE_PRODUCT", nullable = true, length = 4)
+	private String typeProduct;
 
 	public String getIdProperty() {
 		return idProperty;
@@ -94,39 +69,20 @@ public class PropertyList {
 		this.typeProperty = typeProperty;
 	}
 
-	public String getTypeProperty2() {
-		return typeProperty2;
+	public String getNormName() {
+		return normName;
 	}
 
-	public void setTypeProperty2(String typeProperty2) {
-		this.typeProperty2 = typeProperty2;
+	public void setNormName(String normName) {
+		this.normName = normName;
 	}
 
-	public List<Norm> getNorms() {
-		return norms;
+	public String getLineApplication() {
+		return lineApplication;
 	}
 
-	public void setNorms(List<Norm> norms) {
-		this.norms = norms;
-	}
-
-	public void listNorms() {
-		if (this.norms.isEmpty() || this.norms == null) {
-			StringBuilder sb = new StringBuilder();
-			this.norms.forEach(x -> sb.append(x).append("/"));
-
-			this.normText = sb.toString();
-		}else {
-			this.normText = "---";
-		}
-	}
-
-	public String getNormText() {
-		return normText;
-	}
-
-	public void setNormText(String normText) {
-		this.normText = normText;
+	public void setLineApplication(String lineApplication) {
+		this.lineApplication = lineApplication;
 	}
 
 	public String getPeriodicity() {
@@ -137,10 +93,79 @@ public class PropertyList {
 		this.periodicity = periodicity;
 	}
 
-	@Override
-	public String toString() {
-		return "PropertyList [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", typeProperty="
-				+ typeProperty + ", typeProperty2=" + typeProperty2 + ", normText=" + normText + "]";
+	public String getMachine() {
+		return machine;
 	}
 
+	public void setMachine(String machine) {
+		this.machine = machine;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public String getLaboratory() {
+		return laboratory;
+	}
+
+	public void setLaboratory(String laboratory) {
+		this.laboratory = laboratory;
+	}
+
+	public String getTypeProduct() {
+		return typeProduct;
+	}
+
+	public void setTypeProduct(String typeProduct) {
+		this.typeProduct = typeProduct;
+	}
+
+	public String getSamplingPlan() {
+		return samplingPlan;
+	}
+
+	public void setSamplingPlan(String samplingPlan) {
+		this.samplingPlan = samplingPlan;
+	}
+
+	@Override
+	public String toString() {
+		return "PropertyList [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", normName=" + normName
+				+ ", lineApplication=" + lineApplication + ", periodicity=" + periodicity + ", machine=" + machine
+				+ ", typeProperty=" + typeProperty + ", method=" + method + ", laboratory=" + laboratory
+				+ ", samplingPlan=" + samplingPlan + ", typeProduct=" + typeProduct + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idProperty == null) ? 0 : idProperty.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PropertyList other = (PropertyList) obj;
+		if (idProperty == null) {
+			if (other.idProperty != null)
+				return false;
+		} else if (!idProperty.equals(other.idProperty))
+			return false;
+		return true;
+	}
+
+	
+	
 }
