@@ -165,6 +165,12 @@ public class Test {
 		this.comment = "";
 		this.prommissing = false;
 	}
+	
+	public Test(String idProperty, Double resultTest) {
+		super();
+		this.idProperty = idProperty;
+		this.resultTest = resultTest;
+	}
 
 	public Integer getIdTest() {
 		return idTest;

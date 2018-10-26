@@ -59,15 +59,19 @@ public class HccDetail {
 	private Boolean passTest;
 	
 	public void generateSpecifications() {
-		if(this.typeProperty.equals("T")) {
-			if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
-				this.specifications = "> " + this.min;
+		if(this.typeProperty.equals("T")) {	
+			if(this.min == null && this.max == null)
+				this.specifications = " - ";
 			else {
-				if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
-					this.specifications = "< " + this.max;
-				else 
-					this.specifications  = this.min + " - " + this.max;
-			}		
+				if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+					this.specifications = "> " + this.min;
+				else {
+					if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
+						this.specifications = "< " + this.max;
+					else 
+						this.specifications  = this.min + " - " + this.max;
+				}	
+			}	
 		}else {
 			this.specifications = this.view;
 		}

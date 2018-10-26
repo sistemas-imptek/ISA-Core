@@ -21,6 +21,7 @@ import com.isacore.quality.model.Feature;
 import com.isacore.quality.model.LineProduction;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
+import com.isacore.quality.model.PropertyList;
 import com.isacore.quality.repository.IProductRepo;
 import com.isacore.quality.repository.IPropertyRepo;
 import com.isacore.quality.service.IProductService;
@@ -192,11 +193,18 @@ public class ProductServiceImpl implements IProductService {
 			List<Property> listProperty = new ArrayList<>();
 			list.forEach((Object[] x) -> {
 				Property p = new Property();
-				/*p.setIdProperty((String)x[5]);
-				p.setNameProperty((String)x[6]);
+				PropertyList pl = new PropertyList();
+				
+				pl.setIdProperty((String)x[5]);
+				pl.setNameProperty((String)x[6]);
+				//p.setIdProperty((String)x[5]);
+				//p.setNameProperty((String)x[6]);
 				p.setTypeProperty((String)x[7]);
-				p.setPeriodicityProperty((String)x[8]);
-				p.setNormProperty((String)x[9]);*/
+				pl.setPeriodicity((String)x[8]);
+				pl.setNormName((String)x[9]);
+				//p.setPeriodicityProperty((String)x[8]);
+				//p.setNormProperty((String)x[9]);
+				p.setPropertyList(pl);
 				p.setMinProperty((x[10]) == null ? null : ((BigDecimal)x[10]).doubleValue());
 				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal)x[11]).doubleValue());
 				p.setUnitProperty((String)x[12]);
@@ -204,7 +212,7 @@ public class ProductServiceImpl implements IProductService {
 				p.setViewPropertyOnHcc((Boolean)x[14]);
 				listProperty.add(p);
 			});
-			/*product.setPropertyList(listProperty);*/
+			product.setProperties(listProperty);
 			return product;
 		}
 	}

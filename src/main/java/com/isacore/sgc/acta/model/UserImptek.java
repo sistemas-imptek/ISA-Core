@@ -80,7 +80,7 @@ public class UserImptek {
 		this.lastAccess = lastAccess;
 		this.role = role;
 	}
-
+	
 	public String getIdUser() {
 		return idUser;
 	}

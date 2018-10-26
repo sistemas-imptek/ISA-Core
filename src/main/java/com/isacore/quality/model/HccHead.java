@@ -274,4 +274,29 @@ public class HccHead {
 		this.orderNumber = orderNumber;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((sapCode == null) ? 0 : sapCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HccHead other = (HccHead) obj;
+		if (sapCode == null) {
+			if (other.sapCode != null)
+				return false;
+		} else if (!sapCode.equals(other.sapCode))
+			return false;
+		return true;
+	}
+	
 }

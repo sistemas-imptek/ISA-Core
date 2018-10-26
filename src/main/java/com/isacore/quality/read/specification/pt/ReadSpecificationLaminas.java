@@ -156,7 +156,18 @@ public class ReadSpecificationLaminas {
 						}
 					}
 					break;
-
+					
+				case 13: // CONCATENAR (itcdq)
+					cell = row.getCell(i);
+					if (!(cell == null)) {
+						cellType = cell.getCellTypeEnum();
+						if (cellType == CellType.STRING) {
+							product.setItcdq(cell.getStringCellValue());
+							System.out.println(i + "<<< " + product.getItcdq() + " | ");
+						}
+					}
+					break;
+					
 				case 14:// CÓDIGO SAP
 					cell = row.getCell(i);
 					if (!(cell == null)) {

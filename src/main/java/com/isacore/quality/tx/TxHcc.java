@@ -344,11 +344,14 @@ public class TxHcc {
 		else
 			pp = this.serviceProducto.findProductByIdAndPeriod(p.getIdProduct(), period[0]);
 		
-		/*for (Property prop : pp.getPropertyList()) {
+		for (Property prop : pp.getProperties()) {
 			HccDetail hd = new HccDetail();
-			hd.setNameNorm(prop.getNormProperty());
-			hd.setIdProperty(prop.getIdProperty());
-			hd.setNameProperty(prop.getNameProperty());
+			hd.setNameNorm(prop.getPropertyList().getNormName());
+			//hd.setNameNorm(prop.getNormProperty());
+			hd.setIdProperty(prop.getPropertyList().getIdProperty());
+			//hd.setIdProperty(prop.getIdProperty());
+			hd.setNameProperty(prop.getPropertyList().getNameProperty());
+			//hd.setNameProperty(prop.getNameProperty());
 			hd.setTypeProperty(prop.getTypeProperty());
 			hd.setUnit(prop.getUnitProperty());
 			hd.setMin(prop.getMinProperty());
@@ -357,7 +360,7 @@ public class TxHcc {
 			hd.setViewOnHcc(prop.isViewPropertyOnHcc());
 			hd.generateSpecifications();
 			detail.add(hd);
-		}*/
+		}
 
 		hh.setDetail(detail);
 		System.out.println(hh);
