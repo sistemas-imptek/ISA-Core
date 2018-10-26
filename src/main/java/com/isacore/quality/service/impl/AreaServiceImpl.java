@@ -1,6 +1,7 @@
 package com.isacore.quality.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,12 @@ public class AreaServiceImpl implements IAreasService{
 
 	@Override
 	public Area findById(Area area) {
-		return this.repo.findOne(area.getIdArea());
+		
+		Optional<Area> o = this.repo.findById(area.getIdArea());
+		if(o.isPresent())
+			return o.get();
+		else 
+			return null;
 	}
 
 	@Override

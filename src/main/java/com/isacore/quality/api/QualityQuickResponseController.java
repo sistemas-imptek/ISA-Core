@@ -84,6 +84,7 @@ public class QualityQuickResponseController {
 	private RoleServiceImpl roleService;
 	
 	
+	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
 		
@@ -169,6 +170,8 @@ public class QualityQuickResponseController {
 	
 	@RequestMapping(value = "/readSpecifications", method = RequestMethod.GET)
 	public void readSpecifications() {
-		readPT.run();
+		
+		String user = "oquimbiulco";
+		readPT.run(user);
 	}
 }

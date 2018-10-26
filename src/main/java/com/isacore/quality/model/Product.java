@@ -50,10 +50,10 @@ public class Product {
 	@JoinColumn(name = "FEA_ID", nullable = true)
 	private Feature feature;
 	
-	@OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
 	private List<ProdProv> prodProv;
 	
-	@OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
 	private List<Property> properties;
 	
 	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)

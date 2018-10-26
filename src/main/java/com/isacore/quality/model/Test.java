@@ -124,6 +124,9 @@ public class Test {
 	@Column(name = "TEST_COMMENT", nullable = true, columnDefinition = "varchar(max)")
 	private String comment;
 	
+	@Column(name = "TEST_PROMISSING", nullable = true)
+	private Boolean prommissing;
+	
 	public Test() {
 		super();
 		this.idProperty = "0";
@@ -160,6 +163,7 @@ public class Test {
 		this.p2 = 0.0;
 		this.p3 = 0.0;
 		this.comment = "";
+		this.prommissing = false;
 	}
 
 	public Integer getIdTest() {
@@ -440,5 +444,14 @@ public class Test {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}		
+	}
+
+	public Boolean getPrommissing() {
+		return prommissing;
+	}
+
+	public void setPrommissing(Boolean prommissing) {
+		this.prommissing = prommissing;
+	}	
+	
 }

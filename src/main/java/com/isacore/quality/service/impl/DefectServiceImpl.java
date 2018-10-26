@@ -1,6 +1,7 @@
 package com.isacore.quality.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class DefectServiceImpl implements IDefectNCPService{
 
 	@Override
 	public DefectNpc findById(DefectNpc defect) {
-		return this.repo.findOne(defect.getIdDefect());
+		Optional<DefectNpc> o = this.repo.findById(defect.getIdDefect());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;  
 	}
 
 	@Override

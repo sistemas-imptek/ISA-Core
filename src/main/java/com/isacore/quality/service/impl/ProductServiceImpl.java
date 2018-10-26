@@ -1,8 +1,11 @@
 package com.isacore.quality.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +13,8 @@ import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.isacore.quality.model.Family;
 import com.isacore.quality.model.Feature;
@@ -17,6 +22,7 @@ import com.isacore.quality.model.LineProduction;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.repository.IProductRepo;
+import com.isacore.quality.repository.IPropertyRepo;
 import com.isacore.quality.service.IProductService;
 
 @Service
@@ -27,6 +33,9 @@ public class ProductServiceImpl implements IProductService {
 
 	@Autowired
 	private IProductRepo repo;
+	
+	@Autowired
+	private IPropertyRepo repoProperty;
 
 	@Override
 	public List<Product> findAll() {
@@ -40,7 +49,11 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product findById(Product obj) {
-		return this.repo.findOne(obj.getIdProduct());
+		Optional<Product> o = this.repo.findById(obj.getIdProduct());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override
@@ -128,28 +141,32 @@ public class ProductServiceImpl implements IProductService {
 			products = new ArrayList<>();
 			list.forEach((Object[]x) -> {
 				Product pp = new Product();
-				pp.setIdProduct((Integer)x[0]);
-				pp.setSapCode((String)x[1]);
-				pp.setNameProduct((String)x[2]);
-				pp.setDescProduct((String)x[3]);
-				pp.setItcdq((String)x[4]);
-				pp.setTypeProduct((String)x[5]);
 				
-				if(x[6] != null) {
-					Family f = new Family();
-					f.setFamilyId((Integer)x[6]);
-					f.setFamilyName((String) x[7]);
-					pp.setFamily(f);
+				if(x[0] != null) {
+					pp.setIdProduct((Integer)x[0]);
+					pp.setSapCode((String)x[1]);
+					pp.setNameProduct((String)x[2]);
+					pp.setDescProduct((String)x[3]);
+					pp.setItcdq((String)x[4]);
+					pp.setTypeProduct((String)x[5]);
+					
+					if(x[6] != null) {
+						Family f = new Family();
+						f.setFamilyId((Integer)x[6]);
+						f.setFamilyName((String) x[7]);
+						pp.setFamily(f);
+					}
+					
+					if(x[8] != null) {
+						LineProduction lp = new LineProduction();
+						lp.setIdLineP((Integer)x[8]);
+						lp.setLineName((String) x[9]);
+						pp.setLineProduction(lp);
+					}
+					
+					products.add(pp);
 				}
 				
-				if(x[8] != null) {
-					LineProduction lp = new LineProduction();
-					lp.setIdLineP((Integer)x[8]);
-					lp.setLineName((String) x[9]);
-					pp.setLineProduction(lp);
-				}
-				
-				products.add(pp);
 			});
 			return products;
 		}
@@ -223,6 +240,51 @@ public class ProductServiceImpl implements IProductService {
 			
 			return product;
 		}
+	}
+
+
+	@Override
+	public void saveProductProperty(List<Product> listProduct, String user) {
+		
+		LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateUpdate = now.format(formatter);
+		
+		listProduct.forEach(x -> {
+
+			System.out.println("Producto a guardar----> " + x.getNameProduct());
+
+			Product p;
+			List<Property> listProperties = x.getProperties();
+			x.setProperties(null);
+			p = this.repo.save(x);
+
+			listProperties.forEach(y -> {
+				y.setProduct(p);
+				y.setDateUpdate(LocalDateTime.now());
+				List<Object> propertyDescription = this.repoProperty.validateExistProperty(y.getProduct().getIdProduct(),
+						y.getPropertyList().getIdProperty());
+				if (propertyDescription == null)
+					this.repoProperty.createProperty(y.getProduct().getIdProduct(), 
+							y.getPropertyList().getIdProperty(), 
+							y.getMinProperty(), 
+							y.getMaxProperty(), 
+							y.getUnitProperty(), 
+							y.getViewProperty(), 
+							dateUpdate, 
+							y.getTypeProperty(), user);
+				else
+					this.repoProperty.updateProperty(y.getMinProperty(), 
+							y.getMaxProperty(), 
+							y.getUnitProperty(), 
+							y.getViewProperty(), 
+							dateUpdate, 
+							y.getTypeProperty(), user, 
+							y.getProduct().getIdProduct(), 
+							y.getPropertyList().getIdProperty());
+			});
+
+		});
 	}
 
 }

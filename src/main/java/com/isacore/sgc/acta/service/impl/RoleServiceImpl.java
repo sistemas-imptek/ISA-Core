@@ -1,6 +1,7 @@
 package com.isacore.sgc.acta.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class RoleServiceImpl implements IRoleService{
 
 	@Override
 	public Role findById(Role r) {
-		return this.roleRepo.findOne(r.getRolName());
+		Optional<Role> o = this.roleRepo.findById(r.getRolName());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override
@@ -37,8 +42,7 @@ public class RoleServiceImpl implements IRoleService{
 
 	@Override
 	public void delete(String idRole) {
-		this.roleRepo.delete(idRole);
-		
+				
 	}
 
 }

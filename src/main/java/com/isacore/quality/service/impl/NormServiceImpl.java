@@ -1,6 +1,7 @@
 package com.isacore.quality.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,11 @@ public class NormServiceImpl implements INormService{
 
 	@Override
 	public Norm findById(Norm n) {
-		return this.repo.findOne(n.getIdNorm());
+		Optional<Norm> o = this.repo.findById(n.getIdNorm());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override

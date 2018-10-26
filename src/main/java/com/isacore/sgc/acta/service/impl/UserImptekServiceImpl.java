@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isacore.localdate.converter.LocalDateTimeConverter;
 import com.isacore.sgc.acta.model.Employee;
+import com.isacore.sgc.acta.model.Role;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.repository.IRoleRepo;
 import com.isacore.sgc.acta.repository.IUserImptekRepo;
@@ -35,8 +37,12 @@ public class UserImptekServiceImpl implements IUserImptekService{
 	}
 
 	@Override
-	public UserImptek findById(UserImptek u) { 
-		return this.repo.findOne(u.getIdUser());
+	public UserImptek findById(UserImptek u) {
+		Optional<UserImptek> o = this.repo.findById(u.getIdUser());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override
@@ -46,7 +52,7 @@ public class UserImptekServiceImpl implements IUserImptekService{
 
 	@Override
 	public void delete(String iduser) {
-		this.repo.delete(iduser);
+		
 	}
 
 	@Override
@@ -68,7 +74,11 @@ public class UserImptekServiceImpl implements IUserImptekService{
 			Employee emp = new Employee();
 			emp.setCiEmployee((String)o[5]);
 			
-			ui.setRole(this.repoRole.findOne((String)o[6]));
+			Optional<Role> op = this.repoRole.findById((String)o[6]);
+			if(op.isPresent())
+				ui.setRole(op.get());
+			
+			//ui.setRole(this.repoRole.findOne((String)o[6]));
 			
 			emp.setName((String)o[8]);
 			emp.setLastName((String)o[9]);

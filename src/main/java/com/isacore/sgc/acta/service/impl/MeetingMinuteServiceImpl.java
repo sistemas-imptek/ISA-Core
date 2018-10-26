@@ -1,6 +1,7 @@
 package com.isacore.sgc.acta.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class MeetingMinuteServiceImpl implements IMeetingMinuteService{
 
 	@Override
 	public MeetingMinute findById(MeetingMinute m) {
-		return this.repo.findOne(m.getIdMinute());
+		Optional<MeetingMinute> o = this.repo.findById(m.getIdMinute());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override
@@ -37,7 +42,7 @@ public class MeetingMinuteServiceImpl implements IMeetingMinuteService{
 
 	@Override
 	public void delete(String idMinute) {
-		this.repo.delete(idMinute);		
+		
 	}
 
 }

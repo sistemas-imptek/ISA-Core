@@ -1,6 +1,7 @@
 package com.isacore.quality.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class TestServiceImpl implements ITestService{
 
 	@Override
 	public Test findById(Test obj) {
-		return this.repo.findOne(obj.getIdTest());
+		Optional<Test> test = this.repo.findById(obj.getIdTest());
+		if(test.isPresent())
+			return test.get();
+		else		
+			return null; 
 	}
 
 	@Override

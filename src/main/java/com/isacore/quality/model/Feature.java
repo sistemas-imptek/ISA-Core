@@ -17,8 +17,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.isacore.localdate.converter.LocalDateConverter;
-import com.isacore.util.LocalDateDeserializeIsa;
+import com.isacore.localdate.converter.LocalDateTimeConverter;
+import com.isacore.util.LocalDateTimeDeserializeIsa;
 
 @Entity(name = "feature")
 @Table(name = "FEATURE")
@@ -31,9 +31,9 @@ public class Feature {
 	private Integer idFeature;
 	
 	@Column(name = "FEA_DATEUPDATE", nullable = false)
-	@Convert(converter = LocalDateConverter.class)
+	@Convert(converter = LocalDateTimeConverter.class)
 	@JsonSerialize(using = ToStringSerializer.class)
-	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializeIsa.class)
 	private LocalDateTime dateUpdate;
 	
 	@Column(name = "FEA_LENGTH", nullable = true, columnDefinition = "decimal(7,3)")
@@ -75,6 +75,9 @@ public class Feature {
 	
 	@Column(name = "FEA_MATERIALITCDQ", nullable = true, length = 8)
 	private String materialItcdq;
+	
+	@Column(name = "FEA_GROUP", nullable = true, length = 8)
+	private String groupItcdqCod;
 	
 	@Column(name = "FEA_REVIEW", nullable = true, length = 8)
 	private String review;
@@ -295,6 +298,14 @@ public class Feature {
 
 	public void setGroupItcdq(GroupItcdq groupItcdq) {
 		this.groupItcdq = groupItcdq;
+	}
+
+	public String getGroupItcdqCod() {
+		return groupItcdqCod;
+	}
+
+	public void setGroupItcdqCod(String groupItcdqCod) {
+		this.groupItcdqCod = groupItcdqCod;
 	}
 	
 	

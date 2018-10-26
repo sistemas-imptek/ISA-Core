@@ -10,7 +10,7 @@ import com.isacore.quality.model.ReportHeadT;
 @Repository
 public interface IReportHeadTRepo extends JpaRepository<ReportHeadT, Integer> {
 
-	@Query(value = "from reportheadt where type = :typeReport", nativeQuery = true)
+	@Query("from ReportHeadT rht where rht.type = :typeReport")
 	ReportHeadT findHeadByTypeReport(@Param("typeReport") String typeReport);
 	
 }

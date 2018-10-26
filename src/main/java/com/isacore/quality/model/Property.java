@@ -40,9 +40,6 @@ public class Property {
 	@Column(name = "PROPERTY_UNIT", nullable = true, length = 8)
 	private String unitProperty;
 	
-	@Column(name = "PROPERTY_DESCRIPTION", nullable = true, columnDefinition = "varchar(max)")
-	private String descProperty;
-	
 	@Column(name = "PROPERTY_VIEW", nullable = true, columnDefinition = "varchar(Max)")
 	private String viewProperty;
 
@@ -54,7 +51,10 @@ public class Property {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDateTime dateUpdate;
 	
-	@Column(name = "PROPERTY_ASUSER", nullable = false, length = 64)
+	@Column(name = "PROPERTY_TYPE", nullable = true, length = 4)
+	private String typeProperty;
+	
+	@Column(name = "PROPERTY_ASUSER", nullable = true, length = 64)
 	private String asUser;
 	
 /*
@@ -66,6 +66,11 @@ public class Property {
 		this.product = product;
 	}
 */
+	
+	public void setPropertyListId(String idPL) {
+		this.propertyList = new PropertyList();
+		this.propertyList.setIdProperty(idPL);
+	}
 
 	public Product getProduct() {
 		return product;
@@ -107,14 +112,6 @@ public class Property {
 		this.unitProperty = unitProperty;
 	}
 
-	public String getDescProperty() {
-		return descProperty;
-	}
-
-	public void setDescProperty(String descProperty) {
-		this.descProperty = descProperty;
-	}
-
 	public String getViewProperty() {
 		return viewProperty;
 	}
@@ -145,6 +142,14 @@ public class Property {
 
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
+	}
+
+	public String getTypeProperty() {
+		return typeProperty;
+	}
+
+	public void setTypeProperty(String typeProperty) {
+		this.typeProperty = typeProperty;
 	}
 	
 	

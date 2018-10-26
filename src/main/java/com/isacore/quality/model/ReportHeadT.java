@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity(name = "reportheadt")
+@Entity
 @Table(name = "REPORTHEADT")
 public class ReportHeadT {
 
@@ -40,46 +40,6 @@ public class ReportHeadT {
 	@Column(name = "REPORT_REFERENCE", nullable = true, length = 2048)
 	private String reportReference;
 	
-	
-
-	public ReportHeadT() {}
-	
-	
-
-	public ReportHeadT(String type) {
-		super();
-		this.type = type;
-	}
-
-	public ReportHeadT(Integer idReport, String type, String tittle, String subTitle, String norm, String code,
-			String review, String of) {
-		super();
-		this.idReport = idReport;
-		this.type = type;
-		this.tittle = tittle;
-		this.subTitle = subTitle;
-		this.norm = norm;
-		this.code = code;
-		this.review = review;
-		this.of = of;
-	}
-	
-	
-
-	public ReportHeadT(Integer idReport, String type, String tittle, String subTitle, String norm, String code,
-			String review, String of, String reportReference) {
-		super();
-		this.idReport = idReport;
-		this.type = type;
-		this.tittle = tittle;
-		this.subTitle = subTitle;
-		this.norm = norm;
-		this.code = code;
-		this.review = review;
-		this.of = of;
-		this.reportReference = reportReference;
-	}
-
 
 
 	public Integer getIdReport() {

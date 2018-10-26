@@ -278,7 +278,10 @@ public class TxHcc {
 
 			if (p.getTypeProduct().equals("PT")) {
 
-				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCPT"));
+				ReportHeadT rep = new ReportHeadT();
+				rep.setType("HCCPT");
+				
+				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(rep);
 
 				if (rh != null) {
 					logger.info(">>> mthod: getHccHead::::PT::::" + p.getIdProduct() + ":::" + p.getNameProduct());
@@ -299,7 +302,10 @@ public class TxHcc {
 					return null;
 				}
 			} else {
-				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(new ReportHeadT("HCCMP"));
+				ReportHeadT rep = new ReportHeadT();
+				rep.setType("HCCMP");
+				
+				ReportHeadT rh = this.serviceRH.findHeadByTypeReport(rep);
 				
 				if (rh != null) {
 					//p.setProviders(this.serviceProvider.findByProductId(p.getIdProduct()));

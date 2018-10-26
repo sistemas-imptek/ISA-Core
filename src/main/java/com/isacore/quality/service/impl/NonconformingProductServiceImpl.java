@@ -1,6 +1,7 @@
 package com.isacore.quality.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,11 @@ public class NonconformingProductServiceImpl implements INonconformingProductSer
 
 	@Override
 	public NonconformingProduct findById(NonconformingProduct ncp) {
-		return this.repo.findOne(ncp.getIdNCP());
+		Optional<NonconformingProduct> o = this.repo.findById(ncp.getIdNCP());
+		if(o.isPresent())
+			return o.get();
+		else
+			return null;
 	}
 
 	@Override

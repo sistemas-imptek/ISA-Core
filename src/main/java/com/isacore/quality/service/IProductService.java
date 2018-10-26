@@ -15,4 +15,5 @@ public interface IProductService extends CRUD<Product>{
 	
 	List<Product> findAllProducts();
 	
+	void saveProductProperty(List<Product> listProduct, String user);
 }
