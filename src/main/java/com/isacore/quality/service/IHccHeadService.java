@@ -9,4 +9,6 @@ public interface IHccHeadService extends CRUD<HccHead>{
 
 	List<HccHead> findOnlyHccHead(String tp);
 	
+	List<HccHead> findOnlyHccHead();
+	
 }

@@ -12,7 +12,7 @@ import com.isacore.quality.model.Provider;
 @Repository
 public interface IProviderRepo extends JpaRepository<Provider, Integer>{
 
-	@Query(value = "select p.prov_id, p.prov_description, p.prov_name, p.prov_sap_code,p.product_id from provider p where p.product_id = :idP", nativeQuery = true)
+	@Query(value = "select p.prov_id, p.prov_name, p.prov_type from prod_prov pp inner join provider p on pp.prov_id = p.prov_id where pp.product_id = :idP", nativeQuery = true)
 	List<Object[]> findByProductId(@Param("idP")Integer idP);
 	
 }

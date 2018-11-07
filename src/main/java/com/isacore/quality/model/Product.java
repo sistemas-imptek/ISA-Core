@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -68,6 +69,9 @@ public class Product {
 	@JoinColumn(name = "LP_ID", nullable = true)
 	private  LineProduction lineProduction;
 
+	@Transient
+	private List<Provider> providers;
+	
 	
 	public Product() {
 		super();
@@ -193,6 +197,14 @@ public class Product {
 
 	public void setTypeProductTxt(String typeProductTxt) {
 		this.typeProductTxt = typeProductTxt;
+	}
+
+	public List<Provider> getProviders() {
+		return providers;
+	}
+
+	public void setProviders(List<Provider> providers) {
+		this.providers = providers;
 	}
 
 	@Override

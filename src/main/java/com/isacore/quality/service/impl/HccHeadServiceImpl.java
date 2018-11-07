@@ -75,4 +75,29 @@ public class HccHeadServiceImpl implements IHccHeadService {
 		}
 	}
 
+	@Override
+	public List<HccHead> findOnlyHccHead() {
+		List<Object[]> list = this.repo.findOnlyHccHead();
+
+		if(list.isEmpty() || list == null)
+			return null;
+		else {
+			List<HccHead> listhcc = new ArrayList<>();
+			
+			list.forEach((Object[] x) -> {
+				HccHead hh = new HccHead();
+				Product p = new Product();
+				hh.setSapCode((String)x[0]);
+				hh.setHcchBatch((String)x[1]);
+				p.setNameProduct((String)x[2]);
+				hh.setProduct(p);
+				Instant instant = Instant.ofEpochMilli(((Date) x[3]).getTime());
+				hh.setDateCreate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate());
+				hh.setAnalysis((String)x[4]);
+				listhcc.add(hh);
+			});
+			return listhcc;
+		}
+	}
+
 }

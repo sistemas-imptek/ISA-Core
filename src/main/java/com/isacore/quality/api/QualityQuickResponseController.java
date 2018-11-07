@@ -149,6 +149,9 @@ public class QualityQuickResponseController {
 			
 		case TxGenerateQualityCertificate.Tx_CODE_GenerateQualityCertificate:
 			return this.txGQC.TxGQC(wri);
+			
+		case TxGenerateQualityCertificate.TX_CODE_GetAllClients:
+			return this.txGQC.TxQQRGAC(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());

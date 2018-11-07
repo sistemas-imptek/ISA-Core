@@ -60,9 +60,8 @@ public class ProviderServiceImpl implements IProviderService{
 			list.forEach((Object[] x) -> {
 				Provider prov = new Provider();
 				prov.setIdProvider((Integer)x[0]);
-				prov.setDescProvider((String)x[1]);
-				prov.setNameProvider((String)x[2]);
-				prov.setSapProviderCode((String)x[3]);
+				prov.setNameProvider((String)x[1]);
+				prov.setTypeProvider((String)x[2]);
 				listProvider.add(prov);
 			});
 			return listProvider;

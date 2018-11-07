@@ -10,11 +10,11 @@ import com.isacore.quality.repository.IQualityCertificateRepo;
 import com.isacore.quality.service.IQualityCertificateService;
 
 @Service
-public class QualityCertificateServiceImpl implements IQualityCertificateService{
+public class QualityCertificateServiceImpl implements IQualityCertificateService {
 
 	@Autowired
 	private IQualityCertificateRepo repo;
-	
+
 	@Override
 	public List<QualityCertificate> findAll() {
 		// TODO Auto-generated method stub
@@ -41,7 +41,26 @@ public class QualityCertificateServiceImpl implements IQualityCertificateService
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public Integer findCertificateByPK(String idHcc, Integer idC) {
+
+		Integer count = this.repo.findCertificateByPK(idHcc, idC);
+
+		return count == null ? 1 : ++count;
+
+	}
+
+	@Override
+	public void createCertificate(QualityCertificate qc) {
+		this.repo.createCertificate(qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient(), qc.getEmail(), qc.getCountCertificate());		
+	}
+
+	@Override
+	public void updateCount(Integer countC, String idHcc, Integer idC) {
+		this.repo.updateCount(countC, idHcc, idC);
 	}
 
 }
