@@ -25,22 +25,21 @@ public class ReportHeadT {
 	@Column(name = "REPORT_SUBTITLE", nullable = true, length = 3072)
 	private String subTitle;
 	
-	@Column(name = "REPORT_NORM", nullable = true, length = 3072)
-	private String norm; 
-	
 	@Column(name = "REPORT_CODE", nullable = true, length = 3072)
 	private String code;
 	
-	@Column(name = "REPORT_REVIEW", nullable = true, length = 3072)
-	private String review;
+	@Column(name = "REPORT_CAMP1", nullable = true, length = 3072)
+	private String camp1;
 	
-	@Column(name = "REPORT_OF", nullable = true, length = 3072)
-	private String of;
+	@Column(name = "REPORT_CAMP2", nullable = true, length = 3072)
+	private String camp2;
 	
-	@Column(name = "REPORT_REFERENCE", nullable = true, length = 2048)
-	private String reportReference;
+	@Column(name = "REPORT_CAMP3", nullable = true, length = 2048)
+	private String camp3;
 	
-
+	@Column(name = "REPORT_CAMP4", nullable = true, length = 2048)
+	private String camp4;
+	
 
 	public Integer getIdReport() {
 		return idReport;
@@ -74,14 +73,6 @@ public class ReportHeadT {
 		this.subTitle = subTitle;
 	}
 
-	public String getNorm() {
-		return norm;
-	}
-
-	public void setNorm(String norm) {
-		this.norm = norm;
-	}
-
 	public String getCode() {
 		return code;
 	}
@@ -90,29 +81,37 @@ public class ReportHeadT {
 		this.code = code;
 	}
 
-	public String getReview() {
-		return review;
+	public String getCamp1() {
+		return camp1;
 	}
 
-	public void setReview(String review) {
-		this.review = review;
+	public void setCamp1(String camp1) {
+		this.camp1 = camp1;
 	}
 
-	public String getOf() {
-		return of;
+	public String getCamp2() {
+		return camp2;
 	}
 
-	public void setOf(String of) {
-		this.of = of;
+	public void setCamp2(String camp2) {
+		this.camp2 = camp2;
 	}
 
-	public String getReportReference() {
-		return reportReference;
+	public String getCamp3() {
+		return camp3;
 	}
 
-	public void setReportReference(String reportReference) {
-		this.reportReference = reportReference;
+	public void setCamp3(String camp3) {
+		this.camp3 = camp3;
 	}
-	
+
+	public String getCamp4() {
+		return camp4;
+	}
+
+	public void setCamp4(String camp4) {
+		this.camp4 = camp4;
+	}
+
 	
 }

@@ -31,10 +31,10 @@ public class Property {
 	private PropertyList propertyList;
 
 	
-	@Column(name = "PROPERTY_MIN", nullable = true, columnDefinition = "decimal(5,2)" )
+	@Column(name = "PROPERTY_MIN", nullable = true, columnDefinition = "decimal(9,3)" )
 	private Double minProperty;
 	
-	@Column(name = "PROPERTY_MAX", nullable = true, columnDefinition = "decimal(5,2)" )
+	@Column(name = "PROPERTY_MAX", nullable = true, columnDefinition = "decimal(9,3)" )
 	private Double maxProperty;
 	
 	@Column(name = "PROPERTY_UNIT", nullable = true, length = 8)
@@ -44,7 +44,7 @@ public class Property {
 	private String viewProperty;
 
 	@Column(name = "PROPERTY_VIEW_HCC", nullable = true)
-	private boolean viewPropertyOnHcc;
+	private Boolean viewPropertyOnHcc;
 	
 	@Column(name = "PROPERTY_UPDATE", nullable = false)
 	@Convert(converter = LocalDateTimeConverter.class)
@@ -56,6 +56,9 @@ public class Property {
 	
 	@Column(name = "PROPERTY_ASUSER", nullable = true, length = 64)
 	private String asUser;
+	
+	@Column(name = "PROPERTY_NORM", nullable = true, length = 1024)
+	private String propertyNorm;
 	
 /*
 	public Product getProduct() {
@@ -120,11 +123,11 @@ public class Property {
 		this.viewProperty = viewProperty;
 	}
 
-	public boolean isViewPropertyOnHcc() {
+	public Boolean isViewPropertyOnHcc() {
 		return viewPropertyOnHcc;
 	}
 
-	public void setViewPropertyOnHcc(boolean viewPropertyOnHcc) {
+	public void setViewPropertyOnHcc(Boolean viewPropertyOnHcc) {
 		this.viewPropertyOnHcc = viewPropertyOnHcc;
 	}
 
@@ -150,6 +153,14 @@ public class Property {
 
 	public void setTypeProperty(String typeProperty) {
 		this.typeProperty = typeProperty;
+	}
+
+	public String getPropertyNorm() {
+		return propertyNorm;
+	}
+
+	public void setPropertyNorm(String propertyNorm) {
+		this.propertyNorm = propertyNorm;
 	}
 	
 	

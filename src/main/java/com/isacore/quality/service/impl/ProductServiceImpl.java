@@ -201,9 +201,10 @@ public class ProductServiceImpl implements IProductService {
 				//p.setNameProperty((String)x[6]);
 				p.setTypeProperty((String)x[7]);
 				pl.setPeriodicity((String)x[8]);
-				pl.setNormName((String)x[9]);
+				//pl.setNormName((String)x[9]);
 				//p.setPeriodicityProperty((String)x[8]);
 				//p.setNormProperty((String)x[9]);
+				p.setPropertyNorm((String)x[9]);
 				p.setPropertyList(pl);
 				p.setMinProperty((x[10]) == null ? null : ((BigDecimal)x[10]).doubleValue());
 				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal)x[11]).doubleValue());
@@ -280,14 +281,17 @@ public class ProductServiceImpl implements IProductService {
 							y.getUnitProperty(), 
 							y.getViewProperty(), 
 							dateUpdate, 
-							y.getTypeProperty(), user);
+							y.getTypeProperty(),
+							y.getPropertyNorm(),
+							user);
 				else
 					this.repoProperty.updateProperty(y.getMinProperty(), 
 							y.getMaxProperty(), 
 							y.getUnitProperty(), 
 							y.getViewProperty(), 
 							dateUpdate, 
-							y.getTypeProperty(), user, 
+							y.getTypeProperty(), 
+							y.getPropertyNorm() ,user, 
 							y.getProduct().getIdProduct(), 
 							y.getPropertyList().getIdProperty());
 			});

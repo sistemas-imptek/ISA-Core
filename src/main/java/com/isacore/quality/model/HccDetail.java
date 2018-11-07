@@ -25,7 +25,7 @@ public class HccDetail {
 	@Column(name = "HCCD_PROP_ID", nullable = false, length = 16)
 	private String idProperty;
 	
-	@Column(name = "HCCD_PROP_NAME", nullable = false, length = 1024)
+	@Column(name = "HCCD_PROP_NAME", nullable = true, length = 1024)
 	private String nameProperty;
 	
 	@Column(name = "HCCD_PROP_TYPE", nullable = false, length = 4)
@@ -176,14 +176,6 @@ public class HccDetail {
 
 	public void setResultText(String resultText) {
 		this.resultText = resultText;
-	}
-
-	public Boolean isViewOnHcc() {
-		return viewOnHcc;
-	}
-
-	public void setViewOnHcc(Boolean viewOnHcc) {
-		this.viewOnHcc = viewOnHcc;
 	}
 
 	public Boolean isPassTest() {

@@ -37,7 +37,8 @@ public class HccHead {
 	private Product product;
 	/**
 	 * Esta variable tambien se la utiliza para el campo Nombre del proveedor 
-	 * en el caso de la HCC de materia prima
+	 * en el caso de la HCC de materia prima.
+	 * En el hcc PT es el codigo del documento de SGC
 	 */
 	@Column(name = "HCCH_NORM", nullable = false, length = 4096)
 	private String hccNorm;
@@ -68,13 +69,13 @@ public class HccHead {
 	 * Esta variable tambien sela utiliza para el campo Pedido en el caso de la 
 	 * HCC de materia prima
 	 */
-	@Column(name = "HCCH_PERIODICITY", nullable = true, length = 64)
+	@Column(name = "HCCH_PERIODICITY", nullable = true, length = 128)
 	private String periodicity;
 	
 	@Column(name = "HCCH_CODE", nullable = false, length = 32)
 	private String code;
 	
-	@Column(name = "HCCH_REVIEW", nullable = false, length = 64)
+	@Column(name = "HCCH_REVIEW", nullable = true, length = 64)
 	private String review;
 	
 	@Column(name = "HCCH_REFERENCE", nullable = true, length = 32)
@@ -106,6 +107,9 @@ public class HccHead {
 	
 	@Column(name = "HCCH_WORK_AREA", nullable = false, length = 512)
 	private String workArea;
+	
+	@Column(name = "HCCH_REPORT_HEADT", nullable = false, length = 16)
+	private String reportHeadT;
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "HCCH_SAPCODE", nullable = false)
@@ -272,6 +276,14 @@ public class HccHead {
 
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+
+	public String getReportHeadT() {
+		return reportHeadT;
+	}
+
+	public void setReportHeadT(String reportHeadT) {
+		this.reportHeadT = reportHeadT;
 	}
 
 	@Override

@@ -100,7 +100,6 @@ public class ReadNorm {
 			Cell cell;
 
 			PropertyList pl = new PropertyList();
-			pl.setTypeProduct("PT");
 			
 			for(int i = 0; i < 7; i++) {
 				switch (i) {
@@ -124,7 +123,7 @@ public class ReadNorm {
 					cell = row.getCell(i);
 					if (!(cell == null)) {
 						System.out.println("<<< " + cell.getStringCellValue() + " | ");
-						pl.setNormName(cell.getStringCellValue());
+						//pl.setNormName(cell.getStringCellValue());
 					}
 					break;
 					

@@ -11,7 +11,7 @@ import com.isacore.quality.repository.IProviderRepo;
 import com.isacore.quality.service.IProviderService;
 
 @Service
-public class IProviderServiceImpl implements IProviderService{
+public class ProviderServiceImpl implements IProviderService{
 	
 	@Autowired
 	private IProviderRepo repo;

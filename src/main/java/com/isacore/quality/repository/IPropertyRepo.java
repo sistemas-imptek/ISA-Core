@@ -21,12 +21,12 @@ public interface IPropertyRepo extends JpaRepository<Property, PropertyPK>{
 	
 	@Transactional(propagation = Propagation.NESTED)
 	@Modifying
-	@Query(value = "insert into property (product_id, propl_id, property_min, property_max, property_unit, property_view, property_view_hcc, property_update, property_type, property_asuser) values (:idProduct, :idPropertyList, :pMin, :pMax, :pUnit, :pView, 0, :pDateUpdate, :pType, :pUser)", nativeQuery = true)
-	int createProperty(@Param("idProduct")Integer idProduct, @Param("idPropertyList")String idPropertyList, @Param("pMin") Double pMin, @Param("pMax")Double pMax, @Param("pUnit") String pUnit, @Param("pView")String  pView, @Param("pDateUpdate")String pDateUpdate, @Param("pType") String pType, @Param("pUser")String pUser);
+	@Query(value = "insert into property (product_id, propl_id, property_min, property_max, property_unit, property_view, property_view_hcc, property_update, property_type, property_norm, property_asuser) values (:idProduct, :idPropertyList, :pMin, :pMax, :pUnit, :pView, 0, :pDateUpdate, :pType, :pNorm, :pUser)", nativeQuery = true)
+	int createProperty(@Param("idProduct")Integer idProduct, @Param("idPropertyList")String idPropertyList, @Param("pMin") Double pMin, @Param("pMax")Double pMax, @Param("pUnit") String pUnit, @Param("pView")String  pView, @Param("pDateUpdate")String pDateUpdate, @Param("pType") String pType, @Param("pNorm")String pNorm, @Param("pUser")String pUser);
 	
 	@Transactional(propagation = Propagation.NESTED)
 	@Modifying
-	@Query(value = "update property set property_min = :pMin, property_max = :pMax, property_unit = :pUnit, property_view = :pView, property_update = :pDateUpdate, property_type = :pType, property_asuser = :pUser where product_id = :idProduct and propl_id = :idPropertyList", nativeQuery = true)
-	int updateProperty(@Param("pMin") Double pMin, @Param("pMax")Double pMax, @Param("pUnit") String pUnit, @Param("pView")String  pView, @Param("pDateUpdate")String pDateUpdate, @Param("pType") String pType, @Param("pUser")String pUser, @Param("idProduct")Integer idProduct, @Param("idPropertyList")String idPropertyList);
+	@Query(value = "update property set property_min = :pMin, property_max = :pMax, property_unit = :pUnit, property_view = :pView, property_update = :pDateUpdate, property_type = :pType, property_norm = :pNorm, property_asuser = :pUser where product_id = :idProduct and propl_id = :idPropertyList", nativeQuery = true)
+	int updateProperty(@Param("pMin") Double pMin, @Param("pMax")Double pMax, @Param("pUnit") String pUnit, @Param("pView")String  pView, @Param("pDateUpdate")String pDateUpdate, @Param("pType") String pType, @Param("pNorm")String pNorm, @Param("pUser")String pUser, @Param("idProduct")Integer idProduct, @Param("idPropertyList")String idPropertyList);
 	
 }

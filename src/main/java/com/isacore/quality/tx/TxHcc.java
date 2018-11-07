@@ -20,11 +20,12 @@ import com.isacore.quality.model.Property;
 import com.isacore.quality.model.ReportHeadT;
 import com.isacore.quality.model.Test;
 import com.isacore.quality.report.GenerateReportQuality;
+import com.isacore.quality.service.IFeatureService;
 import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IReportHeadTService;
 import com.isacore.quality.service.ITestService;
-import com.isacore.quality.service.impl.IProviderServiceImpl;
+import com.isacore.quality.service.impl.ProviderServiceImpl;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
@@ -63,7 +64,7 @@ public class TxHcc {
 	private IUserImptekService serviceUI;
 	
 	@Autowired
-	private IProviderServiceImpl serviceProvider;
+	private IFeatureService serviceFeature;
 	
 	
 	/**
@@ -286,12 +287,13 @@ public class TxHcc {
 				if (rh != null) {
 					logger.info(">>> mthod: getHccHead::::PT::::" + p.getIdProduct() + ":::" + p.getNameProduct());
 					HccHead hhg = new HccHead();
+					hhg.setReportHeadT("HCCPT");
 					hhg.setProduct(p);
-					hhg.setHccNorm(rh.getNorm());
+					hhg.setHccNorm("");
 					hhg.setCode(rh.getCode());
-					hhg.setReview(rh.getReview());
+					hhg.setReview(this.serviceFeature.findFeatureReviewByIdP(p.getIdProduct()));
 					hhg.setReference(p.getItcdq());
-					hhg.setOf(rh.getOf());
+					hhg.setOf("");
 					hhg.setHcchBatch(hh.getHcchBatch());
 					hhg.setPeriodicity(hh.getPeriodicity());
 					hhg = gerenateDetailOfHcc(hhg, hh.getProduct(), hh.getPeriodicity());
@@ -311,9 +313,12 @@ public class TxHcc {
 					//p.setProviders(this.serviceProvider.findByProductId(p.getIdProduct()));
 					logger.info(">>> mthod: getHccHead::::MP::::" + p.getIdProduct() + ":::" + p.getNameProduct());
 					HccHead hhg = new HccHead();
+					hhg.setReportHeadT("HCCMP");
 					hhg.setProduct(p);
-					hhg.setCode(rh.getCode());
-					hhg.setReview(rh.getReview());
+					hhg.setCode("");
+					
+					
+					hhg.setReview(this.serviceFeature.findFeatureReviewByIdP(p.getIdProduct()));
 					hhg.setHcchBatch(hh.getHcchBatch());
 					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
 					mergeHccTests(hhg, hh.getHcchBatch());
@@ -346,8 +351,8 @@ public class TxHcc {
 		
 		for (Property prop : pp.getProperties()) {
 			HccDetail hd = new HccDetail();
-			hd.setNameNorm(prop.getPropertyList().getNormName());
-			//hd.setNameNorm(prop.getNormProperty());
+			//hd.setNameNorm(prop.getPropertyList().getNormName());
+			hd.setNameNorm(prop.getPropertyNorm());
 			hd.setIdProperty(prop.getPropertyList().getIdProperty());
 			//hd.setIdProperty(prop.getIdProperty());
 			hd.setNameProperty(prop.getPropertyList().getNameProperty());
@@ -357,7 +362,7 @@ public class TxHcc {
 			hd.setMin(prop.getMinProperty());
 			hd.setMax(prop.getMaxProperty());
 			hd.setView(prop.getViewProperty());
-			hd.setViewOnHcc(prop.isViewPropertyOnHcc());
+			//hd.setViewOnHcc(prop.isViewPropertyOnHcc());
 			hd.generateSpecifications();
 			detail.add(hd);
 		}

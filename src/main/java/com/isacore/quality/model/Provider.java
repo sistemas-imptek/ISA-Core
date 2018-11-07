@@ -1,15 +1,10 @@
 package com.isacore.quality.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "provider")
@@ -29,9 +24,9 @@ public class Provider {
 	
 	@Column(name = "PROV_DESCRIPTION", nullable = true, columnDefinition = "varchar(max)")
 	private String descProvider;
-	
-	@OneToMany(mappedBy = "provider", cascade = {CascadeType.ALL},fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<ProdProv> prodProv;
+
+	@Column(name = "PROV_TYPE", nullable = true, length = 512)
+	private String typeProvider;
 
 	public Integer getIdProvider() {
 		return idProvider;
@@ -65,12 +60,12 @@ public class Provider {
 		this.descProvider = descProvider;
 	}
 
-	public List<ProdProv> getProdProv() {
-		return prodProv;
+	public String getTypeProvider() {
+		return typeProvider;
 	}
 
-	public void setProdProv(List<ProdProv> prodProv) {
-		this.prodProv = prodProv;
+	public void setTypeProvider(String typeProvider) {
+		this.typeProvider = typeProvider;
 	}
 
 	@Override

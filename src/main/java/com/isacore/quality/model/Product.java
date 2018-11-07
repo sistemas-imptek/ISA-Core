@@ -46,6 +46,10 @@ public class Product {
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
 	
+	//PT MP Vial SemiElaborado
+	@Column(name = "PRODUCT_TYPETXT", nullable = true, length = 1024)
+	private String typeProductTxt;
+	
 	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "FEA_ID", nullable = true)
 	private Feature feature;
@@ -181,6 +185,14 @@ public class Product {
 
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
+	}
+
+	public String getTypeProductTxt() {
+		return typeProductTxt;
+	}
+
+	public void setTypeProductTxt(String typeProductTxt) {
+		this.typeProductTxt = typeProductTxt;
 	}
 
 	@Override

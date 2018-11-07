@@ -16,9 +16,6 @@ public class PropertyList {
 	@Column(name = "PROPL_NAME", nullable = false, length = 1024)
 	private String nameProperty;
 	
-	@Column(name = "PROPL_NORM", nullable = true, length = 512)
-	private String normName;
-	
 	@Column(name = "PROPL_LINE_APPLICATION", nullable = true, length = 512)
 	private String lineApplication;
 	
@@ -32,18 +29,15 @@ public class PropertyList {
 	@Column(name = "PROPL_TYPE", nullable = false, length = 4)
 	private String typeProperty;
 	
-	@Column(name = "PROPL_METHOD", nullable = true, length = 4)
+	@Column(name = "PROPL_METHOD", nullable = true, length = 512)
 	private String method;
 	
-	@Column(name = "PROPL_LABORATORY", nullable = true, length = 4)
+	@Column(name = "PROPL_LABORATORY", nullable = true, length = 512)
 	private String laboratory;
 	
-	@Column(name = "PROPL_SAMPLING_PLAN", nullable = true, length = 4)
+	@Column(name = "PROPL_SAMPLING_PLAN", nullable = true, length = 1024)
 	private String samplingPlan;
-	
-	//propiedad para saber si la especificacion de un producto terminado PT o materi prima MP
-	@Column(name = "PROPL_TYPE_PRODUCT", nullable = true, length = 4)
-	private String typeProduct;
+
 
 	public String getIdProperty() {
 		return idProperty;
@@ -67,14 +61,6 @@ public class PropertyList {
 
 	public void setTypeProperty(String typeProperty) {
 		this.typeProperty = typeProperty;
-	}
-
-	public String getNormName() {
-		return normName;
-	}
-
-	public void setNormName(String normName) {
-		this.normName = normName;
 	}
 
 	public String getLineApplication() {
@@ -117,14 +103,6 @@ public class PropertyList {
 		this.laboratory = laboratory;
 	}
 
-	public String getTypeProduct() {
-		return typeProduct;
-	}
-
-	public void setTypeProduct(String typeProduct) {
-		this.typeProduct = typeProduct;
-	}
-
 	public String getSamplingPlan() {
 		return samplingPlan;
 	}
@@ -135,10 +113,10 @@ public class PropertyList {
 
 	@Override
 	public String toString() {
-		return "PropertyList [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", normName=" + normName
+		return "PropertyList [idProperty=" + idProperty + ", nameProperty=" + nameProperty + ", normName="
 				+ ", lineApplication=" + lineApplication + ", periodicity=" + periodicity + ", machine=" + machine
 				+ ", typeProperty=" + typeProperty + ", method=" + method + ", laboratory=" + laboratory
-				+ ", samplingPlan=" + samplingPlan + ", typeProduct=" + typeProduct + "]";
+				+ ", samplingPlan=" + samplingPlan + ", typeProduct=" + "]";
 	}
 
 	@Override

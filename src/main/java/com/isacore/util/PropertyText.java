@@ -73,6 +73,6 @@ public class PropertyText {
 	public static final String PROPERTY_69 = "PROP_69";
 
 	public static final String PROP_TECHNICAL = "T";
-	public static final String PROP_VISUAL = "V	";
+	public static final String PROP_VISUAL = "V";
 	
 }

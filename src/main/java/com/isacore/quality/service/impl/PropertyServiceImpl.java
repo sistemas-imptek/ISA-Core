@@ -65,7 +65,7 @@ public class PropertyServiceImpl implements IPropertyService{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dateUpdate = now.format(formatter);
 		
-		this.propertyRepo.createProperty(p.getProduct().getIdProduct(), p.getPropertyList().getIdProperty(), p.getMinProperty(), p.getMaxProperty(), p.getUnitProperty(), p.getViewProperty(), dateUpdate, p.getTypeProperty(), user);
+		this.propertyRepo.createProperty(p.getProduct().getIdProduct(), p.getPropertyList().getIdProperty(), p.getMinProperty(), p.getMaxProperty(), p.getUnitProperty(), p.getViewProperty(), dateUpdate, p.getTypeProperty(), p.getPropertyNorm(), user);
 		return 0;
 	}
 
@@ -76,7 +76,7 @@ public class PropertyServiceImpl implements IPropertyService{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dateUpdate = now.format(formatter);
         
-		this.propertyRepo.updateProperty(p.getMinProperty(), p.getMaxProperty(), p.getUnitProperty(), p.getViewProperty(), dateUpdate, p.getTypeProperty(), user, p.getProduct().getIdProduct(), p.getPropertyList().getIdProperty());
+		this.propertyRepo.updateProperty(p.getMinProperty(), p.getMaxProperty(), p.getUnitProperty(), p.getViewProperty(), dateUpdate, p.getTypeProperty(), p.getPropertyNorm(), user, p.getProduct().getIdProduct(), p.getPropertyList().getIdProperty());
 		return 0;
 	}
 
