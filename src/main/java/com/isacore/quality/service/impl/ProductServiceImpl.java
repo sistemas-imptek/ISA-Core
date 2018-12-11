@@ -87,7 +87,7 @@ public class ProductServiceImpl implements IProductService {
 //		}
 		
 		Query query = entityManager.createNativeQuery(
-				"select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type,\r\n" + 
+				"select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type, p.product_typetxt,\r\n" + 
 				"f.fam_id, f.fam_name,\r\n" + 
 				"lp.lp_id, lp.lp_name, p.product_review\r\n" + 
 				"from product p\r\n" + 
@@ -109,21 +109,22 @@ public class ProductServiceImpl implements IProductService {
 			pp.setDescProduct((String)o[3]);
 			pp.setItcdq((String)o[4]);
 			pp.setTypeProduct((String)o[5]);
+			pp.setTypeProductTxt((String)o[6]);
 			
 			if(o[6] != null) {
 				Family f = new Family();
-				f.setFamilyId((Integer)o[6]);
-				f.setFamilyName((String) o[7]);
+				f.setFamilyId((Integer)o[7]);
+				f.setFamilyName((String) o[8]);
 				pp.setFamily(f);
 			}
 			
 			if(o[8] != null) {
 				LineProduction lp = new LineProduction();
-				lp.setIdLineP((Integer)o[8]);
-				lp.setLineName((String) o[9]);
+				lp.setIdLineP((Integer)o[9]);
+				lp.setLineName((String) o[10]);
 				pp.setLineProduction(lp);
 			}
-			pp.setReview((String)o[10]);
+			pp.setReview((String)o[11]);
 			return pp;
 			
 		}

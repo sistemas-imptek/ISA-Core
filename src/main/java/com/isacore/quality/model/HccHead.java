@@ -72,6 +72,9 @@ public class HccHead {
 	@Column(name = "HCCH_PERIODICITY", nullable = true, length = 128)
 	private String periodicity;
 	
+	@Column(name = "HCCH_REFERRAL_GUIDE", nullable = true, length = 64)
+	private String referralGuide;
+	
 	@Column(name = "HCCH_CODE", nullable = false, length = 32)
 	private String code;
 	
@@ -284,6 +287,14 @@ public class HccHead {
 
 	public void setReportHeadT(String reportHeadT) {
 		this.reportHeadT = reportHeadT;
+	}
+
+	public String getReferralGuide() {
+		return referralGuide;
+	}
+
+	public void setReferralGuide(String referralGuide) {
+		this.referralGuide = referralGuide;
 	}
 
 	@Override

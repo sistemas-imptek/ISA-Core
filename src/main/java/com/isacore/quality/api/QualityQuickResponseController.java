@@ -22,10 +22,6 @@ import com.isacore.quality.model.Product;
 import com.isacore.quality.read.specification.mp.GeneralReadMP;
 import com.isacore.quality.read.specification.pt.GeneralReadPT;
 import com.isacore.quality.read.tests.GeneralReadTest;
-import com.isacore.quality.read.tests.TestReadPesoArea;
-import com.isacore.quality.read.tests.TestReadSujecionGranulo;
-import com.isacore.quality.read.tests.TestReadTemplatepH;
-import com.isacore.quality.read.tests.TestReadViscocidad;
 import com.isacore.quality.service.impl.FormulationServiceImpl;
 import com.isacore.quality.service.impl.ProductServiceImpl;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
@@ -71,18 +67,6 @@ public class QualityQuickResponseController {
 	private TxGenerateQualityCertificate txGQC;
 	
 	@Autowired
-	private TestReadTemplatepH tpH;
-	
-	@Autowired 
-	private TestReadViscocidad tViscocidad;
-	
-	@Autowired
-	private TestReadSujecionGranulo tSujecion;
-	
-	@Autowired
-	private TestReadPesoArea tPesoArea;
-	
-	@Autowired
 	private ProductServiceImpl p;
 	
 	@Autowired
@@ -99,8 +83,6 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private GeneralReadTest readTest;
-	
-	
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){

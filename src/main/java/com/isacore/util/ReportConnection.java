@@ -20,7 +20,7 @@ public class ReportConnection {
 		
 		final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
         sampleDriverConnectionProvider.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        sampleDriverConnectionProvider.setUrl("jdbc:sqlserver://localhost:1433;databaseName=isa;user=sa;password=sqlserver");
+        sampleDriverConnectionProvider.setUrl("jdbc:sqlserver://192.168.4.18:1433;databaseName=isa;user=sa;password=grupoempresarialsrs");
         
         return sampleDriverConnectionProvider;
 	}
