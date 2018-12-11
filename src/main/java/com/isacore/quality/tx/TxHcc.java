@@ -352,6 +352,7 @@ public class TxHcc {
 					hhg.setProduct(p);
 					hhg.setCode(rh.getCode());
 					hhg.setReview(p.getReview());
+					hhg.setReferralGuide("");
 					hhg.setHcchBatch(hh.getHcchBatch());
 					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
 					mergeHccTests(hhg, hh.getHcchBatch());
