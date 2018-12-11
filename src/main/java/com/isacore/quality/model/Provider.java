@@ -28,6 +28,15 @@ public class Provider {
 	@Column(name = "PROV_TYPE", nullable = true, length = 512)
 	private String typeProvider;
 
+	public Provider() {
+		super();
+	}
+
+	public Provider(Integer idProvider) {
+		super();
+		this.idProvider = idProvider;
+	}
+
 	public Integer getIdProvider() {
 		return idProvider;
 	}

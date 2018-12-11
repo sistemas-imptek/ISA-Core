@@ -53,14 +53,17 @@ public class GenerateReportQualityCertificate extends AbstractReportGenerator{
 	public DataFactory getDataFactory() {
 		final SQLReportDataFactory dataFactory = new SQLReportDataFactory(ReportConnection.ConnectionPentaho());
 		dataFactory.setQuery(QUERY_NAME, "select \r\n" + 
-				"qc.qc_client,qc.qc_order,qc_email,\r\n" + 
+				"ci.cli_name,hh.hcch_of,qc_email,\r\n" + 
 				"p.product_name, hh.hcch_sapcode,hh.hcch_norm, hh.hcch_batch, \r\n" + 
-				"hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.hccd_specifications, hd.hccd_test_result, hd.hccd_test_result_view, hd.hccd_pass_test\r\n" + 
+				"hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.hccd_specifications, hd.hccd_test_result, hd.hccd_test_result_view, hd.hccd_pass_test,\r\n" + 
+				"qc.qc_count\r\n" + 
 				"from dbo.product p\r\n" + 
 				"inner join dbo.hcchead hh on hh.product_id = p.product_id\r\n" + 
 				"inner join dbo.hccdetail hd on hd.hcch_sapcode = hh.hcch_sapcode\r\n" + 
-				"inner join dbo.quality_certificate qc on qc.qc_sap_code = hh.hcch_sapcode\r\n" + 
-				"where hh.hcch_sapcode = ${HccSapCode};");
+				"inner join dbo.quality_certificate qc on qc.hcc_head_hcch_sapcode = hh.hcch_sapcode\r\n" + 
+				"inner join dbo.client_imptek ci on qc.client_imptek_cli_id = ci.cli_id\r\n" + 
+				"where qc.hcc_head_hcch_sapcode = ${HccSapCode} \r\n" + 
+				"and qc.client_imptek_cli_id = ${idCli};");
 
 		return dataFactory;
 	}
@@ -71,9 +74,10 @@ public class GenerateReportQualityCertificate extends AbstractReportGenerator{
 		return this.paramsReport;
 	}
 	
-	public void setIdHccSapCode(String hccSapCode) {
+	public void setIdHccSapCode(String hccSapCode, Integer idCli) {
 		this.paramsReport = new HashMap<String, Object>();
 		this.paramsReport.put("HccSapCode",hccSapCode);
+		this.paramsReport.put("idCli", idCli);
 	}
 
 }

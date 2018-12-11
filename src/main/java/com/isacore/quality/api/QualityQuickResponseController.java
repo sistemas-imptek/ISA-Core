@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.isacore.quality.classes.util.TxRequestQualityUtil;
 import com.isacore.quality.model.Formulation;
 import com.isacore.quality.model.Product;
+import com.isacore.quality.read.specification.mp.GeneralReadMP;
 import com.isacore.quality.read.specification.pt.GeneralReadPT;
+import com.isacore.quality.read.tests.GeneralReadTest;
 import com.isacore.quality.read.tests.TestReadPesoArea;
 import com.isacore.quality.read.tests.TestReadSujecionGranulo;
 import com.isacore.quality.read.tests.TestReadTemplatepH;
@@ -87,10 +89,16 @@ public class QualityQuickResponseController {
 	private GeneralReadPT readPT;
 	
 	@Autowired
+	private GeneralReadMP readMP;
+	
+	@Autowired
 	private RoleServiceImpl roleService;
 	
 	@Autowired
 	private FormulationServiceImpl formulationService;
+	
+	@Autowired
+	private GeneralReadTest readTest;
 	
 	
 	
@@ -185,6 +193,14 @@ public class QualityQuickResponseController {
 		
 		String user = "oquimbiulco";
 		readPT.run(user);
+		
+		readMP.run(user);
+	}
+	
+	@RequestMapping(value = "/readTestEUniversal", method = RequestMethod.GET)
+	public void readTestEU() {
+		
+		this.readTest.execute();
 	}
 	
 	@RequestMapping(value = "/readFormula/{idPSap}/{idF}/{load}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

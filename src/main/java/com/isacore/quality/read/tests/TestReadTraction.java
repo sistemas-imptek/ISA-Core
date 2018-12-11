@@ -97,6 +97,9 @@ public class TestReadTraction {
 			t4.setResultTest(Double.parseDouble((String)transverse[2]));
 			listTests.add(t4);
 			
+			File f = new File(pathTest);
+			f.delete();
+			
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");
 		} catch (IOException e) {

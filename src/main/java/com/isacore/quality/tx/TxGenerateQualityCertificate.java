@@ -88,7 +88,7 @@ public class TxGenerateQualityCertificate {
 						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}else {
 						
-						String statusReport = GenerateReportQuality.runReportPentahoQualityCertificate(qc.getHccHead().getSapCode());
+						String statusReport = GenerateReportQuality.runReportPentahoQualityCertificate(qc.getHccHead().getSapCode(),qc.getClientImptek().getIdClient());
 						
 						if(statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 							logger.info(">> Reporte generado correctamente");

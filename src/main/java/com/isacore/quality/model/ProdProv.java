@@ -17,8 +17,11 @@ public class ProdProv {
 	@Id
 	private Provider provider;
 	
-	@Column(name = "PP_STATUS", nullable = false)
-	private boolean status;
+	@Column(name = "PP_STATUS", nullable = true, length = 32)
+	private String status;
+	
+	@Column(name = "PP_Type", nullable = true, length = 32)
+	private String typeProv;
 
 	public Product getProduct() {
 		return product;
@@ -36,14 +39,21 @@ public class ProdProv {
 		this.provider = provider;
 	}
 
-	public boolean isStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+
+	public String getTypeProv() {
+		return typeProv;
+	}
+
+	public void setTypeProv(String typeProv) {
+		this.typeProv = typeProv;
+	}
+
 	
 }

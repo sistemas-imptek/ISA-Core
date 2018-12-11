@@ -65,10 +65,11 @@ public class HccHeadServiceImpl implements IHccHeadService {
 				hh.setSapCode((String)x[0]);
 				hh.setHcchBatch((String)x[1]);
 				p.setNameProduct((String)x[2]);
+				p.setTypeProduct((String)x[3]);
 				hh.setProduct(p);
-				Instant instant = Instant.ofEpochMilli(((Date) x[3]).getTime());
+				Instant instant = Instant.ofEpochMilli(((Date) x[4]).getTime());
 				hh.setDateCreate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate());
-				hh.setAnalysis((String)x[4]);
+				hh.setAnalysis((String)x[5]);
 				listhcc.add(hh);
 			});
 			return listhcc;
@@ -90,10 +91,11 @@ public class HccHeadServiceImpl implements IHccHeadService {
 				hh.setSapCode((String)x[0]);
 				hh.setHcchBatch((String)x[1]);
 				p.setNameProduct((String)x[2]);
+				p.setTypeProduct((String)x[3]);
 				hh.setProduct(p);
-				Instant instant = Instant.ofEpochMilli(((Date) x[3]).getTime());
+				Instant instant = Instant.ofEpochMilli(((Date) x[4]).getTime());
 				hh.setDateCreate(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate());
-				hh.setAnalysis((String)x[4]);
+				hh.setAnalysis((String)x[5]);
 				listhcc.add(hh);
 			});
 			return listhcc;

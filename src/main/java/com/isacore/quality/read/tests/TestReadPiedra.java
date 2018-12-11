@@ -74,6 +74,9 @@ public class TestReadPiedra {
 			t1.setResultTest(Double.parseDouble((String)resistencia[0]));
 			listTests.add(t1);
 			
+			File f = new File(pathTest);
+			f.delete();
+			
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");
 		} catch (IOException e) {

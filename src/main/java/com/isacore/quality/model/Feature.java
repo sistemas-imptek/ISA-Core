@@ -2,16 +2,12 @@ package com.isacore.quality.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -70,42 +66,8 @@ public class Feature {
 	@Column(name = "FEA_WAREHOUSE", nullable = true, length = 32)
 	private String warehouse;
 	
-	@Column(name = "FEA_NUMITCDQ", nullable = true, length = 8)
-	private String numItcdq;
-	
-	@Column(name = "FEA_MATERIALITCDQ", nullable = true, length = 8)
-	private String materialItcdq;
-	
-	@Column(name = "FEA_GROUP", nullable = true, length = 8)
-	private String groupItcdqCod;
-	
-	@Column(name = "FEA_REVIEW", nullable = true, length = 8)
-	private String review;
-	
-	@Column(name = "FEA_REFERENCE", nullable = true, length = 128)
-	private String reference;
-	
-	@Column(name = "FEA_ORIGIN", nullable = true, length = 128)
-	private String origin;
-	
-	@Column(name = "FEA_SPECIFIC_USE", nullable = true, length = 2048)
-	private String specificUse;
-	
-	@Column(name = "FEA_PRESENTATION", nullable = true, length = 512)
-	private String presentation;
-	
-	@Column(name = "FEA_FAMILYGROUP", nullable = true, length = 512)
-	private String familyGroup;
-	
-	@Column(name = "FEA_UNIT", nullable = true, length = 16)
-	private String unit;
-	
-	@Column(name = "FEA_REGISTER", nullable = true, length = 4)
-	private String register;
-	
-	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-	@JoinColumn(name = "GRI_ID", nullable = true)
-	private GroupItcdq groupItcdq;
+	@Column(name = "FEA_STORE_QUANTITY", nullable = true, length = 512)
+	private String storeQuantity;
 	
 
 	public Integer getIdFeature() {
@@ -212,100 +174,22 @@ public class Feature {
 		this.warehouse = warehouse;
 	}
 
-	public String getNumItcdq() {
-		return numItcdq;
+
+//	public GroupItcdq getGroupItcdq() {
+//		return groupItcdq;
+//	}
+//
+//	public void setGroupItcdq(GroupItcdq groupItcdq) {
+//		this.groupItcdq = groupItcdq;
+//	}
+
+
+	public String getStoreQuantity() {
+		return storeQuantity;
 	}
 
-	public void setNumItcdq(String numItcdq) {
-		this.numItcdq = numItcdq;
-	}
-
-	public String getMaterialItcdq() {
-		return materialItcdq;
-	}
-
-	public void setMaterialItcdq(String materialItcdq) {
-		this.materialItcdq = materialItcdq;
-	}
-
-	public String getReview() {
-		return review;
-	}
-
-	public void setReview(String review) {
-		this.review = review;
-	}
-
-	public String getReference() {
-		return reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
-
-	public String getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(String origin) {
-		this.origin = origin;
-	}
-
-	public String getSpecificUse() {
-		return specificUse;
-	}
-
-	public void setSpecificUse(String specificUse) {
-		this.specificUse = specificUse;
-	}
-
-	public String getPresentation() {
-		return presentation;
-	}
-
-	public void setPresentation(String presentation) {
-		this.presentation = presentation;
-	}
-
-	public String getFamilyGroup() {
-		return familyGroup;
-	}
-
-	public void setFamilyGroup(String familyGroup) {
-		this.familyGroup = familyGroup;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getRegister() {
-		return register;
-	}
-
-	public void setRegister(String register) {
-		this.register = register;
-	}
-
-	public GroupItcdq getGroupItcdq() {
-		return groupItcdq;
-	}
-
-	public void setGroupItcdq(GroupItcdq groupItcdq) {
-		this.groupItcdq = groupItcdq;
-	}
-
-	public String getGroupItcdqCod() {
-		return groupItcdqCod;
-	}
-
-	public void setGroupItcdqCod(String groupItcdqCod) {
-		this.groupItcdqCod = groupItcdqCod;
+	public void setStoreQuantity(String storeQuantity) {
+		this.storeQuantity = storeQuantity;
 	}
 	
 	

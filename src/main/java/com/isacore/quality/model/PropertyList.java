@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class PropertyList {
 
 	@Id
-	@Column(name = "PROPL_ID", nullable = false, length = 16)
+	@Column(name = "PROPL_ID", nullable = false, length = 32)
 	private String idProperty;
 
 	@Column(name = "PROPL_NAME", nullable = false, length = 1024)

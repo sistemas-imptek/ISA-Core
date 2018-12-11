@@ -6,14 +6,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.TransactionRequiredException;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isacore.quality.model.Product;
@@ -31,7 +28,7 @@ public class GeneralReadPT {
 	@Autowired
 	private PropertyServiceImpl propertyService;
 
-	public static final String FILE_NAME = "Especificaciones Técnicas Productos V.0.1.xlsx";
+	public static final String FILE_NAME = "Especificaciones Técnicas Productos V.0. Formato.xlsx";
 
 	public static final String PATH_TESTS_TEMPLATE = "C:\\CRIMPTEK\\Calidad\\EspecificacionesFormulaciones\\"
 			+ FILE_NAME;
@@ -58,13 +55,30 @@ public class GeneralReadPT {
 
 			workbook = new XSSFWorkbook(excelFile);
 
-			List<Product> listProduct;
+			
 
 			// ReadNorm.readNorms(workbook.getSheet("Normas Productos"));
 			// ReadNorm.readSpecificationText(workbook.getSheet("Normas de Ensayo"));
 
-			listProduct = ReadSpecificationLaminas.read(workbook.getSheet("Especificaciones Técnicas SBS 1"));
-
+			List<Product> listProduct = ReadSpecificationLaminas.read(workbook.getSheet("Especificaciones Técnicas SBS 1"));
+			
+			List<Product> listRevestimientos = ReadSpecificationRevestimientosLiquidos.read(workbook.getSheet("Revestimientos Líquidos"));
+			listRevestimientos.forEach(x -> listProduct.add(x));
+			listRevestimientos = null;
+			
+			List<Product> listMetales = ReadSpecificationMetales.read(workbook.getSheet("Metales"));
+			listMetales.forEach(x -> listProduct.add(x));
+			listMetales = null;
+			
+			List<Product> listViales = ReadSpecificationViales.read(workbook.getSheet("Viales"));
+			listViales.forEach(x -> listProduct.add(x));
+			listViales = null;
+			
+			List<Product> listCorteBanda = ReadSpecificationCorteBanda.read(workbook.getSheet("Cortes de Bandas"));
+			listCorteBanda.forEach(x -> listProduct.add(x));
+			listCorteBanda = null;
+			
+			
 			//this.productService.saveProductProperty(listProduct, user);
 			writeEspecifications(listProduct, user);
 
@@ -82,7 +96,7 @@ public class GeneralReadPT {
 
 	}
 
-	@Transactional(propagation =  Propagation.NESTED)
+	@Transactional
 	public void writeEspecifications(List<Product> listProduct, String user) {
 
 		listProduct.forEach(x -> {
@@ -92,11 +106,12 @@ public class GeneralReadPT {
 			Product p;
 			List<Property> listProperties = x.getProperties();
 			x.setProperties(null);
-			p = this.productService.create(x);
+			//p = this.productService.create(x);
 
 			listProperties.forEach(y -> {
-				y.setProduct(p);
+				y.setProduct(x);
 				y.setDateUpdate(LocalDateTime.now());
+				System.out.println("********************************>>>> " + y.getPropertyList().getIdProperty());
 				String propertyDescription = this.propertyService.validateExistProperty(y.getProduct().getIdProduct(),
 						y.getPropertyList().getIdProperty());
 				if (propertyDescription == null)
@@ -106,6 +121,8 @@ public class GeneralReadPT {
 			});
 
 		});
+		
+		System.out.println("================Fin de la tarea=================");
 
 	}
 

@@ -3,6 +3,7 @@ package com.isacore.quality.read.specification.mp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,9 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.isacore.quality.model.ProdProv;
 import com.isacore.quality.model.Product;
+import com.isacore.quality.model.Property;
 import com.isacore.quality.read.specification.pt.ReadSpecificationLaminas;
+import com.isacore.quality.service.impl.ProdProvServiceImpl;
 import com.isacore.quality.service.impl.ProductServiceImpl;
 import com.isacore.quality.service.impl.PropertyServiceImpl;
 
@@ -24,8 +29,11 @@ public class GeneralReadMP {
 
 	@Autowired
 	private PropertyServiceImpl propertyService;
+	
+	@Autowired
+	private ProdProvServiceImpl prodProvService;
 
-	public static final String FILE_NAME = "Especificaciones materias primas V.0.xlsx";
+	public static final String FILE_NAME = "Especificaciones materias primas Actualizado Formato.xlsx";
 
 	public static final String PATH_TESTS_TEMPLATE = "C:\\CRIMPTEK\\Calidad\\EspecificacionesFormulaciones\\"
 			+ FILE_NAME;
@@ -54,8 +62,9 @@ public class GeneralReadMP {
 
 			List<Product> listProduct;
 
-			listProduct = ReadSpecificationLaminas.read(workbook.getSheet("Especificaciones Técnicas SBS 1"));
-
+			listProduct = ReadSpecificationMP.read(workbook.getSheet("Especificaciones"));
+			writeEspecifications(listProduct, user);
+			
 		} catch (IOException e) {
 			logger.info(">> No se ha podido leer el libro de excel:::" + FILE_NAME);
 		} finally {
@@ -67,6 +76,46 @@ public class GeneralReadMP {
 			}
 			;
 		}
+
+	}
+	
+	@Transactional
+	public void writeEspecifications(List<Product> listProduct, String user) {
+
+		listProduct.forEach(x -> {
+
+			System.out.println("Producto a guardar----> " + x.getNameProduct());
+			
+			List<ProdProv> listProdProv = x.getProvidersList();
+			listProdProv.forEach(z -> {
+				z.setProduct(x);
+				Integer cod = this.prodProvService.validateProdProv(z.getProduct().getIdProduct(), z.getProvider().getIdProvider());
+				if(cod == null)
+					this.prodProvService.createProdProv(z);
+				else
+					this.prodProvService.updateProdProv(z);
+			});
+
+			Product p;
+			List<Property> listProperties = x.getProperties();
+			x.setProperties(null);
+			//p = this.productService.create(x);
+
+			listProperties.forEach(y -> {
+				y.setProduct(x);
+				y.setDateUpdate(LocalDateTime.now());
+				System.out.println("********************************>>>> " + y.getPropertyList().getIdProperty());
+				String propertyDescription = this.propertyService.validateExistProperty(y.getProduct().getIdProduct(),
+						y.getPropertyList().getIdProperty());
+				if (propertyDescription == null)
+					this.propertyService.createProperty(y, user);
+				else
+					this.propertyService.updateProperty(y, user);
+			});
+
+		});
+		
+		System.out.println("================Fin de la tarea=================");
 
 	}
 }

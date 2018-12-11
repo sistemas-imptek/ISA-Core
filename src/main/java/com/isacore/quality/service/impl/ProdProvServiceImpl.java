@@ -42,4 +42,30 @@ public class ProdProvServiceImpl implements IProdProvService{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Integer validateProdProv(Integer idProduct, Integer idProveedor) {
+		
+		List<Object> list = this.repo.validateProdProv(idProduct, idProveedor);
+		
+		if(list == null || list.isEmpty()) 
+			return null;
+		else 
+			return (Integer)list.get(0);
+
+	}
+
+	@Override
+	public int createProdProv(ProdProv pp) {
+		this.repo.createProdProv(pp.getProduct().getIdProduct(), pp.getProvider().getIdProvider(), pp.getStatus(), pp.getTypeProv());
+		return 0;
+	}
+
+	@Override
+	public int updateProdProv(ProdProv pp) {
+		this.repo.updateProdProv(pp.getStatus(), pp.getTypeProv(),pp.getProduct().getIdProduct(), pp.getProvider().getIdProvider());
+		return 0;
+	}
+
+	
 }

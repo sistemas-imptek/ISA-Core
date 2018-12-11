@@ -89,7 +89,7 @@ public class ProductServiceImpl implements IProductService {
 		Query query = entityManager.createNativeQuery(
 				"select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type,\r\n" + 
 				"f.fam_id, f.fam_name,\r\n" + 
-				"lp.lp_id, lp.lp_name\r\n" + 
+				"lp.lp_id, lp.lp_name, p.product_review\r\n" + 
 				"from product p\r\n" + 
 				"full join family f on p.fam_id = f.fam_id\r\n" + 
 				"full join line_production lp on p.lp_id = lp.lp_id\r\n" + 
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements IProductService {
 				lp.setLineName((String) o[9]);
 				pp.setLineProduction(lp);
 			}
-			
+			pp.setReview((String)o[10]);
 			return pp;
 			
 		}

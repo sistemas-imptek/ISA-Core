@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.isacore.quality.model.Formulation;
-import com.isacore.quality.model.FormulationPK;
 
 @Repository
 public interface IFormulationRepo extends JpaRepository<Formulation, Integer>{

@@ -84,11 +84,11 @@ public class GenerateReportQuality {
 		}
 	}
 	
-	public static String runReportPentahoQualityCertificate(String hccSapCode) {
+	public static String runReportPentahoQualityCertificate(String hccSapCode, Integer idCli) {
 		try {
 			final File outputFilename = new File("C:/CRIMPTEK/Calidad/QualityCertificate/QualityCertificate_" + hccSapCode + ".pdf");
 			GenerateReportQualityCertificate grpQC = new GenerateReportQualityCertificate();
-			grpQC.setIdHccSapCode(hccSapCode);
+			grpQC.setIdHccSapCode(hccSapCode, idCli);
 			grpQC.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
 			
 			return REPORT_SUCCESS;

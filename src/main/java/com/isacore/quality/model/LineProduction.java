@@ -24,6 +24,16 @@ public class LineProduction {
 	
 	@Column(name = "LP_DESCRIPTION", nullable = true, length = 2048)
 	private String lineDescription;
+	
+	
+	public LineProduction(Integer idLineP) {
+		super();
+		this.idLineP = idLineP;
+	}
+
+	public LineProduction() {
+		super();
+	}
 
 	public Integer getIdLineP() {
 		return idLineP;

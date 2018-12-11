@@ -84,6 +84,9 @@ public class TestReadDesgarreClavo {
 			t2.setResultTest(Double.parseDouble((String)transverse[1]));
 			listTests.add(t2);
 			
+			File f = new File(pathTest);
+			f.delete();
+			
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");
 		} catch (IOException e) {

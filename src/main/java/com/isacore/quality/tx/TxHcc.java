@@ -26,7 +26,6 @@ import com.isacore.quality.service.IProductService;
 import com.isacore.quality.service.IProviderService;
 import com.isacore.quality.service.IReportHeadTService;
 import com.isacore.quality.service.ITestService;
-import com.isacore.quality.service.impl.ProviderServiceImpl;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
@@ -83,7 +82,7 @@ public class TxHcc {
 		wrei.setTransactionName(TX_NAME_GetAllHCCTP);
 		wrei.setTransactionCode(TX_CODE_GetAllHCCTP);
 
-		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+		if (wri.getParameters() == null) {
 
 			try {
 
@@ -326,7 +325,7 @@ public class TxHcc {
 					hhg.setProduct(p);
 					hhg.setHccNorm("");
 					hhg.setCode(rh.getCode());
-					hhg.setReview(this.serviceFeature.findFeatureReviewByIdP(p.getIdProduct()));
+					hhg.setReview(p.getReview());
 					hhg.setReference(p.getItcdq());
 					hhg.setOf("");
 					hhg.setHcchBatch(hh.getHcchBatch());
@@ -350,9 +349,8 @@ public class TxHcc {
 					HccHead hhg = new HccHead();
 					hhg.setReportHeadT("HCCMP");
 					hhg.setProduct(p);
-					hhg.setCode("");
-
-					hhg.setReview(this.serviceFeature.findFeatureReviewByIdP(p.getIdProduct()));
+					hhg.setCode(rh.getCode());
+					hhg.setReview(p.getReview());
 					hhg.setHcchBatch(hh.getHcchBatch());
 					hhg = gerenateDetailOfHcc(hhg, hh.getProduct());
 					mergeHccTests(hhg, hh.getHcchBatch());

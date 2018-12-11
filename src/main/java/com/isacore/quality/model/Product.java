@@ -47,16 +47,43 @@ public class Product {
 	@Column(name = "PRODUCT_TYPE", nullable = false, length = 64)
 	private String typeProduct;
 	
+	@Column(name = "PRODUCT_REVIEW", nullable = true, length = 8)
+	private String review;
+	
+	@Column(name = "PRODUCT_REFERENCE", nullable = true, length = 128)
+	private String reference;
+	
 	//PT MP Vial SemiElaborado
 	@Column(name = "PRODUCT_TYPETXT", nullable = true, length = 1024)
 	private String typeProductTxt;
 	
+	@Column(name = "PRODUCT_WAREHOUSE", nullable = true, length = 32)
+	private String warehouse;
+	
+	@Column(name = "PRODUCT_STORE_QUANTITY", nullable = true, length = 512)
+	private String storeQuantity;
+	
+	@Column(name = "PRODUCT_ORIGIN", nullable = true, length = 128)
+	private String origin;
+	
+	@Column(name = "PRODUCT_SPECIFIC_USE", nullable = true, length = 2048)
+	private String specificUse;
+	
+	@Column(name = "PRODUCT_PRESENTATION", nullable = true, length = 512)
+	private String presentation;
+	
+	@Column(name = "PRODUCT_SAP_GROUP", nullable = true, length = 512)
+	private String sapGroup;
+	
+	@Column(name = "PRODUCT__UNIT", nullable = true, length = 16)
+	private String unit;
+	
+	@Column(name = "PRODUCT_REGISTER", nullable = true, length = 4)
+	private String register;
+	
 	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "FEA_ID", nullable = true)
 	private Feature feature;
-	
-	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
-	private List<ProdProv> prodProv;
 	
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
 	private List<Property> properties;
@@ -70,6 +97,9 @@ public class Product {
 	private  LineProduction lineProduction;
 
 	@Transient
+	private List<ProdProv> providersList;
+	
+	@Transient
 	private List<Provider> providers;
 	
 	
@@ -78,7 +108,7 @@ public class Product {
 	}
 
 	public Product(Integer idProduct, String sapCode, String nameProduct, String genericName, String descProduct,
-			String itcdq, String typeProduct, Feature feature, List<ProdProv> prodProv, List<Property> properties,
+			String itcdq, String typeProduct, Feature feature, List<Property> properties,
 			Family family, LineProduction lineProduction) {
 		super();
 		this.idProduct = idProduct;
@@ -89,7 +119,6 @@ public class Product {
 		this.itcdq = itcdq;
 		this.typeProduct = typeProduct;
 		this.feature = feature;
-		this.prodProv = prodProv;
 		this.properties = properties;
 		this.family = family;
 		this.lineProduction = lineProduction;
@@ -151,14 +180,6 @@ public class Product {
 		this.feature = feature;
 	}
 
-	public List<ProdProv> getProdProv() {
-		return prodProv;
-	}
-
-	public void setProdProv(List<ProdProv> prodProv) {
-		this.prodProv = prodProv;
-	}
-
 	public Family getFamily() {
 		return family;
 	}
@@ -199,6 +220,96 @@ public class Product {
 		this.typeProductTxt = typeProductTxt;
 	}
 
+	public List<ProdProv> getProvidersList() {
+		return providersList;
+	}
+
+	public void setProvidersList(List<ProdProv> providersList) {
+		this.providersList = providersList;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
+	}
+	
+	public String getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(String warehouse) {
+		this.warehouse = warehouse;
+	}
+
+	public String getStoreQuantity() {
+		return storeQuantity;
+	}
+
+	public void setStoreQuantity(String storeQuantity) {
+		this.storeQuantity = storeQuantity;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+	public String getSpecificUse() {
+		return specificUse;
+	}
+
+	public void setSpecificUse(String specificUse) {
+		this.specificUse = specificUse;
+	}
+
+	public String getPresentation() {
+		return presentation;
+	}
+
+	public void setPresentation(String presentation) {
+		this.presentation = presentation;
+	}
+
+	public String getSapGroup() {
+		return sapGroup;
+	}
+
+	public void setSapGroup(String sapGroup) {
+		this.sapGroup = sapGroup;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getRegister() {
+		return register;
+	}
+
+	public void setRegister(String register) {
+		this.register = register;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
+	}
+	
+	
+
 	public List<Provider> getProviders() {
 		return providers;
 	}
@@ -211,7 +322,7 @@ public class Product {
 	public String toString() {
 		return "Product [idProduct=" + idProduct + ", sapCode=" + sapCode + ", nameProduct=" + nameProduct
 				+ ", genericName=" + genericName + ", descProduct=" + descProduct + ", itcdq=" + itcdq
-				+ ", typeProduct=" + typeProduct + ", feature=" + feature + ", prodProv=" + prodProv + ", properties="
+				+ ", typeProduct=" + typeProduct + ", feature=" + feature + ", properties="
 				+ properties + ", family=" + family + ", lineProduction=" + lineProduction + "]";
 	}
 

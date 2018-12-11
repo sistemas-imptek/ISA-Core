@@ -29,6 +29,11 @@ public class Family {
 		super();
 	}
 
+	public Family(Integer familyId) {
+		super();
+		this.familyId = familyId;
+	}
+
 	public Family(Integer familyId, String familyName, String familyDescription) {
 		super();
 		this.familyId = familyId;

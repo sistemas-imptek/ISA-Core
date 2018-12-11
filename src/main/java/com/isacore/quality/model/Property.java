@@ -1,5 +1,6 @@
 package com.isacore.quality.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -11,7 +12,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.isacore.localdate.converter.LocalDateConverter;
 import com.isacore.localdate.converter.LocalDateTimeConverter;
+import com.isacore.util.PropertyText;
 
 @Entity(name = "property")
 @IdClass(PropertyPK.class)
@@ -37,7 +40,7 @@ public class Property {
 	@Column(name = "PROPERTY_MAX", nullable = true, columnDefinition = "decimal(9,3)" )
 	private Double maxProperty;
 	
-	@Column(name = "PROPERTY_UNIT", nullable = true, length = 8)
+	@Column(name = "PROPERTY_UNIT", nullable = true, length = 64)
 	private String unitProperty;
 	
 	@Column(name = "PROPERTY_VIEW", nullable = true, columnDefinition = "varchar(Max)")
@@ -51,7 +54,12 @@ public class Property {
 	@JsonSerialize(using = ToStringSerializer.class)
 	private LocalDateTime dateUpdate;
 	
-	@Column(name = "PROPERTY_TYPE", nullable = true, length = 4)
+	@Column(name = "PROPERTY_UPDATE_EXCEL", nullable = true)
+	@Convert(converter = LocalDateConverter.class)
+	@JsonSerialize(using = ToStringSerializer.class)
+	private LocalDate dateUpdateExcel;
+	
+	@Column(name = "PROPERTY_TYPE", nullable = true, length = 32)
 	private String typeProperty;
 	
 	@Column(name = "PROPERTY_ASUSER", nullable = true, length = 64)
@@ -69,6 +77,18 @@ public class Property {
 		this.product = product;
 	}
 */
+	
+	public boolean isEmpty() {
+		
+		if(this.typeProperty.equals(PropertyText.PROP_TECHNICAL))
+			return (this.minProperty == null && 
+				this.maxProperty == null && 
+				this.unitProperty.equals("-"))
+				? true : false;
+		else
+			return (this.viewProperty.equals("-"))
+					? true : false;
+	}
 	
 	public void setPropertyListId(String idPL) {
 		this.propertyList = new PropertyList();
@@ -162,6 +182,26 @@ public class Property {
 	public void setPropertyNorm(String propertyNorm) {
 		this.propertyNorm = propertyNorm;
 	}
+
+	public LocalDate getDateUpdateExcel() {
+		return dateUpdateExcel;
+	}
+
+	public void setDateUpdateExcel(LocalDate dateUpdateExcel) {
+		this.dateUpdateExcel = dateUpdateExcel;
+	}
+
+	public Boolean getViewPropertyOnHcc() {
+		return viewPropertyOnHcc;
+	}
 	
+	public void setIdPropNorm(String s) {
+		String[] data = s.split(";");
+		this.propertyList = new PropertyList();		
+		this.propertyList.setIdProperty(data.length >= 1 ? data[0] : "");
+		this.setPropertyNorm(data.length == 2 ? data[1] : "");
+		System.out.println("****------------------------> "+this.propertyList.getIdProperty() );
+		System.out.println("****------------------------> "+this.getPropertyNorm() );
+	}
 	
 }

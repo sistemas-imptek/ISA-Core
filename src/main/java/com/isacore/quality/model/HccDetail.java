@@ -63,10 +63,12 @@ public class HccDetail {
 			if(this.min == null && this.max == null)
 				this.specifications = " - ";
 			else {
-				if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+				//if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+				if(this.min != null && this.max == null)
 					this.specifications = "> " + this.min;
 				else {
-					if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
+					//if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
+					if(this.max != null && this.min == 0)
 						this.specifications = "< " + this.max;
 					else 
 						this.specifications  = this.min + " - " + this.max;
@@ -80,13 +82,14 @@ public class HccDetail {
 	public void evaluateResult() {
 		this.passTest = false;
 		if(this.typeProperty.equals("T")) {
-			if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
-				this.passTest = this.result > this.min ? true : false;
+			//if((this.min != null || this.min != 0) && (this.max == null || this.max == 0))
+			if(this.min != null && this.max == null)	
+				this.passTest = this.result >= this.min ? true : false;
 			else 
-				if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
-					this.passTest = this.result < this.max ? true : false;
+				if(this.max != null && this.min == null)
+					this.passTest = this.result <= this.max ? true : false;
 				else 
-					this.passTest = (this.result > this.min) && (this.result < this.max) ? true : false;
+					this.passTest = (this.result >= this.min) && (this.result <= this.max) ? true : false;
 		}
 	}
 

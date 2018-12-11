@@ -74,6 +74,9 @@ public class TestReadAdhesividad {
 			t1.setIdProperty(ADHESIVIDAD);
 			t1.setResultTest(Double.parseDouble((String) longitudinal[1]));
 			listTests.add(t1);
+			
+			File f = new File(pathTest);
+			f.delete();
 
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");
