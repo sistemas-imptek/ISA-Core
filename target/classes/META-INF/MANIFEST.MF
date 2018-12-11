@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: ISACore
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: David
+Implementation-Vendor-Id: com.isacore
+Build-Jdk: 1.8.0_191
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/ISACore
+Created-By: Maven Integration for Eclipse
+Main-Class: com.isacore.SpringBootIsa
+
