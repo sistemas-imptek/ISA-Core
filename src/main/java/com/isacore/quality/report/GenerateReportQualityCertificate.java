@@ -1,8 +1,6 @@
 package com.isacore.quality.report;
 
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,16 +25,17 @@ public class GenerateReportQualityCertificate extends AbstractReportGenerator{
 
 	@Override
 	public MasterReport getReportDefinition() {
-		Path pa = Paths.get("com/isacore/quality/report/prpt/QualityCertificate_6.0.1.0-386.prpt");
-		final ClassLoader classloader = this.getClass().getClassLoader();
-		
-		final URL reportDefinitionURL = classloader.getResource(pa.toString());
+//		Path pa = Paths.get("com/isacore/quality/report/prpt/QualityCertificate_6.0.1.0-386.prpt");
+//		final ClassLoader classloader = this.getClass().getClassLoader();		
+//		final URL reportDefinitionURL = classloader.getResource(pa.toString());
 
 		final ResourceManager resourceManager = new ResourceManager();
 		Resource directly;
 		try {			
-			directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
-
+//			directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
+			java.io.File file = new java.io.File("C:\\CRIMPTEK\\Calidad\\ReportPrpt\\QualityCertificate_6.0.1.0-386.prpt");
+			directly = resourceManager.createDirectly(file.toURI().toURL(), MasterReport.class);
+			
 			MasterReport mr = (MasterReport) directly.getResource();
 			mr.setQuery(QUERY_NAME);
 			
@@ -45,6 +44,9 @@ public class GenerateReportQualityCertificate extends AbstractReportGenerator{
 
 		} catch (ResourceException e) {
 			logger.info("> ISA::::Method:::getReportDefinition");
+			return null;
+		} catch (MalformedURLException e) {
+			logger.info("> ISA::::Method:::getReportDefinition:::MalformedURLException");
 			return null;
 		}
 	}

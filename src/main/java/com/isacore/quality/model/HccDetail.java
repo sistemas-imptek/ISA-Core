@@ -31,13 +31,13 @@ public class HccDetail {
 	@Column(name = "HCCD_PROP_TYPE", nullable = false, length = 4)
 	private String typeProperty;
 	
-	@Column(name = "HCCD_PROP_UNIT", nullable = true, length = 8)
+	@Column(name = "HCCD_PROP_UNIT", nullable = true, length = 64)
 	private String unit;
 	
-	@Column(name = "HCCD_PROP_MIN", nullable = true, columnDefinition = "decimal(8,2)")
+	@Column(name = "HCCD_PROP_MIN", nullable = true, columnDefinition = "decimal(10,4)")
 	private Double min;
 	
-	@Column(name = "HCCD_PROP_MAX", nullable = true, columnDefinition = "decimal(8,2)")
+	@Column(name = "HCCD_PROP_MAX", nullable = true, columnDefinition = "decimal(10,4)")
 	private Double max;
 	
 	@Column(name = "HCCD_SPECIFICATIONS", nullable = true, length = 2048)

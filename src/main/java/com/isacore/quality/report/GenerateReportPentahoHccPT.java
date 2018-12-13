@@ -1,8 +1,6 @@
 package com.isacore.quality.report;
 
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,28 +26,32 @@ public class GenerateReportPentahoHccPT extends AbstractReportGenerator {
 	@Override
 	public MasterReport getReportDefinition() {
 
-		Path pa = Paths.get("com/isacore/quality/report/prpt/HCC_PT_6.0.1.0-386-2.prpt");
-		final ClassLoader classloader = this.getClass().getClassLoader();
-		
-		System.out.println("::::::::: " + classloader.toString());
-		
-		final URL reportDefinitionURL = classloader.getResource(pa.toString());
+//		Path pa = Paths.get("com/isacore/quality/report/prpt/HCC_PT_6.0.1.0-386-2.prpt");
+//		final ClassLoader classloader = this.getClass().getClassLoader();
+//		
+//		System.out.println("::::::::: " + pa.toString());
+//		final URL reportDefinitionURL = classloader.getResource(pa.toString());
 
 		final ResourceManager resourceManager = new ResourceManager();
 		Resource directly;
 		try {
 			
-			String pa2 = reportDefinitionURL.toString();
-			System.out.println("> ISA::::Method:::getReportDefinition:::" + pa2);
+			//String pa2 = reportDefinitionURL.toString();
+			//System.out.println("> ISA::::Method:::getReportDefinition:::" + pa2);
 			
-			directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
+			java.io.File file = new java.io.File("C:\\CRIMPTEK\\Calidad\\ReportPrpt\\HCC_PT_6.0.1.0-386-2.prpt");			
+			//directly = resourceManager.createDirectly(reportDefinitionURL, MasterReport.class);
+			directly = resourceManager.createDirectly(file.toURI().toURL(), MasterReport.class);
 
 			MasterReport mr = (MasterReport) directly.getResource();
 			mr.setQuery(QUERY_NAME);
 			return mr;
 
 		} catch (ResourceException e) {
-			logger.info("> ISA::::Method:::getReportDefinition");
+			logger.info("> ISA::::Method:::getReportDefinition:::ResourceException");
+			return null;
+		} catch (MalformedURLException e) {
+			logger.info("> ISA::::Method:::getReportDefinition:::MalformedURLException");
 			return null;
 		}
 	}

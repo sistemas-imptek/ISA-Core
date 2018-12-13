@@ -267,6 +267,9 @@ public class TxHcc {
 							String statusReport = GenerateReportQuality.runReportPentahoHccPT(hh.getSapCode());
 							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
+								wrei.setMessage("El reporte de la HCC " + hh.getSapCode()
+										+ "ha sido creado satisfactoriamente");
+								wrei.setStatus(WebResponseMessage.STATUS_OK);
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {
 								logger.error(">> El reporte de la HCC" + hh.getSapCode() + "no se a podido crear");
