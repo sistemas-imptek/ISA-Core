@@ -28,7 +28,7 @@ public class GeneralReadPT {
 	@Autowired
 	private PropertyServiceImpl propertyService;
 
-	public static final String FILE_NAME = "Especificaciones Técnicas Productos V.0. Formato.xlsx";
+	public static final String FILE_NAME = "Especificaciones Técnicas Productos V.0.xlsx";
 
 	public static final String PATH_TESTS_TEMPLATE = "C:\\CRIMPTEK\\Calidad\\EspecificacionesFormulaciones\\"
 			+ FILE_NAME;

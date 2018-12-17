@@ -25,7 +25,7 @@ public class FormulationPK implements Serializable{
 	
 	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "FI_ID", nullable = false)
-	private FormulationItem formularionItem;
+	private FormulationItem formulationItem;
 
 	public Product getProduct() {
 		return product;
@@ -43,19 +43,19 @@ public class FormulationPK implements Serializable{
 		this.formulationList = formulationList;
 	}
 
-	public FormulationItem getFormularionItem() {
-		return formularionItem;
+	public FormulationItem getFormulationItem() {
+		return formulationItem;
 	}
 
-	public void setFormularionItem(FormulationItem formularionItem) {
-		this.formularionItem = formularionItem;
+	public void setFormularionItem(FormulationItem formulationItem) {
+		this.formulationItem = formulationItem;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((formularionItem == null) ? 0 : formularionItem.hashCode());
+		result = prime * result + ((formulationItem == null) ? 0 : formulationItem.hashCode());
 		result = prime * result + ((formulationList == null) ? 0 : formulationList.hashCode());
 		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		return result;
@@ -70,10 +70,10 @@ public class FormulationPK implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		FormulationPK other = (FormulationPK) obj;
-		if (formularionItem == null) {
-			if (other.formularionItem != null)
+		if (formulationItem == null) {
+			if (other.formulationItem != null)
 				return false;
-		} else if (!formularionItem.equals(other.formularionItem))
+		} else if (!formulationItem.equals(other.formulationItem))
 			return false;
 		if (formulationList == null) {
 			if (other.formulationList != null)

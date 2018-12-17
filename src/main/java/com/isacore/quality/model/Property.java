@@ -82,8 +82,7 @@ public class Property {
 		
 		if(this.typeProperty.equals(PropertyText.PROP_TECHNICAL))
 			return (this.minProperty == null && 
-				this.maxProperty == null && 
-				this.unitProperty.equals("-"))
+				this.maxProperty == null)
 				? true : false;
 		else
 			return (this.viewProperty.equals("-"))

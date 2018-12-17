@@ -33,7 +33,7 @@ public class GeneralReadMP {
 	@Autowired
 	private ProdProvServiceImpl prodProvService;
 
-	public static final String FILE_NAME = "Especificaciones materias primas Actualizado Formato.xlsx";
+	public static final String FILE_NAME = "Especificaciones materias primas Actualizado.xlsx";
 
 	public static final String PATH_TESTS_TEMPLATE = "C:\\CRIMPTEK\\Calidad\\EspecificacionesFormulaciones\\"
 			+ FILE_NAME;

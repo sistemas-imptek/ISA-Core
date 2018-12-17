@@ -1,6 +1,10 @@
 package com.isacore.quality.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -9,6 +13,10 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.isacore.localdate.converter.LocalDateConverter;
+import com.isacore.localdate.converter.LocalDateTimeConverter;
 
 @Entity
 @IdClass(FormulationPK.class)
@@ -23,25 +31,39 @@ public class Formulation {
 	private FormulaList formulationList;
 	
 	@Id
-	private FormulationItem formularionItem;
+	private FormulationItem formulationItem;
 	
-	@Column(name = "FORM_DESCRIPTION", nullable = false, length = 256)
-	private String description;
-	
-	@Column(name = "FORM_VALUE", nullable = false, columnDefinition = ("Decimal(8,6)"))
+	@Column(name = "FORM_VALUE", nullable = false, columnDefinition = ("Decimal(10,8)"))
 	private Double value;
 	
-	@Column(name = "FORM_TYPE", nullable = false, length = 4)
+	@Column(name = "FORM_TYPE", nullable = true, length = 4)
 	private String type;
 	
-	@Column(name = "FORM_VEA", nullable = true, columnDefinition = ("Decimal(10,6)"))
+	@Column(name = "FORM_VEA", nullable = true, columnDefinition = ("Decimal(10,8)"))
 	private Double vea;
 	
-	@Column(name = "FORM_UNIT", nullable = false, length = 8)
+	@Column(name = "FORM_UNIT", nullable = true, length = 8)
 	private String unit;
 	
+	//carga
 	@Column(name = "FORM_MULTIFACTOR", nullable = false)
 	private Integer multiFactor;
+	
+	@Column(name = "FORM_UPDATE", nullable = false)
+	@Convert(converter = LocalDateTimeConverter.class)
+	@JsonSerialize(using = ToStringSerializer.class)
+	private LocalDateTime dateUpdate;
+	
+	@Column(name = "FORM_UPDATE_EXCEL", nullable = true)
+	@Convert(converter = LocalDateConverter.class)
+	@JsonSerialize(using = ToStringSerializer.class)
+	private LocalDate dateUpdateExcel; 
+	
+	@Column(name = "FORM_ASUSER", nullable = true, length = 64)
+	private String asUser;
+	
+	@Transient
+	private String component;
 	
 	@Transient
 	private Double amount;
@@ -60,14 +82,6 @@ public class Formulation {
 
 	public void setFormulationList(FormulaList formulationList) {
 		this.formulationList = formulationList;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Double getValue() {
@@ -110,12 +124,12 @@ public class Formulation {
 		this.multiFactor = multiFactor;
 	}
 
-	public FormulationItem getFormularionItem() {
-		return formularionItem;
+	public FormulationItem getFormulationItem() {
+		return formulationItem;
 	}
 
-	public void setFormularionItem(FormulationItem formularionItem) {
-		this.formularionItem = formularionItem;
+	public void setFormulationItem(FormulationItem formulationItem) {
+		this.formulationItem = formulationItem;
 	}
 
 	public Double getAmount() {
@@ -126,6 +140,40 @@ public class Formulation {
 		this.amount = this.multiFactor * (double)load * this.value;
 	}
 
-	
-	
+	public LocalDateTime getDateUpdate() {
+		return dateUpdate;
+	}
+
+	public void setDateUpdate(LocalDateTime dateUpdate) {
+		this.dateUpdate = dateUpdate;
+	}
+
+	public LocalDate getDateUpdateExcel() {
+		return dateUpdateExcel;
+	}
+
+	public void setDateUpdateExcel(LocalDate dateUpdateExcel) {
+		this.dateUpdateExcel = dateUpdateExcel;
+	}
+
+	public String getAsUser() {
+		return asUser;
+	}
+
+	public void setAsUser(String asUser) {
+		this.asUser = asUser;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	public String getComponent() {
+		return component;
+	}
+
+	public void setComponent(String component) {
+		this.component = component;
+	}
+
 }

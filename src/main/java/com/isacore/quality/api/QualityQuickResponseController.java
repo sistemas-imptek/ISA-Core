@@ -9,19 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.isacore.quality.classes.util.TxRequestQualityUtil;
+import com.isacore.quality.model.FormulaList;
 import com.isacore.quality.model.Formulation;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.read.specification.mp.GeneralReadMP;
 import com.isacore.quality.read.specification.pt.GeneralReadPT;
 import com.isacore.quality.read.tests.GeneralReadTest;
+import com.isacore.quality.service.IFormulationService;
 import com.isacore.quality.service.impl.FormulationServiceImpl;
 import com.isacore.quality.service.impl.ProductServiceImpl;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
@@ -30,6 +34,7 @@ import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
+import com.isacore.quality.tx.TxReadFormulation;
 import com.isacore.sgc.acta.model.Role;
 import com.isacore.sgc.acta.service.impl.RoleServiceImpl;
 import com.isacore.util.WebRequestIsa;
@@ -67,6 +72,9 @@ public class QualityQuickResponseController {
 	private TxGenerateQualityCertificate txGQC;
 	
 	@Autowired
+	private TxReadFormulation txReadFormulation;
+	
+	@Autowired
 	private ProductServiceImpl p;
 	
 	@Autowired
@@ -79,10 +87,10 @@ public class QualityQuickResponseController {
 	private RoleServiceImpl roleService;
 	
 	@Autowired
-	private FormulationServiceImpl formulationService;
+	private GeneralReadTest readTest;
 	
 	@Autowired
-	private GeneralReadTest readTest;
+	private IFormulationService formulationService;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -142,6 +150,9 @@ public class QualityQuickResponseController {
 			
 		case TxGenerateQualityCertificate.TX_CODE_GetAllClients:
 			return this.txGQC.TxQQRGAC(wri);
+			
+		case TxReadFormulation.TX_CODE_ReadFormulation:
+			return this.txReadFormulation.TxQQRReadF(wri);
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());
@@ -185,8 +196,13 @@ public class QualityQuickResponseController {
 		this.readTest.execute();
 	}
 	
-	@RequestMapping(value = "/readFormula/{idPSap}/{idF}/{load}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Formulation> readFormulations(@PathVariable("idPSap")String idPSap,@PathVariable("idF")Integer idF, @PathVariable("load")Integer load) {
+	@GetMapping(value = "/formulaList")
+	public List<FormulaList> getFormulaList(@RequestParam("id")Integer idProd){		
+		return this.formulationService.getTypeFormulationsListByProduct(idProd);		
+	}
+	
+	@RequestMapping(value = "/readFormula", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Formulation> readFormulations(@RequestParam("idPSap")String idPSap,@RequestParam("idF")Integer idF, @RequestParam("load")Integer load) {
 		List<Formulation> formulations = this.formulationService.findFormulationByProductAndFormType(idPSap, idF);
 		
 		if(formulations == null)
