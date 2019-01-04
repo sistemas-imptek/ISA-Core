@@ -6,6 +6,7 @@ E:\STS Projects\ISACore\src\main\java\com\isacore\quality\repository\IAreasRepo.
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\Feature.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\read\formulation\ReadFormulationImpermeabilizacion.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\service\impl\ClientImptekServiceImpl.java
+E:\STS Projects\ISACore\src\main\java\com\isacore\quality\tx\TxReadFormulation.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\report\GenerateReportPentahoHccPT.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\security\api\SecurityResponseController.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\service\IOutputMethodService.java
@@ -23,6 +24,7 @@ E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\OutputMethod.jav
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\service\IHccHeadService.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\service\IReportHeadTService.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\sgc\acta\service\IActionPlanService.java
+E:\STS Projects\ISACore\src\main\java\com\isacore\quality\report\prpt\ActivatePackage.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\read\specification\pt\ReadSpecificationViales.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\Provider.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\repository\INonconformingProduct.java
@@ -57,6 +59,7 @@ E:\STS Projects\ISACore\src\main\java\com\isacore\util\LocalDateTimeSerializeIsa
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\ExitMaterialHistory.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\repository\ILineProductionRepo.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\service\impl\TestServiceImpl.java
+E:\STS Projects\ISACore\src\main\java\com\isacore\util\ReadFormulationExcel.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\report\GenerateReportPentahoPNC.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\ProdProvPK.java
 E:\STS Projects\ISACore\src\main\java\com\isacore\quality\model\Property.java

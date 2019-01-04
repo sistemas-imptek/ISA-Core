@@ -57,7 +57,7 @@ public class GenerateReportPentahoHccMP extends AbstractReportGenerator {
 		final SQLReportDataFactory dataFactory = new SQLReportDataFactory(ReportConnection.ConnectionPentaho());
 		dataFactory.setQuery(QUERY_NAME, "select rht.report_title, rht.report_subtitle,\r\n" + 
 				"p.product_name, p.product_sap_code, p.product_itcdq, p.product_typetxt,\r\n" + 
-				"hh.hcch_sapcode, hh.hcch_date, hh.hcch_analysis, hh.hcch_code, hh.hcch_comment, hh.hcch_date_order, hh.hcch_norm, hh.hcch_batch, \r\n" + 
+				"hh.hcch_sapcode, hh.hcch_date, hh.hcch_analysis, SUBSTRING(p.product_itcdq,4,6) as hcch_code, hh.hcch_comment, hh.hcch_date_order, hh.hcch_norm, hh.hcch_batch, \r\n" + 
 				"hh.hcch_job, hh.hcch_order_number, hh.hcch_periodicity, hh.hcch_reference, hh.hcch_review, hh.hcch_u_name, hh.hcch_work_area,\r\n" + 
 				"hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.hccd_specifications, hd.hccd_test_result, hd.hccd_test_result_view, hd.hccd_pass_test\r\n" + 
 				"from dbo.product p\r\n" + 

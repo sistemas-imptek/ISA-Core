@@ -60,7 +60,7 @@ public class GenerateReportPentahoHccPT extends AbstractReportGenerator {
 	public DataFactory getDataFactory() {
 
 		final SQLReportDataFactory dataFactory = new SQLReportDataFactory(ReportConnection.ConnectionPentaho());
-		dataFactory.setQuery(QUERY_NAME, "select rht.report_title, rht.report_subtitle, rht.report_code,\r\n" + 
+		dataFactory.setQuery(QUERY_NAME, "select rht.report_title, rht.report_subtitle, SUBSTRING(p.product_itcdq,4,6) as report_code,\r\n" + 
 				"p.product_name, rtrim(replace(p.product_sap_code,'.0','')) as product_sap_code, p.product_itcdq,p.product_typetxt,\r\n" + 
 				"hh.hcch_sapcode, hh.hcch_analysis, hh.hcch_code, hh.hcch_comment, hh.hcch_date, hh.hcch_norm, hh.hcch_batch, hh.hcch_referral_guide, \r\n" + 
 				"hh.hcch_job, hh.hcch_of, hh.hcch_periodicity, hh.hcch_reference, hh.hcch_review, hh.hcch_u_name, hh.hcch_work_area,\r\n" + 

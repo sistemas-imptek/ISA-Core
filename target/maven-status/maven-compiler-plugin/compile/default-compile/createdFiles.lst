@@ -106,9 +106,11 @@ com\isacore\quality\model\Provider.class
 com\isacore\util\CRUD.class
 com\isacore\quality\model\QualityCertificate.class
 com\isacore\quality\read\tests\TestReadTraction.class
+com\isacore\util\ReadFormulationExcel.class
 com\isacore\quality\model\Formulation.class
 com\isacore\sgc\acta\api\UserImptekController.class
 com\isacore\sgc\acta\repository\ICommitteeRepo.class
+com\isacore\quality\tx\TxReadFormulation.class
 com\isacore\sgc\acta\service\impl\ActionPlanServiceImpl.class
 com\isacore\SpringBootIsa.class
 com\isacore\sgc\acta\model\Menu.class
@@ -116,6 +118,7 @@ com\isacore\util\WebResponseIsa.class
 com\isacore\quality\read\tests\TestReadSujecionGranulo.class
 com\isacore\quality\tx\TxHcc.class
 com\isacore\quality\read\tests\TestReadTemplatepH.class
+com\isacore\quality\report\prpt\ActivatePackage.class
 com\isacore\quality\service\INonconformingProductService.class
 com\isacore\util\AbstractReportGenerator.class
 com\isacore\quality\report\GenerateReportQualityCertificate.class

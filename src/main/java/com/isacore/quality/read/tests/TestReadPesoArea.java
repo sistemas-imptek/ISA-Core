@@ -26,7 +26,7 @@ import com.isacore.quality.service.ITestService;
 @Component
 public class TestReadPesoArea {
 
-	public static final String PROP_PESO = "PROP_PesoArea";
+	public static final String PROP_PESO = "PROP_14";
 
 	public static final String FILE_NAME = "FR-CDQ-00.06 Peso por área Diario.xlsx";
 

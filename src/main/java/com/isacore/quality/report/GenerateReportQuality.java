@@ -42,10 +42,11 @@ public class GenerateReportQuality {
 		}
 	}
 
-	public static String runReportPentahoHccPT(String idHCC) {
+	public static String runReportPentahoHccPT(String product, String batch, String idHCC, String period) {
 
 		try {
-			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/PT/HCC_" + idHCC + ".pdf");
+			period = period.equalsIgnoreCase("Diaria") ? "" : period;			
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/PT/HCC " + product + " " + batch + " " + period + ".pdf") ;
 			GenerateReportPentahoHccPT grpPT = new GenerateReportPentahoHccPT();
 			grpPT.setIdHcc(idHCC);
 			grpPT.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
@@ -56,10 +57,10 @@ public class GenerateReportQuality {
 		}
 	}
 	
-	public static String runReportPentahoHccMP(String idHCC) {
+	public static String runReportPentahoHccMP(String product, String batch, String idHCC) {
 
 		try {
-			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/MP/HCC_" + idHCC + ".pdf");
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/MP/HCC " + product + " " + batch + ".pdf");
 			GenerateReportPentahoHccMP grpMP = new GenerateReportPentahoHccMP();
 			grpMP.setIdHcc(idHCC);
 			grpMP.generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);

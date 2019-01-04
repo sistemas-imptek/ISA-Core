@@ -20,7 +20,7 @@ import au.com.bytecode.opencsv.CSVReader;
 @Component
 public class TestReadAdhesividad {
 
-	public static final String ADHESIVIDAD = "PROP_27";
+	public static final String ADHESIVIDAD = "PROP_22";
 
 	public static final String PATH_TESTS_TRACTION = "C:\\CRIMPTEK\\Calidad\\Tests\\EquipoUniversal\\Adhesividad";
 

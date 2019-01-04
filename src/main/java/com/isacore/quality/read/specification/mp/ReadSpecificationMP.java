@@ -162,7 +162,28 @@ public class ReadSpecificationMP {
 					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 347,347, ReadPropertiesExcel.STANDARD);
 					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 350, 350, ReadPropertiesExcel.UNIQUE);
 					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 352, 352, ReadPropertiesExcel.UNIQUE);
-
+					
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 354,372, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.visual(properties, row, rowHead, 375,375);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 377,377, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.visual(properties, row, rowHead, 380,380);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 382,397, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 400, 400, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 402,402, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 405, 405, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 407,407, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 410, 410, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 412, 412, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 414, 414, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 416, 416, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 418, 418, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 420,438, ReadPropertiesExcel.STANDARD);
+					properties = ReadPropertiesExcel.visual(properties, row, rowHead, 441,441);
+					properties = ReadPropertiesExcel.technical(properties, row, rowHead, 443, 443, ReadPropertiesExcel.UNIQUE);
+					properties = ReadPropertiesExcel.visual(properties, row, rowHead, 445,445);
+					
+					
+					
 					product.setProperties(properties);
 					prooducts.add(product);
 					

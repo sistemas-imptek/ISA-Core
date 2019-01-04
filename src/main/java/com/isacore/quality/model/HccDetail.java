@@ -68,7 +68,7 @@ public class HccDetail {
 					this.specifications = "> " + this.min;
 				else {
 					//if((this.max != null || this.max != 0) && (this.min == null || this.min == 0))
-					if(this.max != null && this.min == 0)
+					if(this.max != null && this.min == null)
 						this.specifications = "< " + this.max;
 					else 
 						this.specifications  = this.min + " - " + this.max;
