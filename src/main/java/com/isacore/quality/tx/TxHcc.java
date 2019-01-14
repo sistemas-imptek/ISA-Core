@@ -264,7 +264,7 @@ public class TxHcc {
 
 						if (hcc.getProduct().getTypeProduct().equals("PT")) {
 							// String statusReport = GenerateReportQuality.runReport(hh.getSapCode());
-							String statusReport = GenerateReportQuality.runReportPentahoHccPT(hh.getProduct().getNameProduct(), hh.getHcchBatch(), hh.getSapCode(), hh.getPeriodicity());
+							String statusReport = GenerateReportQuality.runReportPentahoHccPT(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode(), hh.getPeriodicity());
 							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
 								wrei.setMessage("El reporte de la HCC " + hh.getSapCode()
@@ -278,7 +278,7 @@ public class TxHcc {
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 							}
 						} else {
-							String statusReport = GenerateReportQuality.runReportPentahoHccMP(hh.getProduct().getNameProduct(), hh.getHcchBatch(), hh.getSapCode());
+							String statusReport = GenerateReportQuality.runReportPentahoHccMP(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode());
 							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
 								wrei.setMessage("El reporte de la HCC " + hh.getSapCode()

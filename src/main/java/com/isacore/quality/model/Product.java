@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -316,6 +317,11 @@ public class Product {
 
 	public void setProviders(List<Provider> providers) {
 		this.providers = providers;
+	}
+	
+	@JsonIgnore
+	public String getFileName() {
+		return this.nameProduct.replaceAll("[/:*?'<>]|\"", "-");
 	}
 
 	@Override
