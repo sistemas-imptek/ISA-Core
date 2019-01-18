@@ -51,6 +51,7 @@ public class HccHead {
 	
 	/*
 	 * Fecha de la orden de pedido de materia prima
+	 * Fecha de orden de produccion para producto terminado
 	 */
 	@Column(name = "HCCH_DATE_ORDER", nullable = true)
 	@Convert(converter = LocalDateConverter.class)
