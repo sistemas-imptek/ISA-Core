@@ -29,7 +29,7 @@ public class ReadPropertiesExcel {
 			//id Property y norma
 			p.setIdPropNorm(ValidateCell.validateString(rowHead.getCell(i)));
 			
-			// Peso Min
+			
 			p.setMinProperty(ValidateCell.validateDouble(row.getCell(i)));
 			
 			if(type.equals(UNIQUE)) {

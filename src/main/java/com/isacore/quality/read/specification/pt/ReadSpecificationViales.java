@@ -73,6 +73,10 @@ public class ReadSpecificationViales {
 				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 24, 24, ReadPropertiesExcel.UNIQUE, "");
 				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 25, 73, ReadPropertiesExcel.STANDARD);
 				
+				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 76, 79, ReadPropertiesExcel.STANDARD);
+				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 82, 82, ReadPropertiesExcel.UNIQUE);
+				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 84, 102, ReadPropertiesExcel.STANDARD);
+				
 				product.setProperties(properties);
 				prooducts.add(product);		
 				

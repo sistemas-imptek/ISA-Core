@@ -56,8 +56,8 @@ public class ReadSpecificationMetales {
 				product.setNameProduct(ValidateCell.validateString(row.getCell(8)));
 
 				// ----------------------Lectura de propiedades----------------------------
-				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 9, 9, ReadPropertiesExcel.UNIQUE);
-				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 11, 28, ReadPropertiesExcel.NOMINAL);
+				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 9, 9, ReadPropertiesExcel.STANDARD);
+				properties = ReadPropertiesExcel.technical(properties, row, rowhead, 12, 28, ReadPropertiesExcel.NOMINAL);
 				
 				product.setProperties(properties);
 				prooducts.add(product);		
