@@ -29,4 +29,6 @@ public interface IPropertyRepo extends JpaRepository<Property, PropertyPK>{
 	@Query(value = "update property set property_min = :pMin, property_max = :pMax, property_unit = :pUnit, property_view = :pView, property_update = :pDateUpdate, property_type = :pType, property_norm = :pNorm, property_asuser = :pUser where product_id = :idProduct and propl_id = :idPropertyList", nativeQuery = true)
 	int updateProperty(@Param("pMin") Double pMin, @Param("pMax")Double pMax, @Param("pUnit") String pUnit, @Param("pView")String  pView, @Param("pDateUpdate")String pDateUpdate, @Param("pType") String pType, @Param("pNorm")String pNorm, @Param("pUser")String pUser, @Param("idProduct")Integer idProduct, @Param("idPropertyList")String idPropertyList);
 	
+	@Query(value = "select * from property pp where pp.product_id = :idProduct and pp.propl_id = :idPropertyList", nativeQuery = true)
+	Property findPropertyByIdPropertyListandIdProduct(@Param("idProduct")Integer idProduct, @Param("idPropertyList") String idPropertyList);
 }

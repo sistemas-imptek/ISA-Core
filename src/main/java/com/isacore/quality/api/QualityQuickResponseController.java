@@ -35,6 +35,7 @@ import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
 import com.isacore.quality.tx.TxReadFormulation;
+import com.isacore.quality.tx.TxTest;
 import com.isacore.sgc.acta.model.Role;
 import com.isacore.sgc.acta.service.impl.RoleServiceImpl;
 import com.isacore.util.WebRequestIsa;
@@ -91,6 +92,9 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private IFormulationService formulationService;
+	
+	@Autowired
+	private TxTest txTest;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -153,6 +157,19 @@ public class QualityQuickResponseController {
 			
 		case TxReadFormulation.TX_CODE_ReadFormulation:
 			return this.txReadFormulation.TxQQRReadF(wri);
+		
+		case TxTest.TX_CODE_SaveTest:
+			return this.txTest.TxQQRsaveTest(wri);
+		
+		case TxTest.TX_CODE_GetTestByBatchNull:
+			return this.txTest.TxQQRgetTestByBatchNull(wri);
+			
+		case TxProduct.TX_CODE_GetProductByIdAndPropertyId:
+			return this.txProduct.TxQQRgetProductByIdAndPropertyId(wri);
+		
+		case TxProduct.TX_CODE_GetProductPropertiesById:
+			return this.txProduct.TxQQRgetProductPropertiesById(wri);
+			
 		
 		default:
 			logger.info("> La transacción solicitada no existe: TX-> " + wri.getTransactionCode());

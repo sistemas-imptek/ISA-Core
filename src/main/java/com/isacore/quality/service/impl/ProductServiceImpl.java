@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.isacore.quality.dto.ProductDto;
 import com.isacore.quality.model.Family;
 import com.isacore.quality.model.Feature;
 import com.isacore.quality.model.LineProduction;
@@ -28,13 +29,13 @@ import com.isacore.quality.service.IProductService;
 
 @Service
 public class ProductServiceImpl implements IProductService {
-	
+
 	@PersistenceContext
 	EntityManager entityManager;
 
 	@Autowired
 	private IProductRepo repo;
-	
+
 	@Autowired
 	private IPropertyRepo repoProperty;
 
@@ -51,7 +52,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product findById(Product obj) {
 		Optional<Product> o = this.repo.findById(obj.getIdProduct());
-		if(o.isPresent())
+		if (o.isPresent())
 			return o.get();
 		else
 			return null;
@@ -70,105 +71,102 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product findOnlyProductById(Product p) {
-//		List<Object[]> list = this.repo.findOnlyProductById(p.getIdProduct());
-//		if(list.isEmpty() || list == null)
-//			return null;
-//		else {
-//			Product pp = new Product();
-//			
-//			Object[] o = list.get(0);
-//			pp.setIdProduct((Integer)o[0]);
-//			pp.setSapCode((String)o[1]);
-//			pp.setNameProduct((String)o[2]);
-//			pp.setDescProduct((String)o[3]);
-//			pp.setItcdq((String)o[4]);
-//			
-//			
-//		}
-		
+		// List<Object[]> list = this.repo.findOnlyProductById(p.getIdProduct());
+		// if(list.isEmpty() || list == null)
+		// return null;
+		// else {
+		// Product pp = new Product();
+		//
+		// Object[] o = list.get(0);
+		// pp.setIdProduct((Integer)o[0]);
+		// pp.setSapCode((String)o[1]);
+		// pp.setNameProduct((String)o[2]);
+		// pp.setDescProduct((String)o[3]);
+		// pp.setItcdq((String)o[4]);
+		//
+		//
+		// }
+
 		Query query = entityManager.createNativeQuery(
-				"select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type, p.product_typetxt,\r\n" + 
-				"f.fam_id, f.fam_name,\r\n" + 
-				"lp.lp_id, lp.lp_name, p.product_review\r\n" + 
-				"from product p\r\n" + 
-				"full join family f on p.fam_id = f.fam_id\r\n" + 
-				"full join line_production lp on p.lp_id = lp.lp_id\r\n" + 
-				"WHERE P.product_id = ?");
-		
+				"select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type, p.product_typetxt,\r\n"
+						+ "f.fam_id, f.fam_name,\r\n" + "lp.lp_id, lp.lp_name, p.product_review\r\n"
+						+ "from product p\r\n" + "full join family f on p.fam_id = f.fam_id\r\n"
+						+ "full join line_production lp on p.lp_id = lp.lp_id\r\n" + "WHERE P.product_id = ?");
+
 		query.setParameter(1, p.getIdProduct());
 		List<Object[]> list = query.getResultList();
-		
-		if(list.isEmpty() || list == null)
-			return null; 
+
+		if (list.isEmpty() || list == null)
+			return null;
 		else {
 			Object[] o = list.get(0);
 			Product pp = new Product();
-			pp.setIdProduct((Integer)o[0]);
-			pp.setSapCode((String)o[1]);
-			pp.setNameProduct((String)o[2]);
-			pp.setDescProduct((String)o[3]);
-			pp.setItcdq((String)o[4]);
-			pp.setTypeProduct((String)o[5]);
-			pp.setTypeProductTxt((String)o[6]);
-			
-			if(o[6] != null) {
+			pp.setIdProduct((Integer) o[0]);
+			pp.setSapCode((String) o[1]);
+			pp.setNameProduct((String) o[2]);
+			pp.setDescProduct((String) o[3]);
+			pp.setItcdq((String) o[4]);
+			pp.setTypeProduct((String) o[5]);
+			pp.setTypeProductTxt((String) o[6]);
+
+			if (o[6] != null) {
 				Family f = new Family();
-				f.setFamilyId((Integer)o[7]);
+				f.setFamilyId((Integer) o[7]);
 				f.setFamilyName((String) o[8]);
 				pp.setFamily(f);
 			}
-			
-			if(o[8] != null) {
+
+			if (o[8] != null) {
 				LineProduction lp = new LineProduction();
-				lp.setIdLineP((Integer)o[9]);
+				lp.setIdLineP((Integer) o[9]);
 				lp.setLineName((String) o[10]);
 				pp.setLineProduction(lp);
 			}
-			pp.setReview((String)o[11]);
+			pp.setReview((String) o[11]);
 			return pp;
-			
+
 		}
-		
+
 	}
-	
+
 	@Override
 	public List<Product> findAllProducts() {
-		
+
 		List<Product> products;
 		List<Object[]> list = this.repo.findAllProducts();
-		
+
 		if (list.isEmpty() || list == null)
 			return null;
 		else {
 			products = new ArrayList<>();
-			list.forEach((Object[]x) -> {
+			list.forEach((Object[] x) -> {
 				Product pp = new Product();
-				
-				if(x[0] != null) {
-					pp.setIdProduct((Integer)x[0]);
-					pp.setSapCode((String)x[1]);
-					pp.setNameProduct((String)x[2]);
-					pp.setDescProduct((String)x[3]);
-					pp.setItcdq((String)x[4]);
-					pp.setTypeProduct((String)x[5]);
-					
-					if(x[6] != null) {
+
+				if (x[0] != null) {
+					pp.setIdProduct((Integer) x[0]);
+					pp.setSapCode((String) x[1]);
+					pp.setNameProduct((String) x[2]);
+					pp.setDescProduct((String) x[3]);
+					pp.setItcdq((String) x[4]);
+					pp.setTypeProduct((String) x[5]);
+
+					if (x[6] != null) {
 						Family f = new Family();
-						f.setFamilyId((Integer)x[6]);
+						f.setFamilyId((Integer) x[6]);
 						f.setFamilyName((String) x[7]);
 						pp.setFamily(f);
 					}
-					
-					if(x[8] != null) {
+
+					if (x[8] != null) {
 						LineProduction lp = new LineProduction();
-						lp.setIdLineP((Integer)x[8]);
+						lp.setIdLineP((Integer) x[8]);
 						lp.setLineName((String) x[9]);
 						pp.setLineProduction(lp);
 					}
-					
+
 					products.add(pp);
 				}
-				
+
 			});
 			return products;
 		}
@@ -178,40 +176,40 @@ public class ProductServiceImpl implements IProductService {
 	public Product findProductByIdAndPeriod(Integer idP, String period) {
 
 		List<Object[]> list = this.repo.findProductByIdAndPeriod(idP, period);
-		
+
 		if (list.isEmpty() || list == null)
 			return null;
 		else {
 			Product product = new Product();
-			
+
 			Object[] o = list.get(0);
-			product.setIdProduct((Integer)o[0]);
+			product.setIdProduct((Integer) o[0]);
 			product.setSapCode((String) o[1]);
 			product.setNameProduct((String) o[2]);
 			product.setDescProduct((String) o[3]);
 			product.setTypeProduct((String) o[4]);
-			
+
 			List<Property> listProperty = new ArrayList<>();
 			list.forEach((Object[] x) -> {
 				Property p = new Property();
 				PropertyList pl = new PropertyList();
-				
-				pl.setIdProperty((String)x[5]);
-				pl.setNameProperty((String)x[6]);
-				//p.setIdProperty((String)x[5]);
-				//p.setNameProperty((String)x[6]);
-				p.setTypeProperty((String)x[7]);
-				pl.setPeriodicity((String)x[8]);
-				//pl.setNormName((String)x[9]);
-				//p.setPeriodicityProperty((String)x[8]);
-				//p.setNormProperty((String)x[9]);
-				p.setPropertyNorm((String)x[9]);
+
+				pl.setIdProperty((String) x[5]);
+				pl.setNameProperty((String) x[6]);
+				// p.setIdProperty((String)x[5]);
+				// p.setNameProperty((String)x[6]);
+				p.setTypeProperty((String) x[7]);
+				pl.setPeriodicity((String) x[8]);
+				// pl.setNormName((String)x[9]);
+				// p.setPeriodicityProperty((String)x[8]);
+				// p.setNormProperty((String)x[9]);
+				p.setPropertyNorm((String) x[9]);
 				p.setPropertyList(pl);
-				p.setMinProperty((x[10]) == null ? null : ((BigDecimal)x[10]).doubleValue());
-				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal)x[11]).doubleValue());
-				p.setUnitProperty((String)x[12]);
-				p.setViewProperty((String)x[13]);
-				p.setViewPropertyOnHcc((Boolean)x[14]);
+				p.setMinProperty((x[10]) == null ? null : ((BigDecimal) x[10]).doubleValue());
+				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal) x[11]).doubleValue());
+				p.setUnitProperty((String) x[12]);
+				p.setViewProperty((String) x[13]);
+				p.setViewPropertyOnHcc((Boolean) x[14]);
 				listProperty.add(p);
 			});
 			product.setProperties(listProperty);
@@ -222,44 +220,43 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product findProductFeature(Integer idP) {
 		List<Object[]> list = this.repo.findProductFeature(idP);
-		
-		if(list.isEmpty() || list == null)
+
+		if (list.isEmpty() || list == null)
 			return null;
 		else {
-			
+
 			Product product = new Product();
-			
-			Object[] o = list.get(0); 
+
+			Object[] o = list.get(0);
 			product.setIdProduct((Integer) o[0]);
 			product.setSapCode((String) o[1]);
 			product.setNameProduct((String) o[2]);
-			
+
 			Feature f = new Feature();
-			f.setLength((o[3]) == null ? null : ((BigDecimal)o[3]).doubleValue());
+			f.setLength((o[3]) == null ? null : ((BigDecimal) o[3]).doubleValue());
 			f.setUnitLength((String) o[4]);
-			f.setGrossWeigth((o[5]) == null ? null : ((BigDecimal)o[5]).doubleValue());
+			f.setGrossWeigth((o[5]) == null ? null : ((BigDecimal) o[5]).doubleValue());
 			f.setUnitGrossWeigth((String) o[6]);
-			f.setNetWeigth((o[7]) == null ? null : ((BigDecimal)o[7]).doubleValue());
+			f.setNetWeigth((o[7]) == null ? null : ((BigDecimal) o[7]).doubleValue());
 			f.setUnitNetWeigth((String) o[8]);
-			f.setWeigthArea((o[9]) == null ? null : ((BigDecimal)o[9]).doubleValue());
+			f.setWeigthArea((o[9]) == null ? null : ((BigDecimal) o[9]).doubleValue());
 			f.setUmb((String) o[10]);
-			f.setUnitCost((o[11]) == null ? null : ((BigDecimal)o[11]).doubleValue());
-			f.setDistributorPrice((o[12]) == null ? null : ((BigDecimal)o[12]).doubleValue());
-			
+			f.setUnitCost((o[11]) == null ? null : ((BigDecimal) o[11]).doubleValue());
+			f.setDistributorPrice((o[12]) == null ? null : ((BigDecimal) o[12]).doubleValue());
+
 			product.setFeature(f);
-			
+
 			return product;
 		}
 	}
 
-
 	@Override
 	public void saveProductProperty(List<Product> listProduct, String user) {
-		
+
 		LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String dateUpdate = now.format(formatter);
-		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String dateUpdate = now.format(formatter);
+
 		listProduct.forEach(x -> {
 
 			System.out.println("Producto a guardar----> " + x.getNameProduct());
@@ -272,32 +269,95 @@ public class ProductServiceImpl implements IProductService {
 			listProperties.forEach(y -> {
 				y.setProduct(p);
 				y.setDateUpdate(LocalDateTime.now());
-				List<Object> propertyDescription = this.repoProperty.validateExistProperty(y.getProduct().getIdProduct(),
-						y.getPropertyList().getIdProperty());
+				List<Object> propertyDescription = this.repoProperty
+						.validateExistProperty(y.getProduct().getIdProduct(), y.getPropertyList().getIdProperty());
 				if (propertyDescription == null)
-					this.repoProperty.createProperty(y.getProduct().getIdProduct(), 
-							y.getPropertyList().getIdProperty(), 
-							y.getMinProperty(), 
-							y.getMaxProperty(), 
-							y.getUnitProperty(), 
-							y.getViewProperty(), 
-							dateUpdate, 
-							y.getTypeProperty(),
-							y.getPropertyNorm(),
-							user);
+					this.repoProperty.createProperty(y.getProduct().getIdProduct(), y.getPropertyList().getIdProperty(),
+							y.getMinProperty(), y.getMaxProperty(), y.getUnitProperty(), y.getViewProperty(),
+							dateUpdate, y.getTypeProperty(), y.getPropertyNorm(), user);
 				else
-					this.repoProperty.updateProperty(y.getMinProperty(), 
-							y.getMaxProperty(), 
-							y.getUnitProperty(), 
-							y.getViewProperty(), 
-							dateUpdate, 
-							y.getTypeProperty(), 
-							y.getPropertyNorm() ,user, 
-							y.getProduct().getIdProduct(), 
-							y.getPropertyList().getIdProperty());
+					this.repoProperty.updateProperty(y.getMinProperty(), y.getMaxProperty(), y.getUnitProperty(),
+							y.getViewProperty(), dateUpdate, y.getTypeProperty(), y.getPropertyNorm(), user,
+							y.getProduct().getIdProduct(), y.getPropertyList().getIdProperty());
 			});
 
 		});
+	}
+
+	@Override
+	public ProductDto findProductByIdAndIdProperty(Integer idP, String idProperty) {
+		List<Object[]> list = this.repo.findProductByIdAndIdProperty(idP, idProperty);
+		Product pp = new Product();
+		ProductDto pdto = new ProductDto();
+
+		if (list.isEmpty() || list == null)
+			return null;
+		else {
+			Object[] o = list.get(0);
+
+			pdto.setProductId(idP);
+			pdto.setProductsapCode((String) o[1]);
+			pdto.setProductName((String) o[2]);
+			pdto.setProductDescription((String) o[3]);
+			pdto.setProductType((String) o[4]);
+			pdto.setPropertyId((String) o[5]);
+			pdto.setPropertyMax((BigDecimal) o[11]);
+			pdto.setPropertyMin((BigDecimal) o[10]);
+			pdto.setPropertyName((String) o[6]);
+			pdto.setPropertyNorm((String) o[9]);
+			pdto.setPropertyPeriodicity((String) o[8]);
+			pdto.setPropertyType((String) o[7]);
+			pdto.setPropertyUnit((String) o[12]);
+			pdto.setPropertyView((String) o[13]);
+			pdto.setPropertyViewHcc((Boolean) o[14]);
+		}
+		return pdto;
+	}
+
+	@Override
+	public Product findProductPropertiesByIdProduct(Integer idP) {
+		// TODO Auto-generated method stub
+		List<Object[]> list = this.repo.findProductPropertiesByIdProduct(idP);
+
+		if (list.isEmpty() || list == null)
+			return null;
+		else {
+			Product product = new Product();
+
+			Object[] o = list.get(0);
+			product.setIdProduct((Integer) o[0]);
+			product.setSapCode((String) o[1]);
+			product.setNameProduct((String) o[2]);
+			product.setDescProduct((String) o[3]);
+			product.setTypeProduct((String) o[4]);
+
+			List<Property> listProperty = new ArrayList<>();
+			list.forEach((Object[] x) -> {
+				Property p = new Property();
+				PropertyList pl = new PropertyList();
+
+				pl.setIdProperty((String) x[5]);
+				pl.setNameProperty((String) x[6]);
+				// p.setIdProperty((String)x[5]);
+				// p.setNameProperty((String)x[6]);
+				p.setTypeProperty((String) x[7]);
+				pl.setPeriodicity((String) x[8]);
+				// pl.setNormName((String)x[9]);
+				// p.setPeriodicityProperty((String)x[8]);
+				// p.setNormProperty((String)x[9]);
+				p.setPropertyNorm((String) x[9]);
+				p.setPropertyList(pl);
+				p.setMinProperty((x[10]) == null ? null : ((BigDecimal) x[10]).doubleValue());
+				p.setMaxProperty((x[11]) == null ? null : ((BigDecimal) x[11]).doubleValue());
+				p.setUnitProperty((String) x[12]);
+				p.setViewProperty((String) x[13]);
+				p.setViewPropertyOnHcc((Boolean) x[14]);
+				listProperty.add(p);
+			});
+			product.setProperties(listProperty);
+			return product;
+		}
+
 	}
 
 }

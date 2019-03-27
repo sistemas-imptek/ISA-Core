@@ -129,7 +129,7 @@ public class TestReadPesoArea {
 						cellType = cell.getCellTypeEnum();
 						if (cellType != CellType.STRING && cellType != CellType.NUMERIC) {
 							logger.info("<<< " + cell.getDateCellValue() + " | ");
-							test.setDateLog(cell.getDateCellValue());
+							//test.setDateLog(cell.getDateCellValue());
 						}
 					}
 					break;

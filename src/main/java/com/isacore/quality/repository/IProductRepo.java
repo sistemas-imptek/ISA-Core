@@ -23,4 +23,11 @@ public interface IProductRepo extends JpaRepository<Product, Integer>{
 	
 	@Query(nativeQuery = true, value = "select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_itcdq, p.product_type,f.fam_id, f.fam_name,lp.lp_id, lp.lp_name from product p full join family f on p.fam_id = f.fam_id full join line_production lp on p.lp_id = lp.lp_id")
 	List<Object[]> findAllProducts();
+	
+	@Query(value = "select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_type, pl.propl_id, pl.propl_name, rtrim(replace(prop.property_type, char(9),'')) as property_type, pl.propl_periodicity, prop.property_norm, prop.property_min, prop.property_max, prop.property_unit, prop.property_view, prop.property_view_hcc  from product p  inner join property prop on p.product_id = prop.product_id inner join propertylist pl on prop.propl_id = pl.propl_id where p.product_id = :idP and pl.propl_id = :idProperty", nativeQuery = true)
+	List<Object[]> findProductByIdAndIdProperty(@Param("idP")Integer idP, @Param("idProperty")String idProperty);
+	
+	@Query(value = "select p.product_id, p.product_sap_code, p.product_name, p.product_description, p.product_type, pl.propl_id, pl.propl_name, rtrim(replace(prop.property_type, char(9),'')) as property_type, pl.propl_periodicity, prop.property_norm, prop.property_min, prop.property_max, prop.property_unit, prop.property_view, prop.property_view_hcc  from product p  inner join property prop on p.product_id = prop.product_id inner join propertylist pl on prop.propl_id = pl.propl_id where p.product_id = :idP ", nativeQuery = true)
+	List<Object[]> findProductPropertiesByIdProduct(@Param("idP")Integer idP);
+	
 }

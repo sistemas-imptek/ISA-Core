@@ -7,7 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Property;
+import com.isacore.quality.model.PropertyList;
 import com.isacore.quality.repository.IPropertyRepo;
 import com.isacore.quality.service.IPropertyService;
 
@@ -78,6 +80,12 @@ public class PropertyServiceImpl implements IPropertyService{
         
 		this.propertyRepo.updateProperty(p.getMinProperty(), p.getMaxProperty(), p.getUnitProperty(), p.getViewProperty(), dateUpdate, p.getTypeProperty(), p.getPropertyNorm(), user, p.getProduct().getIdProduct(), p.getPropertyList().getIdProperty());
 		return 0;
+	}
+	
+	@Override
+	public Property findByIdProductandIdProperty(Product p, PropertyList pl ) {
+		return this.propertyRepo.findPropertyByIdPropertyListandIdProduct(p.getIdProduct(), pl.getIdProperty());
+		 
 	}
 
 }

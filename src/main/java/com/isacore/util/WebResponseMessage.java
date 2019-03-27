@@ -28,4 +28,6 @@ public class WebResponseMessage {
 	
 	public static final String ERROR_GENERATE_HCC = "Error al generar la HCC, favor contacte al administrador para corregir el problema";
 	
+	public static final String PROUDUCT_PROPERTY_NOT_FOUND = "Propiedad no encontrada";
+	
 }

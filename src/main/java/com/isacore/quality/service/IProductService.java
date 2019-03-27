@@ -2,6 +2,7 @@ package com.isacore.quality.service;
 
 import java.util.List;
 
+import com.isacore.quality.dto.ProductDto;
 import com.isacore.quality.model.Product;
 import com.isacore.util.CRUD;
 
@@ -16,4 +17,8 @@ public interface IProductService extends CRUD<Product>{
 	List<Product> findAllProducts();
 	
 	void saveProductProperty(List<Product> listProduct, String user);
+	
+	ProductDto findProductByIdAndIdProperty(Integer idP, String idProperty);
+	
+	Product findProductPropertiesByIdProduct (Integer idP);
 }

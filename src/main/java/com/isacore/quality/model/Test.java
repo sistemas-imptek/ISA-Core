@@ -1,8 +1,11 @@
 package com.isacore.quality.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.isacore.localdate.converter.LocalDateConverter;
+import com.isacore.util.LocalDateDeserializeIsa;
+import com.isacore.util.LocalDateSerializeIsa;
+import com.isacore.util.LocalDateTimeDeserializeIsa;
+import com.isacore.util.LocalDateTimeSerializeIsa;
 
 @Entity(name = "test")
 @Table(name = "TEST")
@@ -24,8 +36,9 @@ public class Test {
 	private String idProperty;
 	
 	@Column(name = "TEST_DATE", nullable = true)
-	@Temporal(TemporalType.DATE)
-	private Date dateLog;
+	@JsonSerialize(using = LocalDateTimeSerializeIsa.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializeIsa.class)
+	private LocalDateTime dateLog;
 	
 	@Column(name = "TEST_TIME", nullable = true)
 	@Temporal(TemporalType.TIME)
@@ -127,14 +140,24 @@ public class Test {
 	@Column(name = "TEST_PROMISSING", nullable = true)
 	private Boolean prommissing;
 	
+	@Column(name = "TEST_IDPRODUCT", nullable = true)
+	private Integer idProduct;
+	
+	@Column(name = "TEST_PREMIXER", nullable = true)
+	private Integer premixer;
+	
+	@Column(name = "TEST_MIXER", nullable = true)
+	private Integer mixer;
+	
+	@Column(name = "TEST_AVERAGMP", nullable = true, columnDefinition = "decimal(16,6)")
+	private Double averageMP ;
+	
 	public Test() {
 		super();
 		this.idProperty = "0";
-		this.dateLog = new Date();
-		this.timeLog = new Date(9999,12,1,0,0,0);
+		this.dateLog = LocalDateTime.now();
 		this.sapCode = "0";
 		this.productName = "";
-		this.batchTest = "0";
 		this.min = 0.0;
 		this.max = 0.0;
 		this.temperature = 0.0;
@@ -164,6 +187,7 @@ public class Test {
 		this.p3 = 0.0;
 		this.comment = "";
 		this.prommissing = false;
+		this.idProduct=0;
 	}
 	
 	public Test(String idProperty, Double resultTest) {
@@ -184,15 +208,23 @@ public class Test {
 		return idProperty;
 	}
 
+	public Integer getIdProduct() {
+		return idProduct;
+	}
+
+	public void setIdProduct(Integer idProduct) {
+		this.idProduct = idProduct;
+	}
+
 	public void setIdProperty(String idProperty) {
 		this.idProperty = idProperty;
 	}
 
-	public Date getDateLog() {
+	public LocalDateTime getDateLog() {
 		return dateLog;
 	}
 
-	public void setDateLog(Date dateLog) {
+	public void setDateLog(LocalDateTime dateLog) {
 		this.dateLog = dateLog;
 	}
 
@@ -458,6 +490,32 @@ public class Test {
 
 	public void setPrommissing(Boolean prommissing) {
 		this.prommissing = prommissing;
+	}
+
+	public Integer getPremixer() {
+		return premixer;
+	}
+
+	public void setPremixer(Integer premixer) {
+		this.premixer = premixer;
+	}
+
+	public Integer getMixer() {
+		return mixer;
+	}
+
+	public void setMixer(Integer mixer) {
+		this.mixer = mixer;
+	}
+
+	public Double getAverageMP() {
+		return averageMP;
+	}
+
+	public void setAverageMP(Double averageMP) {
+		this.averageMP = averageMP;
 	}	
+	
+	
 	
 }

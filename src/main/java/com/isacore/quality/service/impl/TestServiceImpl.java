@@ -1,11 +1,15 @@
 package com.isacore.quality.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isacore.quality.model.Property;
+import com.isacore.quality.model.PropertyList;
 import com.isacore.quality.model.Test;
 import com.isacore.quality.repository.ITestRepo;
 import com.isacore.quality.service.ITestService;
@@ -49,6 +53,19 @@ public class TestServiceImpl implements ITestService{
 	@Override
 	public List<Test> findByBatch(String batch) {
 		return this.repo.findByBatch(batch);
+	}
+
+	@Override
+	public List<Test> findByProductIDBatchNull(Integer idP, String idProp) {
+		List<Test> t=this.repo.findByIdProduct(idP, idProp);
+		List<Test>tb= new ArrayList<>();
+		t.forEach((Test x) -> {
+			if(x.getBatchTest().length()==0) {
+				tb.add(x);
+			}
+			
+		});
+		return tb;
 	}
 
 }
