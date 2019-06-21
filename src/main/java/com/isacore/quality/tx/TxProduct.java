@@ -1,6 +1,7 @@
 package com.isacore.quality.tx;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.dto.ProductDto;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.service.IProductService;
+import com.isacore.quality.service.IProviderService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
@@ -46,6 +48,9 @@ public class TxProduct {
 	
 	@Autowired
 	private IProductService service;
+	
+	@Autowired
+	private IProviderService sProvider;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -72,7 +77,15 @@ public class TxProduct {
 		} else {
 			try {
 				// Serializamos la lista a JSON
-				String json = JSON_MAPPER.writeValueAsString(products);
+				List<Product> productsTmp=new ArrayList<>();
+				for (Product product : products) {
+					if(product.getTypeProduct().equalsIgnoreCase("MP")) {
+						product.setProviders(this.sProvider.findByProductIdVigente(product.getIdProduct()));
+					}
+					productsTmp.add(product);
+					
+				}
+				String json = JSON_MAPPER.writeValueAsString(productsTmp);
 				// encriptamos el JSON
 				String jsonCryp = Crypto.encrypt(json);
 
@@ -409,7 +422,9 @@ public class TxProduct {
 					} else {
 //						JSON_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 						JSONObject jobj= new JSONObject();
-						jobj.put("data", p);					
+						jobj.put("data", p);
+						if(pd.getTypeProduct().equalsIgnoreCase("MP"))
+							pd.setProviders(this.sProvider.findByProductIdVigente(pd.getIdProduct()));
 						String json = JSON_MAPPER.writeValueAsString(pd);
 						String jsonCryp = Crypto.encrypt(json);
 

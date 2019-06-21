@@ -6,6 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+/**
+ * @author Blade-Imptek
+ *
+ */
 @Entity(name = "qualityCertificate")
 @IdClass(QualityCertificatePK.class)
 @Table(name = "QUALITY_CERTIFICATE")
@@ -32,6 +36,9 @@ public class QualityCertificate {
 	
 	@Column(name = "QC_COUNT", nullable = false)
 	private Integer countCertificate;
+	
+	@Column(name = "QC_CLIENT_PRINT", length = 128)
+	private String clientPrint;
 
 	public String getEmail() {
 		return email;
@@ -64,5 +71,15 @@ public class QualityCertificate {
 	public void setCountCertificate(Integer countCertificate) {
 		this.countCertificate = countCertificate;
 	}
+
+	public String getClientPrint() {
+		return clientPrint;
+	}
+
+	public void setClientPrint(String clientPrint) {
+		this.clientPrint = clientPrint;
+	}
+	
+	
 	
 }

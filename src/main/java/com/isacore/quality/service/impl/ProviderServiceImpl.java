@@ -11,11 +11,10 @@ import com.isacore.quality.repository.IProviderRepo;
 import com.isacore.quality.service.IProviderService;
 
 @Service
-public class ProviderServiceImpl implements IProviderService{
-	
+public class ProviderServiceImpl implements IProviderService {
+
 	@Autowired
 	private IProviderRepo repo;
-	
 
 	@Override
 	public List<Provider> findAll() {
@@ -44,28 +43,48 @@ public class ProviderServiceImpl implements IProviderService{
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<Provider> findByProductId(Integer idP) {
-		
+
 		List<Object[]> list = this.repo.findByProductId(idP);
-		
+
 		if (list.isEmpty() || list == null)
 			return null;
 		else {
 			List<Provider> listProvider = new ArrayList<>();
-			
+
 			list.forEach((Object[] x) -> {
 				Provider prov = new Provider();
-				prov.setIdProvider((Integer)x[0]);
-				prov.setNameProvider((String)x[1]);
-				prov.setTypeProvider((String)x[2]);
+				prov.setIdProvider((Integer) x[0]);
+				prov.setNameProvider((String) x[1]);
+				prov.setTypeProvider((String) x[2]);
 				listProvider.add(prov);
 			});
 			return listProvider;
-		} 
+		}
+	}
+
+	@Override
+	public List<Provider> findByProductIdVigente(Integer idP) {
+		List<Object[]> list = this.repo.findByProductIdVigente(idP);
+
+		if (list.isEmpty() || list == null)
+			return null;
+		else {
+			List<Provider> listProvider = new ArrayList<>();
+
+			list.forEach((Object[] x) -> {
+				Provider prov = new Provider();
+				prov.setIdProvider((Integer) x[0]);
+				prov.setNameProvider((String) x[1]);
+				prov.setTypeProvider((String) x[2]);
+				listProvider.add(prov);
+			});
+			return listProvider;
+		}
 	}
 
 }

@@ -58,7 +58,7 @@ public class GenerateReportQualityCertificate extends AbstractReportGenerator{
 				"ci.cli_name,hh.hcch_of,qc_email,\r\n" + 
 				"p.product_name, hh.hcch_sapcode,hh.hcch_norm, hh.hcch_batch, \r\n" + 
 				"hd.hccd_prop_type, hd.hccd_norm_name, hd.hccd_prop_name, hd.hccd_prop_unit, hd.hccd_specifications, hd.hccd_test_result, hd.hccd_test_result_view, hd.hccd_pass_test,\r\n" + 
-				"qc.qc_count\r\n" + 
+				"qc.qc_count, qc.qc_client_print\r\n" + 
 				"from dbo.product p\r\n" + 
 				"inner join dbo.hcchead hh on hh.product_id = p.product_id\r\n" + 
 				"inner join dbo.hccdetail hd on hd.hcch_sapcode = hh.hcch_sapcode\r\n" + 

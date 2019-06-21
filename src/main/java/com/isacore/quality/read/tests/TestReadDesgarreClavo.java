@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +27,8 @@ public class TestReadDesgarreClavo {
 	public static final String RESISTENCIA_DESGARRO_CLAVO_LONGITUDINAL = "PROP_36";
 	public static final String RESISTENCIA_DESGARRO_CLAVO_TRANSVERSE = "PROP_37";
 
-	public static final String PATH_TESTS_TRACTION = "C:\\CRIMPTEK\\Calidad\\Tests\\EquipoUniversal\\DesgarreClavo";
+	public static final String PATH_TESTS_DESGARRO = "C:\\CRIMPTEK\\Calidad\\Tests\\EquipoUniversal\\DesgarreClavo";
+	public static final String PATH_TESTSREAD_DESGARRO = "C:\\CRIMPTEK\\Calidad\\Tests\\TestRead\\DesgarreClavo";
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -32,10 +37,10 @@ public class TestReadDesgarreClavo {
 	
 	public void run() {
 
-		File file = new File(PATH_TESTS_TRACTION);
+		File file = new File(PATH_TESTS_DESGARRO);
 
 		if (file.exists()) {
-			logger.info(">> Accediendo al directorio:::" + PATH_TESTS_TRACTION + ":::");
+			logger.info(">> Accediendo al directorio:::" + PATH_TESTS_DESGARRO + ":::");
 
 			String[] tests = file.list();
 
@@ -51,7 +56,7 @@ public class TestReadDesgarreClavo {
 			} else
 				logger.info(">> No existen tests");
 		} else
-			logger.error(">> El directorio:::" + PATH_TESTS_TRACTION + ":::no existe");
+			logger.error(">> El directorio:::" + PATH_TESTS_DESGARRO + ":::no existe");
 
 	}
 
@@ -60,7 +65,8 @@ public class TestReadDesgarreClavo {
 
 			logger.info(">> ISA::method::readTest:::" + fileName);
 
-			String pathTest = PATH_TESTS_TRACTION + "\\" + fileName;
+			String pathTest = PATH_TESTS_DESGARRO + "\\" + fileName;
+			String pathTestDestino = PATH_TESTSREAD_DESGARRO + "\\" + fileName;
 			// Estraemos el numero de lote
 			String[] dataName = fileName.split(" ");
 			String batch = dataName[0];
@@ -84,8 +90,10 @@ public class TestReadDesgarreClavo {
 			t2.setResultTest(Double.parseDouble((String)transverse[1]));
 			listTests.add(t2);
 			
-			File f = new File(pathTest);
-			f.delete();
+			Path origenPath = Paths.get(pathTest);
+            Path destinoPath = Paths.get(pathTestDestino);
+			
+			Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
 			
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");

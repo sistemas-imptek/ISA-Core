@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,8 @@ public class TestReadTraction {
 	public static final String RESISTENCIA_TRACCION_TRANSVERSE = "PROP_19";
 
 	public static final String PATH_TESTS_TRACTION = "C:\\CRIMPTEK\\Calidad\\Tests\\EquipoUniversal\\Traccion";
+	
+	public static final String PATH_TESTREAD_TRACTION = "C:\\CRIMPTEK\\Calidad\\Tests\\TestRead\\Traccion";
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -62,6 +68,7 @@ public class TestReadTraction {
 			logger.info(">> ISA::method::readTest:::"+fileName);
 			
 			String pathTest = PATH_TESTS_TRACTION + "\\" + fileName;
+			String pathTestDestino = PATH_TESTREAD_TRACTION + "\\" + fileName;
 			//Estraemos el numero de lote
 			String[] dataName = fileName.split(" ");
 			String batch = dataName[0];
@@ -97,8 +104,11 @@ public class TestReadTraction {
 			t4.setResultTest(Double.parseDouble((String)transverse[2]));
 			listTests.add(t4);
 			
-			File f = new File(pathTest);
-			f.delete();
+			Path origenPath = Paths.get(pathTest);
+            Path destinoPath = Paths.get(pathTestDestino);
+			
+			Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+			//f.delete();
 			
 		} catch (FileNotFoundException e) {
 			logger.error(">> ISA::method::readTest:::FileNotFoundException");

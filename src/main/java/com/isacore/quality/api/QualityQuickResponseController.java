@@ -3,6 +3,7 @@ package com.isacore.quality.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.stax2.typed.TypedXMLStreamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,13 @@ import com.isacore.quality.read.tests.GeneralReadTest;
 import com.isacore.quality.service.IFormulationService;
 import com.isacore.quality.service.impl.FormulationServiceImpl;
 import com.isacore.quality.service.impl.ProductServiceImpl;
+import com.isacore.quality.tx.TxComplaint;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
 import com.isacore.quality.tx.TxHcc;
+import com.isacore.quality.tx.TxMail;
 import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
+import com.isacore.quality.tx.TxProblem;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
 import com.isacore.quality.tx.TxReadFormulation;
@@ -95,6 +99,15 @@ public class QualityQuickResponseController {
 	
 	@Autowired
 	private TxTest txTest;
+	
+	@Autowired
+	private TxMail txMail;
+	
+	@Autowired
+	private TxComplaint txComplaint;
+	
+	@Autowired
+	private TxProblem txProblem;
 	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
@@ -160,15 +173,36 @@ public class QualityQuickResponseController {
 		
 		case TxTest.TX_CODE_SaveTest:
 			return this.txTest.TxQQRsaveTest(wri);
+			
+		case TxTest.TX_CODE_ReadTestPF:
+			return this.txTest.TxQQRReadTestPlaneFiles(wri);	
 		
 		case TxTest.TX_CODE_GetTestByBatchNull:
 			return this.txTest.TxQQRgetTestByBatchNull(wri);
+			
+		case TxTest.TX_CODE_GetTestByBatchAndIdProduct:
+			return this.txTest.TxQQRgetTestByBatchAndIdProduct(wri);
 			
 		case TxProduct.TX_CODE_GetProductByIdAndPropertyId:
 			return this.txProduct.TxQQRgetProductByIdAndPropertyId(wri);
 		
 		case TxProduct.TX_CODE_GetProductPropertiesById:
 			return this.txProduct.TxQQRgetProductPropertiesById(wri);
+			
+		case TxMail.TX_CODE_SendEmail:
+			return this.txMail.TxQQRsendEmailHCC(wri);
+			
+		case TxComplaint.TX_CODE_SaveComplaint:
+			return this.txComplaint.TxQQRSaveComplaint(wri);
+			
+		case TxComplaint.TX_CODE_GetAllComplaint:
+			return this.txComplaint.TxQQRgetAllComplaint(wri);
+			
+		case TxComplaint.TX_CODE_GenerateReportComplaint:
+			return this.txComplaint.TxQQRGenerateReportComplaint(wri);
+			
+		case TxProblem.TX_CODE_SaveProblem:
+			return this.txProblem.TxQQRsetProblem(wri);
 			
 		
 		default:

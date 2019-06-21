@@ -152,9 +152,18 @@ public class Test {
 	@Column(name = "TEST_AVERAGMP", nullable = true, columnDefinition = "decimal(16,6)")
 	private Double averageMP ;
 	
+	@Column(name = "TEST_IDPROVIDER", nullable = true)
+	private Integer idProvider;
+	
+	@Column(name = "TEST_RESULT_VIEW", nullable = true, length = 32)
+	private String test_result_view;
+	
+	
+	
 	public Test() {
 		super();
 		this.idProperty = "0";
+		this.batchTest="";
 		this.dateLog = LocalDateTime.now();
 		this.sapCode = "0";
 		this.productName = "";
@@ -514,7 +523,24 @@ public class Test {
 
 	public void setAverageMP(Double averageMP) {
 		this.averageMP = averageMP;
+	}
+
+	public Integer getIdProvider() {
+		return idProvider;
+	}
+
+	public void setIdProvider(Integer idProvider) {
+		this.idProvider = idProvider;
+	}
+
+	public String getTest_result_view() {
+		return test_result_view;
+	}
+
+	public void setTest_result_view(String test_result_view) {
+		this.test_result_view = test_result_view;
 	}	
+	
 	
 	
 	

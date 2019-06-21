@@ -30,4 +30,12 @@ public class WebResponseMessage {
 	
 	public static final String PROUDUCT_PROPERTY_NOT_FOUND = "Propiedad no encontrada";
 	
+	public static final String SEND_MESSAGE = "Mensaje enviado";
+	
+	public static final String SEND_MESSAGE_FAIL = "Error al momento de enviar el correo";	
+	
+	public static final String ERROR_GENERATE_REPORT = "Error al momento de generar el reporte";
+	
+	public static final String SUCCESS_GENERATE_REPORT = "Reporte generado satisfactoriamente";
+	
 }

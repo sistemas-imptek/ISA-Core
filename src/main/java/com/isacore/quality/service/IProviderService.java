@@ -9,4 +9,6 @@ public interface IProviderService extends CRUD<Provider>{
 
 	List<Provider> findByProductId(Integer idP);
 	
+	List<Provider> findByProductIdVigente(Integer idP);
+	
 }

@@ -55,12 +55,12 @@ public class QualityCertificateServiceImpl implements IQualityCertificateService
 
 	@Override
 	public void createCertificate(QualityCertificate qc) {
-		this.repo.createCertificate(qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient(), qc.getEmail(), qc.getCountCertificate());		
+		this.repo.createCertificate(qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient(), qc.getEmail(), qc.getCountCertificate(), qc.getClientPrint());		
 	}
 
 	@Override
-	public void updateCount(Integer countC, String idHcc, Integer idC) {
-		this.repo.updateCount(countC, idHcc, idC);
+	public void updateCount(Integer countC, String idHcc, Integer idC, String clientPrint) {
+		this.repo.updateCount(countC, idHcc, idC, clientPrint);
 	}
 
 }

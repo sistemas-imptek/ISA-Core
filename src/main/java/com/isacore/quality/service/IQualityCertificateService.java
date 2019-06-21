@@ -9,6 +9,6 @@ public interface IQualityCertificateService extends CRUD<QualityCertificate>{
 
 	void createCertificate(QualityCertificate qc);
 	
-	void updateCount(Integer countC, String idHcc, Integer idC);
+	void updateCount(Integer countC, String idHcc, Integer idC, String clientPrint);
 	
 }

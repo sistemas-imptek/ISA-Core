@@ -15,4 +15,6 @@ public interface IProviderRepo extends JpaRepository<Provider, Integer>{
 	@Query(value = "select p.prov_id, p.prov_name, p.prov_type from prod_prov pp inner join provider p on pp.prov_id = p.prov_id where pp.product_id = :idP", nativeQuery = true)
 	List<Object[]> findByProductId(@Param("idP")Integer idP);
 	
+	@Query(value = "select p.prov_id, p.prov_name, p.prov_type from prod_prov pp inner join provider p on pp.prov_id = p.prov_id where pp.pp_status='vigente' and pp.product_id = :idP", nativeQuery = true)
+	List<Object[]> findByProductIdVigente(@Param("idP")Integer idP);
 }

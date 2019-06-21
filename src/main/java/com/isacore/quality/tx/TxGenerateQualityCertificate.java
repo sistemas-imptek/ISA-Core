@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isacore.quality.dto.EmailDto;
 import com.isacore.quality.model.ClientImptek;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.QualityCertificate;
@@ -70,13 +71,15 @@ public class TxGenerateQualityCertificate {
 					logger.info("> mapeando json a la clase: " + QualityCertificate.class);
 					QualityCertificate qc = JSON_MAPPER.readValue(jsonValue, QualityCertificate.class);
 					logger.info("> objeto a guardar: " + qc.toString());
-
+					if(qc.getClientImptek().getIdClient() == null) {
+						this.clientService.create(qc.getClientImptek());
+					}
 					int count = this.service.findCertificateByPK(qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient());
 					qc.setCountCertificate(count);
 					if(count == 1)
 						this.service.createCertificate(qc);
 					else
-						this.service.updateCount(count, qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient());
+						this.service.updateCount(count, qc.getHccHead().getSapCode(), qc.getClientImptek().getIdClient(), qc.getClientPrint());
 					
 					String json = JSON_MAPPER.writeValueAsString(qc);
 					String jsonCryp = Crypto.encrypt(json);
@@ -88,10 +91,15 @@ public class TxGenerateQualityCertificate {
 						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}else {
 						
-						String statusReport = GenerateReportQuality.runReportPentahoQualityCertificate(qc.getHccHead().getSapCode(),qc.getClientImptek().getIdClient());
+						String pathFile = GenerateReportQuality.runReportPentahoQualityCertificate(qc.getHccHead().getSapCode(),qc.getClientImptek().getIdClient());
 						
-						if(statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
+						if(!pathFile.equals(GenerateReportQuality.REPORT_ERROR)) {
 							logger.info(">> Reporte generado correctamente");
+							EmailDto emd= new EmailDto();
+							emd.setFilePath(pathFile);
+							String jsonR = JSON_MAPPER.writeValueAsString(emd);
+							String jsonCrypR = Crypto.encrypt(jsonR); 
+							wrei.setParameters(jsonCrypR);
 							wrei.setMessage("Certificado de calidad::" + qc.getHccHead().getSapCode() + "::: creado satisfactoriamente");
 							wrei.setStatus(WebResponseMessage.STATUS_OK);
 							return new ResponseEntity<Object>(wrei, HttpStatus.OK);

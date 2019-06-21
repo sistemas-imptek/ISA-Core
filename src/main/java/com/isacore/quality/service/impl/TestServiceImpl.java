@@ -15,11 +15,11 @@ import com.isacore.quality.repository.ITestRepo;
 import com.isacore.quality.service.ITestService;
 
 @Service
-public class TestServiceImpl implements ITestService{
+public class TestServiceImpl implements ITestService {
 
 	@Autowired
 	private ITestRepo repo;
-	
+
 	@Override
 	public List<Test> findAll() {
 		return this.repo.findAll();
@@ -33,10 +33,10 @@ public class TestServiceImpl implements ITestService{
 	@Override
 	public Test findById(Test obj) {
 		Optional<Test> test = this.repo.findById(obj.getIdTest());
-		if(test.isPresent())
+		if (test.isPresent())
 			return test.get();
-		else		
-			return null; 
+		else
+			return null;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class TestServiceImpl implements ITestService{
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -57,15 +57,30 @@ public class TestServiceImpl implements ITestService{
 
 	@Override
 	public List<Test> findByProductIDBatchNull(Integer idP, String idProp) {
-		List<Test> t=this.repo.findByIdProduct(idP, idProp);
-		List<Test>tb= new ArrayList<>();
+		List<Test> t = this.repo.findByIdProduct(idP, idProp);
+		List<Test> tb = new ArrayList<>();
 		t.forEach((Test x) -> {
-			if(x.getBatchTest().length()==0) {
+			if (x.getBatchTest().length() == 0) {
 				tb.add(x);
 			}
-			
+
 		});
 		return tb;
+	}
+
+	@Override
+	public List<Test> findByBatchAndPromissingNull(String batch) {
+		return this.repo.findByBatchAndPromissing(batch);
+	}
+
+	@Override
+	public List<Test> findByBatchMP(String batch) {
+		return this.repo.findByBatchMP(batch);
+	}
+
+	@Override
+	public List<Test> findByBatchAndIdProduct(String batch, Integer idP) {
+		return this.repo.findByBatchAndIdProduct(batch, idP);
 	}
 
 }

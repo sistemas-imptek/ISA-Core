@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.isacore.quality.dto.EmailDto;
 import com.isacore.quality.model.HccDetail;
 import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Product;
@@ -285,11 +286,16 @@ public class TxHcc {
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 							}
 						} else {
-							String statusReport = GenerateReportQuality.runReportPentahoHccMP(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode());
-							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
+							String pathFile = GenerateReportQuality.runReportPentahoHccMP(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode());
+							EmailDto emd= new EmailDto();
+							emd.setFilePath(pathFile);
+							if (!emd.getFilePath().isEmpty()) {
 								logger.info(">> Reporte generado correctamente");
 								wrei.setMessage("El reporte de la HCC " + hh.getSapCode()
 										+ "ha sido creado satisfactoriamente");
+								String json = JSON_MAPPER.writeValueAsString(emd);
+								String jsonCryp = Crypto.encrypt(json); 
+								wrei.setParameters(jsonCryp);
 								wrei.setStatus(WebResponseMessage.STATUS_OK);
 								return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 							} else {
