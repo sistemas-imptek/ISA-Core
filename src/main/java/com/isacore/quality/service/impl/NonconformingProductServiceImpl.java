@@ -1,5 +1,6 @@
 package com.isacore.quality.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,12 @@ public class NonconformingProductServiceImpl implements INonconformingProductSer
 
 	@Override
 	public NonconformingProduct create(NonconformingProduct ncp) {
+		ncp.setRepCode("PNC-03");
+		ncp.setRepReference("MP-PNC.01");
+		ncp.setRepRegister("PNC.03");
+		ncp.setRepReview("REV.01");
+		ncp.setRepSubtitle("Tratamiento del Producto No Conforme");
+		ncp.setRepTitle("FORMATO DE REGISTRO");
 		return this.repo.save(ncp);
 	}
 
@@ -44,6 +51,14 @@ public class NonconformingProductServiceImpl implements INonconformingProductSer
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public NonconformingProduct consumeMaterialNC(NonconformingProduct ncp, Double quantity) {
+		NonconformingProduct ncpFound= this.findById(ncp);
+		Double stock= ncpFound.getExistingMaterial() - quantity;
+		ncpFound.setExistingMaterial(stock);
+		return this.repo.save(ncpFound);		
 	}
 
 }

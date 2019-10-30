@@ -18,8 +18,7 @@ public class ProviderServiceImpl implements IProviderService {
 
 	@Override
 	public List<Provider> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.repo.findAll();
 	}
 
 	@Override

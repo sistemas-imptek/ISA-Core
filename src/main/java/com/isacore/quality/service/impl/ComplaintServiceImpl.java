@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.isacore.quality.model.Complaint;
+import com.isacore.quality.model.Problem;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Provider;
 import com.isacore.quality.repository.IComplaintRepo;
 import com.isacore.quality.repository.IProductRepo;
 import com.isacore.quality.service.IComplaintService;
 import com.isacore.quality.service.IProviderService;
+import com.isacore.util.PassFileToRepository;
 
 import net.bytebuddy.asm.Advice.This;
 
@@ -42,6 +44,16 @@ public class ComplaintServiceImpl implements IComplaintService {
 				for (Provider provider : aux.getProviders()) {
 					if (complaint.getIdProvider() == provider.getIdProvider())
 						complaint.setProvider(provider);
+				}
+				
+				for(Problem pr: complaint.getListProblems()){
+					if(pr.getNameFileP()!=null) {
+						String fb64=PassFileToRepository.fileToBase64(pr.getPictureStringB64(), pr.getExtensionFileP());
+						if(fb64!=null ) {
+							pr.setPictureStringB64(fb64);
+						}
+					}
+					
 				}
 			}
 

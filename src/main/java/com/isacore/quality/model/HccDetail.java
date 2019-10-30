@@ -180,8 +180,12 @@ public class HccDetail {
 	public void setResultText(String resultText) {
 		this.resultText = resultText;
 	}
-
+/*
 	public Boolean isPassTest() {
+		return passTest; 
+	}*/
+	
+	public Boolean getPassTest() {
 		return passTest;
 	}
 

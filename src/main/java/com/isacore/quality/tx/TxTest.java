@@ -1,6 +1,7 @@
 package com.isacore.quality.tx;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.dto.ProductDto;
+import com.isacore.quality.dto.ReportTest;
 import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Test;
 import com.isacore.quality.read.tests.GeneralReadTest;
@@ -44,12 +46,15 @@ public class TxTest {
 
 	public static final String TX_NAME_ReadTestPFReblandecimiento = "ReadTestPFPReblandecimiento";
 	public static final String TX_CODE_ReadTestPFReblandecimiento = "TxQQRReadTestPFPReblandecimiento";
-	
+
 	public static final String TX_NAME_GetTestByBatchDEV = "GetTestByBatchDEV";
 	public static final String TX_CODE_GetTestByBatchDEV = "TxQQRgetTestByBatchDEV";
-	
+
 	public static final String TX_NAME_GetTestByBatchAndIdProduct = "GetTestByBatchAndIdProduct";
 	public static final String TX_CODE_GetTestByBatchAndIdProduct = "TxQQRgetTestByBatchAndIdProduct";
+
+	public static final String TX_NAME_GenerateDataReport = "GenerateDataReport";
+	public static final String TX_CODE_GenerateDataReport = "TxQQRgenerateDataReport";
 
 	public static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -288,10 +293,10 @@ public class TxTest {
 			}
 		}
 	}
-	
+
 	/**
-	 * TX NAME: GetTestByBatchAndIdProduct recupera los tests en base al codigo de producto
-	 * MP y lote
+	 * TX NAME: GetTestByBatchAndIdProduct recupera los tests en base al codigo de
+	 * producto MP y lote
 	 * 
 	 * @param wri
 	 * @return
@@ -322,7 +327,7 @@ public class TxTest {
 					// Test.class)) ;
 					Test tsNew = JSON_MAPPER.readValue(jsonValue, Test.class);
 					List<Test> tests = new ArrayList<>();
-					tests = this.serviceTest.findByBatchAndIdProduct(tsNew.getBatchTest(),tsNew.getIdProduct());
+					tests = this.serviceTest.findByBatchAndIdProduct(tsNew.getBatchTest(), tsNew.getIdProduct());
 					if (tests.size() != 0) {
 						logger.info(">> Tests obtenidos correctamente");
 						String json = JSON_MAPPER.writeValueAsString(tests);
@@ -354,16 +359,16 @@ public class TxTest {
 			}
 		}
 	}
-	
+
 	/**
-	 * TX NAME: TxQQRgetTestByBatchDEV recupera los Test de Productos de Desarrollo  q aun no tiene lote
+	 * TX NAME: TxQQRgetTestByBatchDEV recupera los Test de Productos de Desarrollo
+	 * q aun no tiene lote
 	 * 
 	 * 
 	 * @param wri
 	 * @return
 	 */
-	
-	
+
 	public ResponseEntity<Object> TxQQRgetTestByBatchDEV(WebRequestIsa wri) {
 		logger.info("> TX: TxQQRgetTestByBatchDEV");
 
@@ -423,4 +428,86 @@ public class TxTest {
 		}
 	}
 
+	/**
+	 * TX NAME: GetTestByBatchNull recupera los tests en base al codigo de producto
+	 * MP y que no tenga Lote
+	 * 
+	 * @param wri
+	 * @return
+	 */
+	public ResponseEntity<Object> TxQQRgenerateDataReport(WebRequestIsa wri) {
+		logger.info("> TX: TxQQRgenerateDataReport");
+
+		WebResponseIsa wrei = new WebResponseIsa();
+		wrei.setTransactionName(TX_NAME_GenerateDataReport);
+		wrei.setTransactionCode(TX_CODE_GenerateDataReport);
+
+		if (wri.getParameters().isEmpty() || wri.getParameters() == null) {
+			logger.info("> Objeto vacío");
+			wrei.setMessage(WebResponseMessage.WITHOUT_PARAMS);
+			wrei.setStatus(WebResponseMessage.STATUS_INFO);
+			return new ResponseEntity<Object>(wrei, HttpStatus.NOT_ACCEPTABLE);
+		} else {
+			String jsonValue = Crypto.decrypt(wri.getParameters());
+			if (jsonValue.equals(Crypto.ERROR)) {
+				logger.error("> error al desencryptar");
+				wrei.setMessage(WebResponseMessage.ERROR_DECRYPT);
+				wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+				return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				try {
+					logger.info("> mapeando json a la clase: " + ReportTest.class);
+					// List<Test> recibedTest = Array.isList(JSON_MAPPER.readValue(jsonValue,
+					// Test.class)) ;
+					ReportTest tsNew = JSON_MAPPER.readValue(jsonValue, ReportTest.class);
+					List<ReportTest> tests = new ArrayList<>();
+
+					List<Object[]> result = this.serviceTest.generateDataReport(tsNew.getDateIni(), tsNew.getDateFin());
+					for (Object[] o : result) {
+						ReportTest rt = new ReportTest();
+
+						rt.setDateOrder((String) o[0].toString());
+						rt.setNameProduct((String) o[1]);
+						rt.setTypeProduct((String) o[2]);
+						rt.setBatch((String) o[3]);
+						rt.setOf((String) o[4]);
+						BigDecimal s = (BigDecimal) o[5];
+						if (s != null)
+							rt.setResult(s.doubleValue());
+						rt.setResultView((String) o[6]);
+						rt.setNameProperty((String) o[7]);
+						tests.add(rt);
+					}
+
+					if (tests.size() != 0) {
+						logger.info(">> Tests obtenidos correctamente");
+						String json = JSON_MAPPER.writeValueAsString(tests);
+						String jsonCryp = Crypto.encrypt(json);
+						if (jsonCryp.equals(Crypto.ERROR)) {
+							logger.error("> error al encryptar");
+							wrei.setMessage(WebResponseMessage.ERROR_ENCRYPT);
+							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+						} else {
+							wrei.setParameters(jsonCryp);
+							wrei.setMessage(WebResponseMessage.SEARCHING_OK);
+							wrei.setStatus(WebResponseMessage.STATUS_OK);
+							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
+						}
+					} else {
+						logger.error(">> No existen registros");
+						wrei.setMessage("No existen registros");
+						wrei.setStatus(WebResponseMessage.STATUS_INFO);
+						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					logger.error("> No se ha podido serializar el JSON a la clase: " + Test.class);
+					wrei.setMessage(WebResponseMessage.ERROR_TO_CLASS);
+					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
+					return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
+				}
+			}
+		}
+	}
 }

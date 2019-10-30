@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.dto.EmailDto;
 import com.isacore.quality.model.Complaint;
 import com.isacore.quality.model.HccHead;
+import com.isacore.quality.model.Problem;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.Test;
 import com.isacore.quality.report.GenerateReportQuality;
@@ -25,6 +26,7 @@ import com.isacore.quality.service.IProblemService;
 import com.isacore.sgc.acta.model.UserImptek;
 import com.isacore.sgc.acta.service.IUserImptekService;
 import com.isacore.util.Crypto;
+import com.isacore.util.PassFileToRepository;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
 import com.isacore.util.WebResponseMessage;
@@ -88,8 +90,23 @@ public class TxComplaint {
 					complaint.setWorkArea(ui.getEmployee().getArea().getNameArea());
 					logger.info("> objeto a guardar: " + complaint.toString());
 					complaint.setDateCreateComplaint(LocalDateTime.now());
-
+					for(Problem p: complaint.getListProblems()) {
+						
+						if(p.getPictureStringB64().contains("base64")) {
+							String uri=PassFileToRepository.base64ToFile(p.getPictureStringB64(), p.getNameFileP(), p.getExtensionFileP());
+							if(uri!= "") {
+								p.setPictureStringB64(uri);
+							}else {
+								p.setExtensionFileP(null);
+								p.setNameFileP(null);
+								p.setPictureStringB64(null);
+							}
+						}
+						
+					}
+					
 					Complaint cc = this.complaintService.create(complaint);
+					
 					if (cc != null) {
 						logger.info(">> Reclamo de MP guardado correctamente");
 						Complaint ccTmp= this.complaintService.findById(cc);
@@ -109,6 +126,7 @@ public class TxComplaint {
 					}
 				} catch (IOException e) {
 					logger.error("> No se ha podido serializar el JSON a la clase: " + Complaint.class);
+					e.printStackTrace();
 					wrei.setMessage(WebResponseMessage.ERROR_TO_CLASS);
 					wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 					return new ResponseEntity<Object>(wrei, HttpStatus.BAD_REQUEST);
@@ -201,7 +219,7 @@ public class TxComplaint {
 					Complaint cc = this.complaintService.findById(complaint);
 					if (cc != null) {
 						logger.info(">> Reclamo de MP obtenido correctamente");
-						this.problemService.dataTratamientImagesReport(cc.getListProblems());
+						//this.problemService.dataTratamientImagesReport(cc.getListProblems());
 						String fileReport= GenerateReportQuality.runGenerateReportComplaint(cc) ;
 						
 						if(!fileReport.equals(GenerateReportQuality.REPORT_ERROR)) {

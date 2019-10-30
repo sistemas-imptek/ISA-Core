@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.dto.EmailDto;
+import com.isacore.quality.dto.ReportDto;
 import com.isacore.quality.model.HccDetail;
 import com.isacore.quality.model.HccHead;
 import com.isacore.quality.model.Product;
@@ -34,6 +35,8 @@ import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
 import com.isacore.util.WebResponseMessage;
+
+import javassist.expr.NewArray;
 
 @Component
 public class TxHcc {
@@ -70,7 +73,7 @@ public class TxHcc {
 
 	@Autowired
 	private IFeatureService serviceFeature;
-
+	
 	@Autowired
 	IProviderService serviceProvider;
 	
@@ -269,10 +272,15 @@ public class TxHcc {
 						logger.info(">> Hcc guardada correctamente");
 						wrei.setMessage(WebResponseMessage.CREATE_UPDATE_OK);
 						wrei.setStatus(WebResponseMessage.STATUS_OK);
-
+						
+						ReportDto rpt= new ReportDto();
+						rpt.setHccHead(hh);
+						ReportHeadT rHTemp= new ReportHeadT();
+						rHTemp.setType(hcc.getReportHeadT());							
+						rpt.setRh(this.serviceRH.findHeadByTypeReport(rHTemp));
+						
 						if (hcc.getProduct().getTypeProduct().equals("PT")) {
-							// String statusReport = GenerateReportQuality.runReport(hh.getSapCode());
-							String statusReport = GenerateReportQuality.runReportPentahoHccPT(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode(), hh.getPeriodicity());
+							String statusReport = GenerateReportQuality.runReportJasperHcc(rpt);
 							if (statusReport.equals(GenerateReportQuality.REPORT_SUCCESS)) {
 								logger.info(">> Reporte generado correctamente");
 								wrei.setMessage("El reporte de la HCC " + hh.getSapCode()
@@ -286,7 +294,7 @@ public class TxHcc {
 								return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 							}
 						} else {
-							String pathFile = GenerateReportQuality.runReportPentahoHccMP(hh.getProduct().getFileName(), hh.getHcchBatch(), hh.getSapCode());
+							String pathFile = GenerateReportQuality.runReportJasperHcc(rpt);
 							EmailDto emd= new EmailDto();
 							emd.setFilePath(pathFile);
 							if (!emd.getFilePath().isEmpty()) {
@@ -491,7 +499,15 @@ public class TxHcc {
 	private void mergeHccTests(HccHead hh, String batch) {
 		logger.info(">>>>> mthod: mergeHccTests::::");
 		List<Test> tests = this.serviceTest.findByBatch(batch);
-
+		List<Test>testsTMP = this.serviceTest.findByBatchAll(batch);
+		List<Test>testsFail=new ArrayList<>();
+		for(Test tm:testsTMP ) {
+			if(tm.getPrommissing()==false){
+				testsFail.add(tm);
+			}
+		}
+		
+		
 		hh.getDetail().forEach(x -> x.setPassTest(false));
 
 		if (tests == null || tests.isEmpty()) {
@@ -505,6 +521,33 @@ public class TxHcc {
 						break;
 					}
 				}
+			}
+			if(hh.getProduct().getTypeProduct().equalsIgnoreCase("MP")){
+				hh.setIdProviderMP(testsTMP.get(0).getIdProvider());
+				hh.setDateOrder(testsTMP.get(0).getDateLog().toLocalDate());
+			}
+		}
+		
+		if(testsFail == null || testsFail.isEmpty()) {
+			logger.info(">>>>> mthod: mergeHccTests Fail::::");
+		}else {
+			for (Test tf : testsFail) {
+				for (HccDetail hd : hh.getDetail()) {
+					if(hd.getResult()==null ) {
+						if (tf.getIdProperty().equals(hd.getIdProperty())) {
+							hd.setResult(tf.getResultTest());
+							hd.evaluateResult();
+							break;
+						}
+					}
+				}
+			}
+			if(hh.getProduct().getTypeProduct().equalsIgnoreCase("MP")){
+				if(hh.getIdProviderMP()==null) {
+					hh.setIdProviderMP(testsFail.get(0).getIdProvider());
+					hh.setDateOrder(testsFail.get(0).getDateLog().toLocalDate());
+				}
+				
 			}
 		}
 	}

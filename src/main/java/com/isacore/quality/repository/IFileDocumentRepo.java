@@ -3,9 +3,9 @@ package com.isacore.quality.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.isacore.quality.model.DefectNpc;
+import com.isacore.quality.model.FileDocument;
 
 @Repository
-public interface IDefectsRepo extends JpaRepository<DefectNpc, Integer>{
+public interface IFileDocumentRepo extends JpaRepository<FileDocument, Integer> {
 
 }

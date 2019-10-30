@@ -89,6 +89,9 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
 	private List<Property> properties;
 	
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
+	private List<NormProduct> norms;
+	
 	@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "FAM_ID", nullable = true)
 	private Family family;
@@ -319,6 +322,16 @@ public class Product {
 		this.providers = providers;
 	}
 	
+	
+
+	public List<NormProduct> getNorms() {
+		return norms;
+	}
+
+	public void setNorm(List<NormProduct> norms) {
+		this.norms = norms;
+	}
+
 	@JsonIgnore
 	public String getFileName() {
 		return this.nameProduct.replaceAll("[/:*?'<>]|\"", "-");

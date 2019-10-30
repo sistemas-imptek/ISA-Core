@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -103,45 +104,48 @@ public class TestReblandecimiento {
 				String[] bolaIzquierda = data.get(28);
 				// String[] lefttBall = bolaIzquierda[0].split(" ");
 				Double leftBallValue = getValueDataRead(bolaIzquierda[0]);
-
-				String[] media = data.get(30);
-				String[] averagMP = media[0].split(" ");
-				String cadenaTransform = averagMP[1].replaceAll("", ";");
-				String[] cadenaConversion = cadenaTransform.split(";");
-				String value = "";
-				for (int i = 0; i < cadenaConversion.length; i++) {
-					if (i % 2 == 0)
-						value = value + cadenaConversion[i];
-				}
-				Double averagMPValue = Double.parseDouble(value);
-
-				Test t1 = new Test();
-				if (!batch.equalsIgnoreCase("MP"))
+				
+				if(rightBallValue !=null & leftBallValue != null) {
+					
+					/*String[] media = data.get(30);
+					String[] averagMP = media[0].split(" ");
+					String cadenaTransform = averagMP[1].replaceAll("", ";");
+					String[] cadenaConversion = cadenaTransform.split(";");
+					String value = "";
+					for (int i = 0; i < cadenaConversion.length; i++) {
+						if (i % 2 == 0)
+							value = value + cadenaConversion[i];
+					}*/					
+					Double averagMPValue =  Math.round(((rightBallValue + leftBallValue)/2) * 10d) / 10d;
+					
+					Test t1 = new Test();
 					t1.setBatchTest(batch);
 
-				t1.setIdProperty(PUNTO_REBLANDECIMIENTO);
-				t1.setDateLog(dateTime);
-				if (PoM.equalsIgnoreCase("P")) {
+					t1.setIdProperty(PUNTO_REBLANDECIMIENTO);
+					t1.setDateLog(dateTime);
+					if (PoM.equalsIgnoreCase("P")) {
 
-					t1.setPremixer(tank);
-					t1.setM1Ini(rightBallValue);
-					t1.setM2Ini(leftBallValue);
-					t1.setAverageMP(averagMPValue);
+						t1.setPremixer(tank);
+						t1.setM1Ini(rightBallValue);
+						t1.setM2Ini(leftBallValue);
+						t1.setAverageMP(averagMPValue);
 
-				} else if (PoM.equalsIgnoreCase("M")) {
+					} else if (PoM.equalsIgnoreCase("M")) {
 
-					t1.setMixer(tank);
-					t1.setM1End(rightBallValue);
-					t1.setM2End(leftBallValue);
-					t1.setResultTest(averagMPValue);
+						t1.setMixer(tank);
+						t1.setM1End(rightBallValue);
+						t1.setM2End(leftBallValue);
+						t1.setResultTest(averagMPValue);
+					}
+
+					listTests.add(t1);
+
+					Path origenPath = Paths.get(pathTest);
+					Path destinoPath = Paths.get(pathTestDestino);
+
+					Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
 				}
-
-				listTests.add(t1);
-
-				Path origenPath = Paths.get(pathTest);
-				Path destinoPath = Paths.get(pathTestDestino);
-
-				Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
+				
 			}
 			
 
@@ -162,7 +166,10 @@ public class TestReblandecimiento {
 			if (i % 2 == 0)
 				value = value + cadenaConversion[i];
 		}
-		return Double.parseDouble(value);
+		if(value.equalsIgnoreCase("---"))
+			return null;
+		else 
+			return Double.parseDouble(value);
 	}
 	
 	private LocalDateTime getDateTimeTestPF(String date, String hour) {
@@ -185,6 +192,11 @@ public class TestReblandecimiento {
 				valueHour = valueHour + hourConversion[i];
 		}
 		
+		String [] vl= valueHour.split(":");
+		if(vl[0].length()==1) {
+			vl[0]=vl[0]+"0";
+			valueHour="0"+valueHour;
+		}
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); 
 		LocalDateTime dateTime = LocalDateTime.parse(valueConvert+" "+valueHour, formatter);

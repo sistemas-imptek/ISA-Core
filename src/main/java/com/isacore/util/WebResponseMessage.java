@@ -38,4 +38,12 @@ public class WebResponseMessage {
 	
 	public static final String SUCCESS_GENERATE_REPORT = "Reporte generado satisfactoriamente";
 	
+	public static final String SUCCESS_SMP_DISPONIBLE = "Exito, materia prima disponible notificada";
+	
+	public static final String SUCCESS_SMP_ORDER = "Exito, materia prima solicitada";
+	
+	public static final String CREATE_SOLICITUD_UPDATE_OK = "Solicitud creada/actualizada satisfactoriamente";
+	
+	public static final String RESPOND_SOLICITUD_UPDATE_OK = "Solicitud atendida satisfactoriamente";
+	
 }

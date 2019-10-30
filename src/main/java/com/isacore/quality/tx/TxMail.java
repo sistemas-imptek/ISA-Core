@@ -65,19 +65,12 @@ public class TxMail {
 					logger.info("> mapeando json a la clase: "+ EmailDto.class);
 					EmailDto em = JSON_MAPPER.readValue(jsonValue, EmailDto.class);
 					if (em != null) {
-						boolean resp=this.email.sendEmail(em.getContacts(), em.getFilePath(), em.getSubject(), em.getMessage());
+						this.email.sendEmail(em.getContacts(), em.getFilePath(), em.getSubject(), em.getMessage());
 						
-						if (!resp) {
-							logger.error("> error al encryptar");
-							wrei.setMessage(WebResponseMessage.SEND_MESSAGE_FAIL);
-							wrei.setStatus(WebResponseMessage.STATUS_ERROR);
-							return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
-						} else {
-							wrei.setMessage(WebResponseMessage.SEND_MESSAGE);
-							wrei.setStatus(WebResponseMessage.STATUS_OK);
-							//wrei.setParameters(jsonCryp);
-							return new ResponseEntity<Object>(wrei, HttpStatus.OK);
-						}
+						wrei.setMessage(WebResponseMessage.SEND_MESSAGE);
+						wrei.setStatus(WebResponseMessage.STATUS_OK);
+						//wrei.setParameters(jsonCryp);
+						return new ResponseEntity<Object>(wrei, HttpStatus.OK);
 
 					} else {
 						logger.error("> Error al  enviar el correo: " + EmailDto.class);

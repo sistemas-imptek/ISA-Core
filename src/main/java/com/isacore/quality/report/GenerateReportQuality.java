@@ -14,7 +14,10 @@ import java.util.Map;
 
 import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 
+import com.isacore.quality.dto.ReportDto;
+import com.isacore.quality.dto.ReportProcessTestRequestDto;
 import com.isacore.quality.model.Complaint;
+import com.isacore.quality.model.ProcessTestRequest;
 import com.isacore.util.AbstractReportGenerator;
 import com.isacore.util.ReportConnection;
 import com.isacore.util.ReportUtil;
@@ -46,6 +49,41 @@ public class GenerateReportQuality {
 			return REPORT_SUCCESS;
 
 		} catch (JRException e) {
+			return REPORT_ERROR;
+		}
+	}
+	
+	// Método para generar el reporte de Calidad
+	public static String runReportJasperHcc(ReportDto rep) {
+		Map parameters = new HashMap();
+		JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(Arrays.asList(rep));
+		String nameProduct = (rep.getHccHead().getProduct().getNameProduct()).replaceAll("/"," ");
+		try {
+			switch(rep.getHccHead().getProduct().getTypeProduct()) {
+			case "PT":
+				String period=rep.getHccHead().getPeriodicity();
+				period=period.equalsIgnoreCase("Diaria") ? "" : period;
+				final File outputFilename = new File("C:/CRIMPTEK/Calidad/HCC/PT/HCC " + nameProduct + " " + rep.getHccHead().getHcchBatch() + " " + period + ".pdf") ;
+				
+				String pathReporte = "HccPT.jasper";			
+				String ruta = "C:\\CRIMPTEK\\Calidad\\ReportPrpt\\" + pathReporte;
+				JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parameters, beanColDataSource);
+				JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilename.getAbsolutePath());
+		        return REPORT_SUCCESS;
+			
+			case "MP":
+				final File outputFilenameMP = new File("C:/CRIMPTEK/Calidad/HCC/MP/HCC" + nameProduct + " " + rep.getHccHead().getHcchBatch() + ".pdf");
+				String pathReporteMP = "HccMP.jasper";			
+				String rutaMP = "C:\\CRIMPTEK\\Calidad\\ReportPrpt\\" + pathReporteMP;
+				JasperPrint jasperPrintMP = JasperFillManager.fillReport(rutaMP, parameters, beanColDataSource);
+				JasperExportManager.exportReportToPdfFile(jasperPrintMP, outputFilenameMP.getAbsolutePath());
+				return outputFilenameMP.getAbsolutePath();	
+			default:
+				return REPORT_ERROR;
+			}
+			
+		} catch (JRException e) {
+			e.printStackTrace();
 			return REPORT_ERROR;
 		}
 	}
@@ -107,6 +145,25 @@ public class GenerateReportQuality {
 		}
 	}
 	
+	//Generación de certificado de calidad Usando JasperReport
+	public static String runReportJasperQualityCertificate(ReportDto qc) {
+		Map parameters = new HashMap();
+		try {
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/QualityCertificate/QualityCertificate_" + qc.getHccHead().getSapCode() + ".pdf");
+			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(Arrays.asList(qc));
+			String pathReporte = "QualityCertificate.jasper";			
+			String ruta = "C:\\CRIMPTEK\\Calidad\\ReportPrpt\\" + pathReporte;
+			JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parameters, beanColDataSource);
+			JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilename.getAbsolutePath());
+			return outputFilename.getAbsolutePath();
+			
+		} catch (JRException e) {
+			e.printStackTrace();
+			return REPORT_ERROR;
+		}
+	}
+	
+	
 	//Generacion de Reporte Reclamos de Materia Prima.
 	public static String runGenerateReportComplaint(Complaint a){
 		Map parameters = new HashMap();
@@ -129,5 +186,32 @@ public class GenerateReportQuality {
 		}
         
     }
+	
+	/*Generación de Reporte de Pruebas en Proceso 
+	 * 	DDP-04 REPORT
+	 * 
+	 * */
+	public static String runGenerateReportProcessTestRequest(ReportProcessTestRequestDto rPTR) {
+	
+		Map parameters = new HashMap();
+		try {
+			LocalDateTime fecha1 = LocalDateTime.now();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+			String p= fecha1.format(dtf);
+			//String nameP=(a.getProduct().getNameProduct()).replaceAll("/", "");
+			
+			final File outputFilename = new File("C:/CRIMPTEK/Calidad/PruebasEnProceso/DDP04_"+p + ".pdf");
+			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(Arrays.asList(rPTR), false);
+			String pathReporte = "DDP04.jasper";
+			//save pdf
+			String ruta = "C:\\CRIMPTEK\\Calidad\\ReportPrpt\\" + pathReporte;
+			JasperPrint jasperPrint = JasperFillManager.fillReport(ruta, parameters, beanColDataSource);
+			JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilename.getAbsolutePath());
+			return outputFilename.getAbsolutePath();
+		}catch (JRException e) {
+			e.printStackTrace();
+			return REPORT_ERROR;
+		}
+	}
 
 }

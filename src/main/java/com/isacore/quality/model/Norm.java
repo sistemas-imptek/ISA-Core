@@ -26,7 +26,7 @@ public class Norm {
 	@Column(name = "NORM_DESCRIPTION", nullable = true, length = 512)
 	private String description;
 	
-	@Column(name = "NORM_KIND", nullable = false, length = 2)
+	@Column(name = "NORM_KIND", nullable = true, length = 2)
 	private String kind;
 	
 	@Transient

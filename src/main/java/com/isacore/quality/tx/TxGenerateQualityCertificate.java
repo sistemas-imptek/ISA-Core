@@ -12,11 +12,15 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.dto.EmailDto;
+import com.isacore.quality.dto.ReportDto;
 import com.isacore.quality.model.ClientImptek;
+import com.isacore.quality.model.HccHead;
+import com.isacore.quality.model.NormProduct;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.model.QualityCertificate;
 import com.isacore.quality.report.GenerateReportQuality;
 import com.isacore.quality.service.IClientImptekService;
+import com.isacore.quality.service.IHccHeadService;
 import com.isacore.quality.service.IQualityCertificateService;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebRequestIsa;
@@ -40,6 +44,9 @@ public class TxGenerateQualityCertificate {
 	
 	@Autowired
 	private IClientImptekService clientService;
+	
+	@Autowired
+	private IHccHeadService hccHeadService;
 	
 	/**
 	 * TX NAME: GenerateQualityCertificate genera un certificado de una hcc en formato PDF
@@ -90,8 +97,22 @@ public class TxGenerateQualityCertificate {
 						wrei.setStatus(WebResponseMessage.STATUS_ERROR);
 						return new ResponseEntity<Object>(wrei, HttpStatus.INTERNAL_SERVER_ERROR);
 					}else {
-						
-						String pathFile = GenerateReportQuality.runReportPentahoQualityCertificate(qc.getHccHead().getSapCode(),qc.getClientImptek().getIdClient());
+						HccHead hccTmp= this.hccHeadService.findById(qc.getHccHead());
+						ReportDto qcD = new ReportDto();
+						qcD.setHccHead(hccTmp);
+						if(hccTmp.getProduct().getNorms().isEmpty()) {
+							qcD.setNormProductText("-");
+						}else {
+							List<NormProduct> listNorms= hccTmp.getProduct().getNorms();
+							String normTextTmp="-";
+							for (NormProduct norm : listNorms) {
+								if(norm.getState().equalsIgnoreCase("vigente"))
+									normTextTmp=norm.getNorm().getNameNorm();
+							}
+							qcD.setNormProductText(normTextTmp);
+						}
+						qcD.setQc(qc);
+						String pathFile = GenerateReportQuality.runReportJasperQualityCertificate(qcD);
 						
 						if(!pathFile.equals(GenerateReportQuality.REPORT_ERROR)) {
 							logger.info(">> Reporte generado correctamente");

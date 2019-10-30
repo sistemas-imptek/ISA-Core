@@ -75,12 +75,6 @@ public class NonconformingProduct {
 	@JsonDeserialize(using = LocalDateDeserializeIsa.class)
 	private LocalDate dateProduction;
 	
-	@Column(name = "NCP_YEAR", nullable = false)
-	private Integer year;
-	
-	@Column(name = "NCP_MONTH", nullable = false)
-	private Integer month;
-	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID", insertable = true, updatable = false)
 	private Product product;
@@ -108,10 +102,7 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_UNIT", nullable = false, length = 16)
 	private String unitNCP;
-	
-	@Column(name = "NCP_MATERIAL_EXIT", nullable = true, columnDefinition = "decimal(10,3)")
-	private Double exitMaterial;
-	
+		
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "NCP_ID", nullable = true)
@@ -120,12 +111,14 @@ public class NonconformingProduct {
 	@Column(name = "NCP_MATERIAL_BALANCE", nullable = true, columnDefinition = "decimal(10,3)")
 	private Double balanceMaterial;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "DEFECT_ID", referencedColumnName = "DEFECT_ID", insertable = true, updatable = false)
-	private DefectNpc defect;
+	@Column(name = "NCP_DEFECT", nullable = false, length = 4096)
+	private String defect;
 	
 	@Column(name = "NCP_EXISTS_INVENTORY", nullable = true)
 	private Boolean existsInventory;
+	
+	@Column(name = "NCP_EXISTING_MATERIAL", nullable = true)
+	private Double existingMaterial;
 	
 	@Column(name = "NCP_PERCENT_VALIDITY", nullable = true, columnDefinition = "decimal(5,3)")
 	private Double validityPercent;
@@ -136,11 +129,7 @@ public class NonconformingProduct {
 	
 	@Column(name = "NCP_FIVEM", nullable = false, length = 2048)
 	private String fiveM;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "OM_ID", referencedColumnName = "OM_ID", insertable = true, updatable = false)
-	private OutputMethod outputMethod;
-	
+		
 	@Column(name = "NCP_UNIT_COST", nullable = true, columnDefinition = "decimal(5,3)")
 	private Double unitCost;
 	
@@ -180,9 +169,7 @@ public class NonconformingProduct {
 	@Column(name = "NCP_ADDITIONAL_REMARKS", nullable = true, columnDefinition = "varchar(max)")
 	private String aditionalRemarks;
 	
-	@Column(name = "NCP_FINAL_DESTINATION", nullable = true, columnDefinition = "varchar(max)")
-	private String finalDestination;
-	
+		
 	@Column(name = "NCP_ASUSER", nullable = true)
 	private String asUser;
 	
@@ -195,19 +182,9 @@ public class NonconformingProduct {
 	@Column(name = "NCP_WORK_AREA", nullable = false, length = 512)
 	private String workArea;
 	
-	@Column(name = "NCP_CLOSE", nullable = true)
-	private Boolean close;
+	@Column(name = "NCP_STATE", nullable = true)
+	private String state;
 	
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "NCP_ID", nullable = true)
-	private List<TaskNcp> tasks;
-
-	
-	public void calculteBalanceMaterial() {
-		if(this.exitMaterial != null) {
-			this.balanceMaterial = this.amountNonConforming - this.exitMaterial;
-		}
-	}
 	
 	public Integer getIdNCP() {
 		return idNCP;
@@ -239,22 +216,6 @@ public class NonconformingProduct {
 
 	public void setDateProduction(LocalDate dateProduction) {
 		this.dateProduction = dateProduction;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
 	}
 
 	public String getBatch() {
@@ -311,14 +272,6 @@ public class NonconformingProduct {
 
 	public void setUnitNCP(String unitNCP) {
 		this.unitNCP = unitNCP;
-	}
-
-	public Double getExitMaterial() {
-		return exitMaterial;
-	}
-
-	public void setExitMaterial(Double exitMaterial) {
-		this.exitMaterial = exitMaterial;
 	}
 
 	public Double getBalanceMaterial() {
@@ -457,14 +410,6 @@ public class NonconformingProduct {
 		this.daysAntiquities = daysAntiquities;
 	}
 
-	public DefectNpc getDefect() {
-		return defect;
-	}
-
-	public void setDefect(DefectNpc defect) {
-		this.defect = defect;
-	}
-
 	public Area getArea() {
 		return area;
 	}
@@ -479,14 +424,6 @@ public class NonconformingProduct {
 
 	public void setFiveM(String fiveM) {
 		this.fiveM = fiveM;
-	}
-
-	public OutputMethod getOutputMethod() {
-		return outputMethod;
-	}
-
-	public void setOutputMethod(OutputMethod outputMethod) {
-		this.outputMethod = outputMethod;
 	}
 
 	public Product getProduct() {
@@ -577,28 +514,38 @@ public class NonconformingProduct {
 		this.detailOther = detailOther;
 	}
 
-	public String getFinalDestination() {
-		return finalDestination;
+	public List<ExitMaterialHistory> getExitMaterialH() {
+		return exitMaterialH;
 	}
 
-	public void setFinalDestination(String finalDestination) {
-		this.finalDestination = finalDestination;
+	public void setExitMaterialH(List<ExitMaterialHistory> exitMaterialH) {
+		this.exitMaterialH = exitMaterialH;
 	}
+
+	public String getDefect() {
+		return defect;
+	}
+
+	public void setDefect(String defect) {
+		this.defect = defect;
+	}
+
+	public Double getExistingMaterial() {
+		return existingMaterial;
+	}
+
+	public void setExistingMaterial(Double existingMaterial) {
+		this.existingMaterial = existingMaterial;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	
-	public Boolean getClose() {
-		return close;
-	}
-
-	public void setClose(Boolean close) {
-		this.close = close;
-	}
-
-	public List<TaskNcp> getTasks() {
-		return tasks;
-	}
-
-	public void setTasks(List<TaskNcp> tasks) {
-		this.tasks = tasks;
-	}
 
 }

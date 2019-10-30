@@ -79,9 +79,10 @@ public class TxProduct {
 				// Serializamos la lista a JSON
 				List<Product> productsTmp=new ArrayList<>();
 				for (Product product : products) {
-					if(product.getTypeProduct().equalsIgnoreCase("MP")) {
-						product.setProviders(this.sProvider.findByProductIdVigente(product.getIdProduct()));
-					}
+					/*if(product.getTypeProduct().equalsIgnoreCase("MP")) {
+						
+					}*/
+					product.setProviders(this.sProvider.findByProductIdVigente(product.getIdProduct()));
 					productsTmp.add(product);
 					
 				}

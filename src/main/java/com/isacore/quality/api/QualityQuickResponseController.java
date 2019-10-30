@@ -30,14 +30,17 @@ import com.isacore.quality.service.IFormulationService;
 import com.isacore.quality.service.impl.FormulationServiceImpl;
 import com.isacore.quality.service.impl.ProductServiceImpl;
 import com.isacore.quality.tx.TxComplaint;
+import com.isacore.quality.tx.TxFileDocument;
 import com.isacore.quality.tx.TxGenerateQualityCertificate;
 import com.isacore.quality.tx.TxHcc;
 import com.isacore.quality.tx.TxMail;
 import com.isacore.quality.tx.TxNonConformingProduct;
 import com.isacore.quality.tx.TxNorm;
 import com.isacore.quality.tx.TxProblem;
+import com.isacore.quality.tx.TxProcessTestRequest;
 import com.isacore.quality.tx.TxProduct;
 import com.isacore.quality.tx.TxPropertyList;
+import com.isacore.quality.tx.TxProvider;
 import com.isacore.quality.tx.TxReadFormulation;
 import com.isacore.quality.tx.TxTest;
 import com.isacore.sgc.acta.model.Role;
@@ -45,6 +48,7 @@ import com.isacore.sgc.acta.service.impl.RoleServiceImpl;
 import com.isacore.util.WebRequestIsa;
 import com.isacore.util.WebResponseIsa;
 import com.isacore.util.WebResponseMessage;
+import com.isacore.workflow.tx.TxProcess;
 
 @RestController
 @RequestMapping(value = "/qualityQR")
@@ -109,6 +113,18 @@ public class QualityQuickResponseController {
 	@Autowired
 	private TxProblem txProblem;
 	
+	@Autowired
+	private TxProvider txProvider;
+	
+	@Autowired
+	private TxProcess txProcessFlow;
+	
+	@Autowired
+	private TxFileDocument txFileDocument;
+	
+	@Autowired
+	private TxProcessTestRequest txProcessTestRequest;
+	
 	@RequestMapping(value = "/api", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> txQuickResponse(@RequestBody WebRequestIsa wri){
 		
@@ -159,6 +175,9 @@ public class QualityQuickResponseController {
 		case TxNonConformingProduct.TX_CODE_CloseNCP:	
 			return this.txNcp.TxQQRcloseNCP(wri);
 			
+		case TxNonConformingProduct.TX_CODE_SaveExitMaterial:	
+			return this.txNcp.TxQQRsaveExitMaterial(wri);
+			
 		case TxRequestQualityUtil.TX_CODE_RNCP:
 			return this.txRQU.requestNCP();
 			
@@ -203,6 +222,36 @@ public class QualityQuickResponseController {
 			
 		case TxProblem.TX_CODE_SaveProblem:
 			return this.txProblem.TxQQRsetProblem(wri);
+			
+		case TxProvider.TX_CODE_GetAllProviders:
+			return this.txProvider.TxQQRgetProviders(wri);
+			
+		case TxProcess.TX_CODE_SetProcessFlow:
+			return this.txProcessFlow.TxQQRsetProcessFlow(wri);
+			
+		case TxProcess.TX_CODE_ValidateDeliverMaterial:
+			return this.txProcessFlow.TxQQRValidateDeliverMaterial(wri);
+			
+		case TxProcess.TX_CODE_ReplyProcessFlow:
+			return this.txProcessFlow.TxQQRReplyProcessFlow(wri);
+			
+		case TxProcess.TX_CODE_GetTrayProcess:
+			return this.txProcessFlow.TxQQRgetTrayProcessByUser(wri);
+			
+		case TxProcess.TX_CODE_OrderMP:
+			return this.txProcessFlow.TxQQROrderMP(wri);
+			
+		case TxProcess.TX_CODE_AvailableMP:
+			return this.txProcessFlow.TxQQRAvailableMP(wri);
+			
+		case TxFileDocument.TX_CODE_Download:
+			return this.txFileDocument.TxQQRdownloadFiles(wri);
+			
+		case TxProcessTestRequest.TX_CODE_GenerateReportProcessTestRequest:
+			return this.txProcessTestRequest.TxQQRGenerateReportProcessTestRequest(wri);
+			
+		case TxTest.TX_CODE_GenerateDataReport:
+			return this.txTest.TxQQRgenerateDataReport(wri);
 			
 		
 		default:

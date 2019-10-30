@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.isacore.quality.dto.ReportTest;
 import com.isacore.quality.model.Property;
 import com.isacore.quality.model.PropertyList;
 import com.isacore.quality.model.Test;
@@ -81,6 +82,17 @@ public class TestServiceImpl implements ITestService {
 	@Override
 	public List<Test> findByBatchAndIdProduct(String batch, Integer idP) {
 		return this.repo.findByBatchAndIdProduct(batch, idP);
+	}
+
+	@Override
+	public List<Test> findByBatchAll(String batch) {
+		return this.repo.findByBatchAll(batch);
+	}
+
+	@Override
+	public List<Object[]> generateDataReport(String dateIni, String dateFin) {
+		
+		return this.repo.dataReport(dateIni, dateFin);
 	}
 
 }

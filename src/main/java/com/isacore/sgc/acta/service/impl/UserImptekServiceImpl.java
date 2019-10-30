@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isacore.localdate.converter.LocalDateTimeConverter;
+import com.isacore.quality.model.Area;
 import com.isacore.sgc.acta.model.Employee;
 import com.isacore.sgc.acta.model.Role;
 import com.isacore.sgc.acta.model.UserImptek;
@@ -69,22 +70,26 @@ public class UserImptekServiceImpl implements IUserImptekService{
 			ui.setLastAccess(ldtc.convertToEntityAttribute((Timestamp)o[1]));			
 			ui.setLastKeyDateChange(ldtc.convertToEntityAttribute((Timestamp)o[2]));
 			ui.setNickName((String)o[3]);
-			ui.setUserPass((String)o[4]);
+			ui.setUserPass((String)o[13]);
 			
 			Employee emp = new Employee();
-			emp.setCiEmployee((String)o[5]);
+			emp.setCiEmployee((String)o[4]);
 			
-			Optional<Role> op = this.repoRole.findById((String)o[6]);
+			Optional<Role> op = this.repoRole.findById((String)o[5]);
 			if(op.isPresent())
 				ui.setRole(op.get());
 			
 			//ui.setRole(this.repoRole.findOne((String)o[6]));
 			
-			emp.setName((String)o[8]);
-			emp.setLastName((String)o[9]);
-			emp.setJob((String)o[10]);
-			emp.setState((Boolean)o[11]);
+			emp.setName((String)o[7]);
+			emp.setLastName((String)o[8]);
+			emp.setJob((String)o[9]);
+			emp.setState((Boolean)o[10]);
+			emp.setEmail((String)o[11]);
+			Area a= new Area();
 			
+			a.setNameArea((String) o[12]);
+			emp.setArea(a);
 			ui.setEmployee(emp);
 			
 			return ui;

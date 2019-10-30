@@ -6,11 +6,13 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isacore.quality.model.HccHead;
+import com.isacore.quality.model.ProcessFlow;
 import com.isacore.quality.model.Product;
 import com.isacore.quality.repository.IHccHeadRepo;
 import com.isacore.quality.service.IHccHeadService;
@@ -33,9 +35,9 @@ public class HccHeadServiceImpl implements IHccHeadService {
 	}
 
 	@Override
-	public HccHead findById(HccHead id) {
-		// TODO Auto-generated method stub
-		return null;
+	public HccHead findById(HccHead hh) {
+		Optional<HccHead> hccH = this.repo.findById(hh.getSapCode());
+		return hccH.get();
 	}
 
 	@Override

@@ -20,11 +20,16 @@ public class Problem {
 	
 	@Column(name = "PROBLEM_DESCRIPTION", nullable = true, length = 1024)
 	private String description;
-	
-	
+		
 	@Column(name = "PROBLEM_PICTURE", nullable = true)
 	private String pictureStringB64;
 
+	@Column(name = "PROBLEM_NAME_FILE", nullable = true, length = 128)
+	private String nameFileP;
+
+	@Column(name = "PROBLEM_EXTEN_FILE", nullable = true, length = 8)
+	private String extensionFileP;
+	
 	public Integer getIdProblem() {
 		return idProblem;
 	}
@@ -47,6 +52,22 @@ public class Problem {
 
 	public void setPictureStringB64(String pictureStringB64) {
 		this.pictureStringB64 = pictureStringB64;
+	}
+
+	public String getNameFileP() {
+		return nameFileP;
+	}
+
+	public void setNameFileP(String nameFileP) {
+		this.nameFileP = nameFileP;
+	}
+
+	public String getExtensionFileP() {
+		return extensionFileP;
+	}
+
+	public void setExtensionFileP(String extensionFileP) {
+		this.extensionFileP = extensionFileP;
 	}
 
 	

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isacore.quality.service.impl.AreaServiceImpl;
-import com.isacore.quality.service.impl.DefectServiceImpl;
-import com.isacore.quality.service.impl.OutputMethodServiceImpl;
 import com.isacore.util.Crypto;
 import com.isacore.util.WebResponseIsa;
 import com.isacore.util.WebResponseMessage;
@@ -29,12 +27,7 @@ public class TxRequestQualityUtil {
 	@Autowired
 	private RequestNCP rNCP;
 	
-	@Autowired
-	private DefectServiceImpl defectService;
-	
-	@Autowired
-	private OutputMethodServiceImpl oMService;
-	
+		
 	@Autowired
 	private AreaServiceImpl areaService;
 
@@ -44,9 +37,6 @@ public class TxRequestQualityUtil {
 		wrei.setTransactionCode(TX_CODE_RNCP);
 
 		logger.info("> TX: TxRNCP");
-
-		rNCP.setDefects(this.defectService.findAll());
-		rNCP.setOutMethods(this.oMService.findAll());
 		rNCP.setAreas(this.areaService.findAll());
 
 		try {

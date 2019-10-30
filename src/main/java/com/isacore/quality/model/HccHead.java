@@ -114,6 +114,9 @@ public class HccHead {
 	
 	@Column(name = "HCCH_REPORT_HEADT", nullable = false, length = 16)
 	private String reportHeadT;
+	
+	@Column(name = "HCCH_IDPROVIDER", nullable = true)
+	private Integer idProviderMP;
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "HCCH_SAPCODE", nullable = false)
@@ -296,6 +299,14 @@ public class HccHead {
 
 	public void setReferralGuide(String referralGuide) {
 		this.referralGuide = referralGuide;
+	}
+
+	public Integer getIdProviderMP() {
+		return idProviderMP;
+	}
+
+	public void setIdProviderMP(Integer idProviderMP) {
+		this.idProviderMP = idProviderMP;
 	}
 
 	@Override
